@@ -1,0 +1,2155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anthony Cernon — Portfolio Cybersécurité</title>
+  <!-- React 18 + ReactDOM -->
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <!-- Babel standalone — transpile JSX in browser -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}body{overflow-x:hidden}</style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, createContext, useContext } = React;
+
+// React available globally via CDN
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// THEME PALETTES
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const DARK = {
+  bg:          "#090c12",
+  surface:     "#0f1320",
+  surfaceHigh: "#141929",
+  border:      "#1a1f30",
+  borderHigh:  "#252c42",
+  text:        "#d8dced",
+  textStrong:  "#ffffff",
+  textMuted:   "#5e6a88",
+  textDim:     "#3a4258",
+  accent:      "#4b8eff",
+  accentSoft:  "#7eb3ff",
+  accentGlow:  "#4b8eff22",
+  success:     "#2dd97e",
+  warn:        "#ffd166",
+  dotGrid:     "#ffffff07",
+  topGlow:     "#4b8eff12",
+};
+
+const LIGHT = {
+  bg:          "#f2f4fb",
+  surface:     "#e6eaf6",
+  surfaceHigh: "#dae0f0",
+  border:      "#c6cde2",
+  borderHigh:  "#aab4d0",
+  text:        "#1c2238",
+  textStrong:  "#080c18",
+  textMuted:   "#56607a",
+  textDim:     "#a0aabe",
+  accent:      "#2356d8",
+  accentSoft:  "#4b8eff",
+  accentGlow:  "#2356d814",
+  success:     "#1aaa63",
+  warn:        "#b8860b",
+  dotGrid:     "#00000009",
+  topGlow:     "#2356d80d",
+};
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// STATIC TOKENS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const T = {
+  font: {
+    display: "'Syne', sans-serif",
+    mono:    "'JetBrains Mono', monospace",
+    body:    "'DM Sans', sans-serif",
+  },
+  radius: { sm:"3px", md:"6px", lg:"10px" },
+  shadow: { card:"0 4px 32px rgba(0,0,0,.3)", glow:"0 0 24px rgba(75,142,255,.25)" },
+};
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// CONTEXT
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const ThemeCtx = createContext({ C: DARK, isDark: true, toggle: () => {} });
+const useTheme = () => useContext(ThemeCtx);
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// DYNAMIC CSS (regenerated on theme change)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const makeCSS = (C, isDark) => `
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:${C.bg};color:${C.text};
+  font-family:${T.font.body};font-size:15px;line-height:1.7;overflow-x:hidden;
+  transition:background-color .55s cubic-bezier(.4,0,.2,1),color .55s cubic-bezier(.4,0,.2,1);
+}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:${C.bg}}
+::-webkit-scrollbar-thumb{background:${C.borderHigh};border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:${C.accent}}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,${C.dotGrid} 1px,transparent 1px);background-size:26px 26px;pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;top:0;left:0;right:0;height:600px;background:radial-gradient(ellipse 55% 45% at 50% -5%,${C.topGlow} 0%,transparent 70%);pointer-events:none;z-index:0}
+
+#scroll-progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:200;background:linear-gradient(90deg,${C.accent},${C.accentSoft});transform-origin:left}
+
+/* reveals */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s cubic-bezier(.22,.68,0,1.2),transform .65s cubic-bezier(.22,.68,0,1.2)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-32px);transition:opacity .65s .1s cubic-bezier(.22,.68,0,1.2),transform .65s .1s cubic-bezier(.22,.68,0,1.2)}
+.reveal-left.visible{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(32px);transition:opacity .65s .1s cubic-bezier(.22,.68,0,1.2),transform .65s .1s cubic-bezier(.22,.68,0,1.2)}
+.reveal-right.visible{opacity:1;transform:translateX(0)}
+.stagger>*{opacity:0;transform:translateY(20px);transition:opacity .5s cubic-bezier(.22,.68,0,1.2),transform .5s cubic-bezier(.22,.68,0,1.2)}
+.stagger.visible>*:nth-child(1){opacity:1;transform:translateY(0);transition-delay:.05s}
+.stagger.visible>*:nth-child(2){opacity:1;transform:translateY(0);transition-delay:.12s}
+.stagger.visible>*:nth-child(3){opacity:1;transform:translateY(0);transition-delay:.19s}
+.stagger.visible>*:nth-child(4){opacity:1;transform:translateY(0);transition-delay:.26s}
+.stagger.visible>*:nth-child(5){opacity:1;transform:translateY(0);transition-delay:.33s}
+.stagger.visible>*:nth-child(6){opacity:1;transform:translateY(0);transition-delay:.40s}
+
+/* misc */
+.bar-fill{width:0;transition:width 1s cubic-bezier(.22,.68,0,1.2)}
+.card-hover{transition:transform .25s cubic-bezier(.22,.68,0,1.2),box-shadow .25s ease,border-color .25s ease}
+.card-hover:hover{transform:translateY(-4px);box-shadow:${isDark?'0 4px 32px rgba(0,0,0,.45)':'0 4px 24px rgba(0,0,0,.12)'};border-color:${C.borderHigh}!important}
+.tag{transition:color .2s,border-color .2s,background .2s}
+.tag:hover{color:${C.accentSoft}!important;border-color:${C.accent}33!important;background:${C.accentGlow}!important}
+#cursor-glow{position:fixed;pointer-events:none;z-index:9999;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,${C.accentGlow} 0%,transparent 70%);transform:translate(-50%,-50%);opacity:${isDark?1:0};transition:opacity .4s ease}
+
+/* hamburger */
+.loader{
+  display:flex;align-items:center;gap:0;
+  transition:transform .4s cubic-bezier(.22,.68,0,1.2);
+}
+.loader:hover{transform:rotate(90deg)}
+.bar{display:inline-block;width:3px;height:16px;background-color:${C.textMuted};border-radius:10px;animation:scale-up4 1s linear infinite}
+.bar:nth-child(2){height:26px;margin:0 4px;animation-delay:.25s}
+.bar:nth-child(3){animation-delay:.5s}
+@keyframes scale-up4{20%{background-color:${C.accentSoft};transform:scaleY(1.5)}40%{transform:scaleY(1)}}
+
+/* drawer */
+.drawer-overlay{position:fixed;inset:0;z-index:149;background:rgba(4,6,10,.6);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .4s ease}
+.drawer-overlay.open{opacity:1;pointer-events:all}
+.drawer-panel{position:fixed;top:0;right:0;bottom:0;width:min(360px,90vw);z-index:150;background:${C.surface};border-left:1px solid ${C.border};transform:translateX(100%);transition:transform .48s cubic-bezier(.22,.68,0,1.2),background-color .55s,border-color .55s;display:flex;flex-direction:column;overflow:hidden}
+.drawer-panel.open{transform:translateX(0)}
+.drawer-item{opacity:0;transform:translateX(24px);transition:opacity .4s cubic-bezier(.22,.68,0,1.2),transform .4s cubic-bezier(.22,.68,0,1.2)}
+.drawer-panel.open .drawer-item:nth-child(1){opacity:1;transform:translateX(0);transition-delay:.08s}
+.drawer-panel.open .drawer-item:nth-child(2){opacity:1;transform:translateX(0);transition-delay:.14s}
+.drawer-panel.open .drawer-item:nth-child(3){opacity:1;transform:translateX(0);transition-delay:.20s}
+.drawer-panel.open .drawer-item:nth-child(4){opacity:1;transform:translateX(0);transition-delay:.26s}
+.drawer-panel.open .drawer-item:nth-child(5){opacity:1;transform:translateX(0);transition-delay:.32s}
+.submenu{overflow:hidden;max-height:0;transition:max-height .38s cubic-bezier(.22,.68,0,1.2),opacity .3s ease;opacity:0}
+.submenu.open{max-height:200px;opacity:1}
+.sub-item{transition:color .2s,background .2s,padding-left .2s}
+.sub-item:hover{color:${C.accentSoft}!important;background:${C.accentGlow}!important;padding-left:28px!important}
+
+/* keyframes */
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.cursor-blink{animation:blink 1.1s step-end infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 ${C.success}44}50%{box-shadow:0 0 0 5px transparent}}
+.pulse{animation:pulse 2s ease infinite}
+
+
+/* toggle switch */
+.toggle-switch{position:relative;width:56px;height:28px;--light:#d8dbe0;--dark:#28292c;flex-shrink:0}
+.switch-label{position:absolute;width:100%;height:28px;background-color:var(--dark);border-radius:14px;cursor:pointer;border:2px solid var(--dark);transition:border-color .3s}
+.checkbox{position:absolute;display:none}
+.slider{position:absolute;width:100%;height:100%;border-radius:14px;transition:0.3s}
+.checkbox:checked ~ .slider{background-color:var(--light)}
+.slider::before{content:"";position:absolute;top:5px;left:5px;width:14px;height:14px;border-radius:50%;box-shadow:inset 7px -2px 0px 0px var(--light);background-color:var(--dark);transition:0.3s}
+.checkbox:checked ~ .slider::before{transform:translateX(28px);background-color:var(--dark);box-shadow:none}
+
+/* ripple */
+.theme-ripple{position:fixed;border-radius:50%;pointer-events:none;z-index:9998;transform:scale(0);opacity:.1;transition:transform .7s cubic-bezier(.4,0,.2,1),opacity .7s ease}
+.theme-ripple.go{transform:scale(1);opacity:0}
+
+/* ── CRT intro ── */
+@keyframes crt-flicker{
+  0%{opacity:0}2%{opacity:.9}4%{opacity:.1}6%{opacity:1}8%{opacity:.2}
+  10%{opacity:1}13%{opacity:.5}16%{opacity:1}
+  100%{opacity:1}
+}
+/* Vraie ligne CRT : flash blanc vif au centre puis expansion */
+@keyframes crt-line-expand{
+  0%  {transform:scaleY(0);    opacity:0;  filter:brightness(1)}
+  5%  {transform:scaleY(.004); opacity:1;  filter:brightness(8)}
+  15% {transform:scaleY(.004); opacity:1;  filter:brightness(4)}
+  45% {transform:scaleY(1);    opacity:1;  filter:brightness(1.4)}
+  100%{transform:scaleY(1);    opacity:1;  filter:brightness(1)}
+}
+@keyframes crt-content-in{
+  0%  {opacity:0;  filter:brightness(6) blur(8px) saturate(0)}
+  25% {opacity:1;  filter:brightness(2) blur(2px) saturate(.5)}
+  100%{opacity:1;  filter:brightness(1) blur(0)   saturate(1)}
+}
+/* Monitor entry — fade in with slight downward drift */
+@keyframes monitor-enter{
+  0%  {opacity:0; transform:translateY(12px) perspective(1200px) rotateX(1.5deg)}
+  100%{opacity:1; transform:translateY(0)   perspective(1200px) rotateX(1.5deg)}
+}
+/* White flash before zoom resolves */
+@keyframes crt-flash{
+  0%  {opacity:0}
+  30% {opacity:.7}
+  100%{opacity:0}
+}
+/* FLIP: screen expands from its rect to fullscreen */
+@keyframes crt-flip-expand{
+  0%  { inset: var(--s-top) auto auto var(--s-left); width:var(--s-w); height:var(--s-h); border-radius:6px; }
+  100%{ left:0; top:0; width:100vw; height:100vh; border-radius:0; }
+}
+@keyframes scanline-move{
+  0%{transform:translateY(-100%)}
+  100%{transform:translateY(100vh)}
+}
+@keyframes crt-flash{
+  0%  {opacity:0}
+  20% {opacity:.8}
+  100%{opacity:0}
+}
+.crt-scanlines{
+  position:absolute;inset:0;pointer-events:none;z-index:4;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,.18) 2px,
+    rgba(0,0,0,.18) 4px
+  );
+}
+.crt-sweep{
+  position:absolute;left:0;right:0;height:40%;
+  background:linear-gradient(180deg,transparent,rgba(75,142,255,.04),transparent);
+  animation:scanline-move 3s linear infinite;
+  pointer-events:none;z-index:5;
+}
+.crt-vignette{
+  position:absolute;inset:0;pointer-events:none;z-index:3;
+  background:radial-gradient(ellipse 80% 80% at 50% 50%,transparent 55%,rgba(0,0,0,.7) 100%);
+}
+.crt-glow{
+  position:absolute;inset:-2px;pointer-events:none;z-index:6;
+  border-radius:inherit;
+  box-shadow:
+    inset 0 0 30px rgba(75,142,255,.08),
+    0 0 40px rgba(75,142,255,.12),
+    0 0 80px rgba(75,142,255,.06);
+}
+
+/* glitch on name hover */
+@keyframes glitch-1{0%,100%{clip-path:inset(0 0 98% 0);transform:translate(-2px,0)}20%{clip-path:inset(30% 0 50% 0);transform:translate(2px,0)}40%{clip-path:inset(60% 0 20% 0);transform:translate(-1px,0)}60%{clip-path:inset(80% 0 5% 0);transform:translate(1px,0)}80%{clip-path:inset(10% 0 80% 0);transform:translate(-2px,0)}}
+@keyframes glitch-2{0%,100%{clip-path:inset(50% 0 30% 0);transform:translate(2px,0)}25%{clip-path:inset(10% 0 85% 0);transform:translate(-2px,0)}50%{clip-path:inset(70% 0 10% 0);transform:translate(1px,0)}75%{clip-path:inset(20% 0 65% 0);transform:translate(-1px,0)}}
+.glitch-wrap{position:relative;display:inline-block}
+.glitch-wrap:hover .glitch-a{animation:glitch-1 .4s steps(1) forwards}
+.glitch-wrap:hover .glitch-b{animation:glitch-2 .4s steps(1) forwards}
+.glitch-a,.glitch-b{position:absolute;top:0;left:0;width:100%;pointer-events:none;opacity:0}
+.glitch-wrap:hover .glitch-a{opacity:1;color:${C.accentSoft};mix-blend-mode:screen}
+.glitch-wrap:hover .glitch-b{opacity:1;color:${C.accentSoft};mix-blend-mode:screen}
+
+/* hero scan line — fires once on load */
+@keyframes scan{0%{top:-2px;opacity:.6}100%{top:100%;opacity:0}}
+.hero-scan{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,${C.accent},transparent);animation:scan 1.4s .3s cubic-bezier(.4,0,.2,1) forwards;pointer-events:none;z-index:2}
+
+/* hero meta strip */
+.hero-meta{
+  display:flex;align-items:center;gap:0;
+  font-family:${T.font.mono};font-size:10.5px;
+  color:${C.textMuted};letter-spacing:.06em;
+  border-top:1px solid ${C.border};
+  padding-top:20px;margin-top:8px;
+}
+.hero-meta-item{padding-right:24px;margin-right:24px;border-right:1px solid ${C.border}}
+.hero-meta-item:last-child{border-right:none;padding-right:0;margin-right:0}
+
+/* terminal card refined */
+.term-card{
+  background:${C.surface};
+  border:1px solid ${C.border};
+  border-radius:${T.radius.lg};
+  overflow:hidden;position:relative;
+}
+.term-card-accent{
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,${C.accent},${C.accentSoft},transparent);
+}
+
+/* ════════════════════════════════════════════
+   HOLOGRAPHIC CYLINDER — extraordinary effect
+   ════════════════════════════════════════════ */
+
+/* scene container */
+.proj-scene{
+  width:100%;height:560px;
+  display:flex;align-items:flex-start;justify-content:center;
+  padding-top:40px;
+  position:relative;overflow:hidden;
+}
+
+/* floor fade */
+.proj-scene::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:50%;
+  background:linear-gradient(0deg,${C.bg} 0%,transparent 100%);
+  pointer-events:none;z-index:4;
+}
+
+/* floor mirror reflection */
+.proj-floor-mirror{
+  position:absolute;bottom:0;left:0;right:0;height:200px;
+  pointer-events:none;z-index:2;overflow:hidden;
+}
+
+/* hologram emitter base */
+.proj-base{
+  position:absolute;bottom:60px;left:50%;transform:translateX(-50%);
+  width:180px;height:6px;
+  background:linear-gradient(90deg,transparent,${C.accent}88,${C.accent},${C.accent}88,transparent);
+  border-radius:3px;
+  box-shadow:0 0 20px ${C.accent}66, 0 0 40px ${C.accent}33;
+  z-index:5;
+}
+.proj-base::before{
+  content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);
+  width:2px;height:80px;
+  background:linear-gradient(0deg,${C.accent}88,transparent);
+}
+
+/* cone of light from emitter upward */
+.proj-cone{
+  position:absolute;bottom:66px;left:50%;transform:translateX(-50%);
+  width:0;height:0;
+  border-left:160px solid transparent;
+  border-right:160px solid transparent;
+  border-bottom:280px solid rgba(75,142,255,.025);
+  filter:blur(12px);
+  pointer-events:none;z-index:1;
+}
+
+/* ambient scan sweep — moves through cone */
+@keyframes cone-sweep{
+  0%  {opacity:0;transform:translateX(-50%) scaleX(.3)}
+  20% {opacity:1}
+  50% {opacity:.4;transform:translateX(-50%) scaleX(1)}
+  80% {opacity:1}
+  100%{opacity:0;transform:translateX(-50%) scaleX(.3)}
+}
+.proj-cone-pulse{
+  position:absolute;bottom:66px;left:50%;transform:translateX(-50%);
+  width:320px;height:280px;
+  background:radial-gradient(ellipse 50% 100% at 50% 100%,rgba(75,142,255,.04),transparent 70%);
+  pointer-events:none;z-index:1;
+  animation:cone-sweep 4s ease-in-out infinite;
+}
+
+/* circular scan ring at base */
+@keyframes ring-pulse{
+  0%  {transform:translateX(-50%) scale(.8);opacity:.8}
+  100%{transform:translateX(-50%) scale(2.2);opacity:0}
+}
+.proj-ring-pulse{
+  position:absolute;bottom:60px;left:50%;
+  width:180px;height:6px;
+  border-radius:50%;
+  border:1px solid ${C.accent}66;
+  animation:ring-pulse 2.5s ease-out infinite;
+  pointer-events:none;z-index:5;
+}
+.proj-ring-pulse:nth-child(2){animation-delay:1.25s}
+
+/* cylinder */
+.proj-cylinder{
+  --cw:200px;--ch:280px;--tz:230px;--rx:-8deg;
+  width:var(--cw);height:var(--ch);
+  position:relative;transform-style:preserve-3d;
+  animation:cyl-spin 36s linear infinite;
+  transform:perspective(1000px) rotateX(var(--rx)) rotateY(0deg);
+  z-index:3;
+}
+.proj-scene:hover .proj-cylinder{animation-play-state:paused}
+@keyframes cyl-spin{
+  from{transform:perspective(1000px) rotateX(var(--rx)) rotateY(0)}
+  to  {transform:perspective(1000px) rotateX(var(--rx)) rotateY(360deg)}
+}
+
+/* individual card face */
+.proj-face{
+  position:absolute;inset:0;
+  transform:rotateY(calc(var(--angle))) translateZ(var(--tz));
+  border-radius:12px;overflow:hidden;
+  cursor:pointer;backface-visibility:hidden;
+  border:1px solid rgba(75,142,255,.15);
+  background:linear-gradient(145deg,rgba(75,142,255,.05) 0%,${C.surface} 100%);
+  /* filter managed by JS lamppost */
+  will-change:filter;
+}
+
+/* holographic scanline overlay on each card */
+.proj-face::after{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:2;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,transparent 3px,
+    rgba(75,142,255,.03) 3px,rgba(75,142,255,.03) 4px
+  );
+}
+
+/* top accent line */
+.proj-face-bar{
+  position:absolute;top:0;left:0;right:0;height:1.5px;z-index:3;
+  background:linear-gradient(90deg,transparent,rgba(75,142,255,.9),transparent);
+  opacity:0;transition:opacity .4s;
+}
+
+/* card inner */
+.proj-face-body{
+  position:relative;z-index:1;
+  width:100%;height:100%;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:22px 18px;
+}
+.proj-face-num{
+  font-family:'JetBrains Mono',monospace;font-size:8.5px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(75,142,255,.7);margin-bottom:auto;
+}
+.proj-face-middle{
+  flex:1;display:flex;flex-direction:column;
+  justify-content:center;padding:14px 0;
+}
+.proj-face-title{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:15px;
+  color:${C.textStrong};line-height:1.25;
+  text-shadow:0 0 20px rgba(75,142,255,.2);
+}
+.proj-face-pills{display:flex;flex-wrap:wrap;gap:4px}
+.proj-face-pill{
+  font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.04em;
+  padding:2px 7px;border-radius:2px;
+  background:rgba(75,142,255,.08);
+  color:rgba(75,142,255,.75);
+  border:1px solid rgba(75,142,255,.2);
+}
+
+/* modal */
+.proj-modal-bg{
+  position:fixed;inset:0;z-index:5000;
+  background:rgba(4,6,10,.92);backdrop-filter:blur(16px);
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  animation:modal-fade-in .2s ease forwards;
+}
+@keyframes modal-fade-in{from{opacity:0}to{opacity:1}}
+.proj-modal{
+  background:${C.surface};border:1px solid ${C.borderHigh};border-radius:14px;
+  max-width:540px;width:100%;padding:36px;position:relative;
+  box-shadow:0 32px 80px rgba(0,0,0,.7),0 0 0 1px rgba(75,142,255,.08);
+  animation:modal-up .28s cubic-bezier(.22,.68,0,1.2) forwards;
+  max-height:88vh;overflow-y:auto;
+}
+@keyframes modal-up{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+`;
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// HOOKS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function useInView(ref, options = {}) {
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    if (!ref.current) return;
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setInView(true); obs.disconnect(); } },
+      { threshold: 0.15, ...options }
+    );
+    obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, [ref]);
+  return inView;
+}
+
+function useScrollProgress() {
+  const [p, setP] = useState(0);
+  useEffect(() => {
+    const fn = () => {
+      const el = document.documentElement;
+      const s  = el.scrollTop || document.body.scrollTop;
+      const t  = el.scrollHeight - el.clientHeight;
+      setP(t ? s / t : 0);
+    };
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
+  }, []);
+  return p;
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// DATA
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const SKILLS = [
+  { icon:"🔌", title:"Réseaux",                desc:"Protocoles TCP/IP, routage inter-VLAN, DNS, DHCP et architecture LAN/WAN.", level:62, tags:["TCP/IP","Cisco","VLAN"],               accent:[0,2] },
+  { icon:"🖥️", title:"Administration système", desc:"Déploiement et administration sous Linux et Windows Server, virtualisation avec VirtualBox.",  level:55, tags:["Linux","Windows Server","VirtualBox"], accent:[0]   },
+  { icon:"🛡️", title:"Sécurité réseau",       desc:"Mise en place de pare-feu, détection d'intrusion et analyse de vulnérabilités.", level:48, tags:["Wireshark","Nmap","pfSense"],         accent:[0,1] },
+  { icon:"💻", title:"Scripting & Code",       desc:"Automatisation de tâches, scripts Bash et initiation Python pour la surveillance système.", level:38, tags:["Python","Bash","PowerShell"],          accent:[0,1] },
+  { icon:"🔐", title:"Bases de cryptographie", desc:"Fondamentaux du chiffrement symétrique/asymétrique, PKI, certificats SSL/TLS.", level:30, tags:["RSA","SSL/TLS","GPG"],                 accent:[]    },
+  { icon:"⚔️", title:"CTF & Sécurité off.",   desc:"Découverte des environnements offensifs, challenges en ligne et outils d'audit.", level:42, tags:["HackTheBox","Metasploit","Burp Suite"], accent:[0]   },
+];
+
+const PROJECTS = [
+  { num:"01", status:"done", title:"Infrastructure réseau virtualisée",
+    desc:"Conception d'une architecture LAN complète sous VirtualBox avec routage inter-VLAN via pfSense 2.7.",
+    detail:"3 VLANs configurés (LAN, DMZ, MGMT), règles de filtrage par interface, tests de connectivité validés avec ping et traceroute. Toute la topologie est documentée avec un schéma réseau.",
+    tags:["pfSense 2.7","VirtualBox","VLAN"], github:null },
+  { num:"02", status:"done", title:"Sécurisation Active Directory",
+    desc:"Déploiement d'un Active Directory sous Windows Server 2019 avec GPO de sécurité et journalisation.",
+    detail:"Création d'une forêt AD, OU hiérarchisées, politique de mots de passe renforcée (longueur min. 12, complexité obligatoire), GPO de verrouillage de session, audit des connexions et des changements de droits.",
+    tags:["Windows Server 2019","GPO","AD"], github:null },
+  { num:"03", status:"done", title:"Analyse de trafic réseau",
+    desc:"Capture et analyse de trames avec Wireshark sur un réseau simulé : protocoles, anomalies, rapport.",
+    detail:"Analyse de captures ARP, DHCP, DNS et HTTP. Identification d'une attaque ARP spoofing simulée. Rapport structuré avec captures commentées, indicateurs de compromission et recommandations.",
+    tags:["Wireshark","TCP/IP","Rapport"], github:null },
+  { num:"04", status:"done", title:"Mise en place d'une DMZ",
+    desc:"Zone démilitarisée avec serveur Apache exposé, règles pfSense strictes et cloisonnement réseau.",
+    detail:"Serveur Apache 2.4 en DMZ, règles NAT/PAT pour l'exposition HTTP/HTTPS, isolation complète du LAN interne. Tests de pénétration basiques depuis la zone WAN pour vérifier l'étanchéité.",
+    tags:["pfSense","Apache 2.4","DMZ"], github:null },
+  { num:"05", status:"done", title:"Audit de vulnérabilités",
+    desc:"Scan d'une infrastructure de test avec Nmap et OpenVAS : failles recensées, rapport de remédiation.",
+    detail:"Découverte de services exposés sur 3 machines virtuelles, scan Nmap avec scripts NSE, analyse OpenVAS avec scoring CVSS. Rapport final incluant priorités de correction et plan d'action.",
+    tags:["Nmap","OpenVAS","CVSS"], github:null },
+  { num:"06", status:"wip",  title:"Script de surveillance Python",
+    desc:"Outil de monitoring système : supervision CPU, RAM, réseau et alertes automatiques par mail.",
+    detail:"Script Python utilisant psutil pour superviser CPU, RAM et connexions réseau. Seuils configurables, envoi d'alertes via smtplib en cas d'anomalie. Logs horodatés dans un fichier dédié.",
+    tags:["Python","psutil","Monitoring"], github:null },
+];
+
+const NAV_MENU = [
+  { id:"hero",     label:"Accueil",        icon:"◎", num:"00", subs:[] },
+  { id:"about",    label:"À propos",       icon:"◈", num:"01", subs:[] },
+  { id:"timeline", label:"Parcours",       icon:"◌", num:"02", subs:[] },
+  { id:"skills",   label:"Compétences",    icon:"◉", num:"03", subs:[] },
+  { id:"certs",    label:"Certifications", icon:"◑", num:"04", subs:[] },
+  { id:"projects", label:"Projets",        icon:"◇", num:"05", subs:[] },
+  { id:"contact",  label:"Contact",        icon:"◻", num:"06", subs:[] },
+];
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// THEME TOGGLE — custom moon/sun switch
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function ThemeToggle() {
+  const { isDark, toggle } = useTheme();
+  const [ripple, setRipple] = useState(null);
+  const ref = useRef();
+
+  const handleChange = () => {
+    if (ref.current) {
+      const r  = ref.current.getBoundingClientRect();
+      const cx = r.left + r.width  / 2;
+      const cy = r.top  + r.height / 2;
+      const d  = Math.hypot(window.innerWidth, window.innerHeight) * 2.2;
+      setRipple({ cx, cy, d, color: isDark ? LIGHT.accent : DARK.accent });
+      setTimeout(() => setRipple(null), 750);
+    }
+    toggle();
+  };
+
+  return (
+    <>
+      {ripple && (
+        <div className="theme-ripple go" style={{
+          left: ripple.cx - ripple.d / 2, top: ripple.cy - ripple.d / 2,
+          width: ripple.d, height: ripple.d, background: ripple.color,
+        }} />
+      )}
+      <div ref={ref} className="toggle-switch">
+        <label className="switch-label">
+          <input type="checkbox" className="checkbox" checked={!isDark} onChange={handleChange} />
+          <span className="slider" />
+        </label>
+      </div>
+    </>
+  );
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ATOMIC COMPONENTS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function SectionLabel({ children }) {
+  const { C } = useTheme();
+  return (
+    <div style={{ fontFamily:T.font.mono, fontSize:11, letterSpacing:".18em",
+      textTransform:"uppercase", color:C.accent, marginBottom:16,
+      display:"flex", alignItems:"center", gap:12 }}>
+      <span style={{ display:"inline-block", width:24, height:1, background:C.accent }} />
+      {children}
+    </div>
+  );
+}
+
+function Tag({ children, accent }) {
+  const { C } = useTheme();
+  return (
+    <span className="tag" style={{
+      fontFamily:T.font.mono, fontSize:10, letterSpacing:".06em",
+      textTransform:"uppercase", padding:"4px 10px", borderRadius:T.radius.sm,
+      border:`1px solid ${accent ? C.accent+"44" : C.borderHigh}`,
+      color:accent ? C.accentSoft : C.textMuted,
+      background:accent ? C.accentGlow : "transparent",
+      cursor:"default",
+    }}>
+      {children}
+    </span>
+  );
+}
+
+function Divider() {
+  const { C } = useTheme();
+  return <div style={{ height:1, background:`linear-gradient(90deg,transparent,${C.borderHigh},transparent)`, margin:"0 clamp(24px,10vw,180px)" }} />;
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SKILL CARD
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function SkillCard({ skill, delay = 0 }) {
+  const { C, isDark } = useTheme();
+  const ref    = useRef();
+  const inView = useInView(ref);
+  const [hov, setHov] = useState(false);
+
+  return (
+    <div ref={ref} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      style={{ background:hov ? C.surfaceHigh : C.bg, padding:"30px 26px",
+        borderRight:`1px solid ${C.border}`, borderBottom:`1px solid ${C.border}`,
+        transition:"background .25s, box-shadow .25s", position:"relative", overflow:"hidden",
+        boxShadow: (!isDark && hov) ? `inset 0 0 0 1px ${C.accent}33` : "none" }}>
+
+      {isDark && (
+        <div style={{ position:"absolute", inset:0, pointerEvents:"none",
+          background:`radial-gradient(circle at 50% 50%,${C.accentGlow},transparent 70%)`,
+          opacity:hov?1:0, transition:"opacity .3s" }} />
+      )}
+
+      <div style={{ width:40, height:40, borderRadius:8, background:C.surface,
+        border:`1px solid ${C.borderHigh}`, display:"flex", alignItems:"center",
+        justifyContent:"center", fontSize:18, marginBottom:18,
+        transform:hov?"scale(1.1)":"scale(1)", transition:"transform .25s cubic-bezier(.22,.68,0,1.2)" }}>
+        {skill.icon}
+      </div>
+
+      <div style={{ fontFamily:T.font.display, fontSize:15, fontWeight:600, color:C.text, marginBottom:8 }}>
+        {skill.title}
+      </div>
+      <div style={{ fontSize:12.5, color:C.textMuted, lineHeight:1.6, marginBottom:16 }}>
+        {skill.desc}
+      </div>
+
+      <div style={{ marginBottom:14 }}>
+        <div style={{ display:"flex", justifyContent:"space-between",
+          fontFamily:T.font.mono, fontSize:10, color:C.textMuted, marginBottom:6 }}>
+          <span>Niveau</span>
+          <span style={{ color:inView?C.accentSoft:C.textDim, transition:"color .5s" }}>{skill.level}%</span>
+        </div>
+        <div style={{ height:2, background:C.border, borderRadius:2, overflow:"hidden" }}>
+          <div className="bar-fill" style={{
+            height:"100%", background:`linear-gradient(90deg,${C.accent},${C.accentSoft})`,
+            borderRadius:2, width:inView?`${skill.level}%`:0, transitionDelay:`${delay}s` }} />
+        </div>
+      </div>
+
+      <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
+        {skill.tags.map((t, i) => <Tag key={t} accent={skill.accent.includes(i)}>{t}</Tag>)}
+      </div>
+    </div>
+  );
+}
+
+// project card with accordion
+// colour palette per project index — cybersecurity blues/greens
+const PROJ_COLORS = [
+  "75,142,255",   // accent
+  "100,160,255",
+  "55,120,240",
+  "90,150,255",
+  "65,130,255",
+  "110,170,255",
+];
+
+function ProjectModal({ project, onClose, C }) {
+  const idx   = PROJECTS.findIndex(p => p.num === project.num);
+  const color = PROJ_COLORS[idx % PROJ_COLORS.length];
+  const done  = project.status === "done";
+
+  useEffect(() => {
+    const fn = e => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", fn);
+    return () => window.removeEventListener("keydown", fn);
+  }, []);
+
+  return (
+    <div className="proj-modal-bg" onClick={onClose}>
+      <div className="proj-modal" onClick={e => e.stopPropagation()}
+        style={{ "--mc": color }}>
+
+        {/* colored header strip */}
+        <div style={{
+          margin:"-36px -36px 28px",
+          padding:"24px 28px 20px",
+          background:`linear-gradient(135deg, rgba(${color},.12) 0%, rgba(${color},.04) 100%)`,
+          borderBottom:`1px solid rgba(${color},.2)`,
+          borderRadius:"14px 14px 0 0",
+          position:"relative", overflow:"hidden",
+        }}>
+          {/* accent line top */}
+          <div style={{
+            position:"absolute", top:0, left:0, right:0, height:2,
+            background:`linear-gradient(90deg, rgba(${color},1), rgba(${color},.3), transparent)`,
+          }} />
+
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+            <div>
+              <div style={{ fontFamily:T.font.mono, fontSize:10, color:`rgba(${color},1)`,
+                letterSpacing:".14em", textTransform:"uppercase", marginBottom:10, opacity:.75 }}>
+                // {project.num}
+              </div>
+              <h3 style={{ fontFamily:T.font.display, fontSize:"clamp(18px,2.2vw,26px)",
+                fontWeight:800, color:C.textStrong, letterSpacing:"-.02em", lineHeight:1.15 }}>
+                {project.title}
+              </h3>
+            </div>
+            <div style={{ display:"flex", flexDirection:"column", alignItems:"flex-end", gap:10 }}>
+              <button onClick={onClose} style={{
+                width:28, height:28, borderRadius:T.radius.sm,
+                background:"none", border:`1px solid ${C.border}`,
+                color:C.textMuted, cursor:"pointer", fontSize:13,
+                display:"flex", alignItems:"center", justifyContent:"center",
+                transition:"color .2s, border-color .2s, background .2s",
+              }}
+              onMouseEnter={e=>{e.currentTarget.style.color=C.textStrong;e.currentTarget.style.borderColor=C.borderHigh;e.currentTarget.style.background=C.surfaceHigh}}
+              onMouseLeave={e=>{e.currentTarget.style.color=C.textMuted;e.currentTarget.style.borderColor=C.border;e.currentTarget.style.background="none"}}>
+                ✕
+              </button>
+              <span style={{ fontFamily:T.font.mono, fontSize:9.5, letterSpacing:".08em",
+                textTransform:"uppercase", padding:"3px 9px", borderRadius:T.radius.sm,
+                color:done?C.success:C.warn,
+                border:`1px solid ${done?C.success+"44":C.warn+"44"}`,
+                background:done?C.success+"08":C.warn+"08" }}>
+                {done ? "Terminé" : "En cours"}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* body */}
+        <p style={{ fontSize:13.5, color:C.textMuted, lineHeight:1.85, marginBottom:22 }}>
+          {project.desc}
+        </p>
+
+        <div style={{ padding:"18px 20px", borderRadius:T.radius.md,
+          background:C.bg, border:`1px solid ${C.border}`, marginBottom:22 }}>
+          <div style={{ fontFamily:T.font.mono, fontSize:9.5, color:`rgba(${color},.8)`,
+            letterSpacing:".14em", textTransform:"uppercase", marginBottom:10 }}>
+            Détails techniques
+          </div>
+          <p style={{ fontSize:13, color:C.textMuted, lineHeight:1.85 }}>
+            {project.detail}
+          </p>
+        </div>
+
+        <div style={{ display:"flex", flexWrap:"wrap", gap:7 }}>
+          {project.tags.map((t,i) => <Tag key={t} accent={i===0}>{t}</Tag>)}
+        </div>
+
+        {project.github && (
+          <a href={project.github} target="_blank" rel="noreferrer"
+            style={{ marginTop:18, display:"inline-flex", alignItems:"center", gap:7,
+              fontFamily:T.font.mono, fontSize:10.5, letterSpacing:".08em",
+              textTransform:"uppercase", color:`rgba(${color},1)`, textDecoration:"none",
+              border:`1px solid rgba(${color},.35)`, padding:"8px 16px",
+              borderRadius:T.radius.sm, transition:"background .2s" }}
+            onMouseEnter={e=>e.currentTarget.style.background=`rgba(${color},.08)`}
+            onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/>
+            </svg>
+            Voir sur GitHub
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// CHEVRON
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function Chevron({ open }) {
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+      style={{ transition:"transform .32s cubic-bezier(.22,.68,0,1.2)", transform:open?"rotate(90deg)":"rotate(0deg)", flexShrink:0 }}>
+      <path d="M4 2l4 4-4 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// NAVBAR — side drawer
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function Navbar() {
+  const { C } = useTheme();
+  const [open, setOpen]   = useState(false);
+  const [sub,  setSub  ]  = useState(null);
+  const [active, setAct]  = useState("hero");
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (es) => { es.forEach(e => { if (e.isIntersecting) setAct(e.target.id); }); },
+      { threshold: 0.4 }
+    );
+    NAV_MENU.forEach(n => { const el = document.getElementById(n.id); if (el) obs.observe(el); });
+    return () => obs.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const fn = (e) => { if (e.key==="Escape") setOpen(false); };
+    window.addEventListener("keydown", fn);
+    return () => window.removeEventListener("keydown", fn);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
+  const go = (id) => { document.getElementById(id)?.scrollIntoView({ behavior:"smooth" }); setOpen(false); };
+
+  return (
+    <>
+      {/* Top bar */}
+      <div style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, height:60,
+        display:"flex", alignItems:"center", justifyContent:"space-between",
+        padding:"0 clamp(24px,5vw,72px)", pointerEvents:"none" }}>
+
+        <button onClick={() => go("hero")} style={{ fontFamily:T.font.mono, fontSize:13,
+          color:C.accent, letterSpacing:".07em", background:"none", border:"none",
+          cursor:"pointer", pointerEvents:"all", padding:0 }}>
+          <span style={{ color:C.textMuted }}>root@anthony:</span><span style={{ color:C.textMuted }}>~</span><span style={{ color:C.accent }}>#</span>
+        </button>
+
+        {/* Right cluster: theme toggle + menu trigger */}
+        <div style={{ display:"flex", alignItems:"center", gap:8, pointerEvents:"all",
+          height:36 }}>
+          <div style={{ display:"flex", alignItems:"center", height:36 }}>
+            <ThemeToggle />
+          </div>
+          <button
+            onClick={() => setOpen(o => !o)} aria-label="Menu"
+            style={{
+              display:"flex", alignItems:"center", justifyContent:"center",
+              background:C.surface, border:`1px solid ${open ? C.accent : C.border}`,
+              borderRadius:T.radius.md, cursor:"pointer",
+              padding:"0 14px", height:36,
+              transition:"border-color .2s, background .2s, box-shadow .2s",
+              boxShadow: open ? `0 0 0 1px ${C.accent}44` : "none",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor=C.accent; e.currentTarget.style.boxShadow=`0 0 0 1px ${C.accent}44`; }}
+            onMouseLeave={e => { if (!open) { e.currentTarget.style.borderColor=C.border; e.currentTarget.style.boxShadow="none"; } }}
+          >
+            <div className="loader">
+              <span className="bar" />
+              <span className="bar" />
+              <span className="bar" />
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div className={`drawer-overlay ${open?"open":""}`} onClick={() => setOpen(false)} />
+
+      <div className={`drawer-panel ${open?"open":""}`}>
+        {/* Header */}
+        <div style={{ padding:"20px 28px 18px", borderBottom:`1px solid ${C.border}`,
+          display:"flex", alignItems:"center", justifyContent:"space-between", flexShrink:0 }}>
+          <div>
+            <div style={{ fontFamily:T.font.mono, fontSize:10, letterSpacing:".16em",
+              textTransform:"uppercase", color:C.accent, marginBottom:4 }}>Navigation</div>
+            <div style={{ fontFamily:T.font.mono, fontSize:13,
+              color:C.text, letterSpacing:".04em" }}>
+              <span style={{color:C.textMuted}}>root@anthony:</span><span style={{color:C.textMuted}}>~</span><span style={{color:C.accent}}>#</span>
+            </div>
+          </div>
+          <button onClick={() => setOpen(false)}
+            style={{ width:34, height:34, borderRadius:T.radius.md, background:"none",
+              border:`1px solid ${C.border}`, color:C.textMuted, cursor:"pointer",
+              display:"flex", alignItems:"center", justifyContent:"center",
+              fontSize:16, transition:"color .2s,border-color .2s,background .2s" }}
+            onMouseEnter={e => { e.currentTarget.style.color=C.accent; e.currentTarget.style.borderColor=C.accent; e.currentTarget.style.background=C.accentGlow; }}
+            onMouseLeave={e => { e.currentTarget.style.color=C.textMuted; e.currentTarget.style.borderColor=C.border; e.currentTarget.style.background="none"; }}
+          >✕</button>
+        </div>
+
+        {/* Accent line */}
+        <div style={{ position:"absolute", top:0, left:0, bottom:0, width:2,
+          background:`linear-gradient(180deg,transparent,${C.accent},${C.accentSoft},transparent)`,
+          opacity:.35, pointerEvents:"none" }} />
+
+        {/* Items */}
+        <nav style={{ flex:1, overflowY:"auto", padding:"12px 0" }}>
+          {NAV_MENU.map((item, i) => {
+            const isAct  = active === item.id;
+            const subOp  = sub === i;
+            const hasSub = item.subs.length > 0;
+            return (
+              <div key={item.id} className="drawer-item">
+                <button onClick={() => hasSub ? setSub(p => p===i?null:i) : go(item.id)}
+                  style={{ width:"100%", display:"flex", alignItems:"center", gap:14,
+                    padding:"13px 28px",
+                    background:isAct?C.accentGlow:"none",
+                    border:"none", borderLeft:`2px solid ${isAct?C.accent:"transparent"}`,
+                    cursor:"pointer", textAlign:"left", transition:"background .2s,border-color .2s" }}
+                  onMouseEnter={e => { if (!isAct) e.currentTarget.style.background="#00000006"; }}
+                  onMouseLeave={e => { if (!isAct) e.currentTarget.style.background="none"; }}>
+                  <span style={{ fontFamily:T.font.mono, fontSize:10,
+                    color:isAct?C.accent:C.textDim, letterSpacing:".06em", flexShrink:0 }}>{item.num}</span>
+                  <span style={{ fontSize:14, color:isAct?C.accent:C.textMuted, flexShrink:0 }}>{item.icon}</span>
+                  <span style={{ fontFamily:T.font.display, fontSize:15, fontWeight:600,
+                    color:isAct?C.textStrong:C.text, flex:1, letterSpacing:"-.01em" }}>{item.label}</span>
+                  {hasSub && <span style={{ color:subOp?C.accent:C.textDim }}><Chevron open={subOp} /></span>}
+                </button>
+
+                {hasSub && (
+                  <div className={`submenu ${subOp?"open":""}`}>
+                    {item.subs.map(s => (
+                      <button key={s.label} className="sub-item"
+                        onClick={() => { window.open(s.href,"_blank"); setOpen(false); }}
+                        style={{ width:"100%", display:"flex", alignItems:"center", gap:10,
+                          padding:"10px 24px 10px 64px", background:"none", border:"none",
+                          cursor:"pointer", textAlign:"left" }}>
+                        <span style={{ width:4, height:4, borderRadius:"50%", background:C.textDim, flexShrink:0 }} />
+                        <span style={{ fontFamily:T.font.mono, fontSize:11, letterSpacing:".06em",
+                          color:C.textMuted, textTransform:"uppercase" }}>{s.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <div style={{ height:1, background:C.border, margin:"0 28px", opacity:.5 }} />
+              </div>
+            );
+          })}
+        </nav>
+
+        {/* Footer */}
+        <div style={{ padding:"16px 28px", borderTop:`1px solid ${C.border}`, flexShrink:0,
+          display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+          <span style={{ fontFamily:T.font.mono, fontSize:10, color:C.textDim,
+            letterSpacing:".08em" }}>anthony@portfolio</span>
+          <span style={{ fontFamily:T.font.mono, fontSize:10, color:C.textDim,
+            letterSpacing:".06em" }}>v2025</span>
+        </div>
+      </div>
+    </>
+  );
+}
+
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// TYPEWRITER
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function Typewriter({ text, style }) {
+  const [displayed, setDisplayed] = useState("");
+  const [done, setDone] = useState(false);
+  useEffect(() => {
+    setDisplayed(""); setDone(false);
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      setDisplayed(text.slice(0, i));
+      if (i >= text.length) { clearInterval(interval); setDone(true); }
+    }, 55);
+    return () => clearInterval(interval);
+  }, [text]);
+  return (
+    <span style={style}>
+      {displayed}
+      {!done && <span className="cursor-blink" style={{ opacity:.7 }}>|</span>}
+    </span>
+  );
+}
+
+// hero components
+function GlitchName({ children, style }) {
+  return (
+    <span className="glitch-wrap" style={style}>
+      {children}
+      <span className="glitch-a" aria-hidden="true">{children}</span>
+      <span className="glitch-b" aria-hidden="true">{children}</span>
+    </span>
+  );
+}
+
+// ASCII art — 5-line banner
+
+
+
+
+
+function Hero() {
+  const { C } = useTheme();
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => { const t = setTimeout(() => setLoaded(true), 80); return () => clearTimeout(t); }, []);
+
+  const tr = (d, extra = {}) => ({
+    opacity:   loaded ? 1 : 0,
+    transform: loaded ? "translateY(0)" : "translateY(22px)",
+    transition:`opacity .8s ${d}s cubic-bezier(.22,.68,0,1.2),transform .8s ${d}s cubic-bezier(.22,.68,0,1.2)`,
+    ...extra,
+  });
+
+  const META = [
+    { label:"Nexa Digital School, Paris" },
+    { label:"BTS SIO · SISR" },
+    { label:"En alternance" },
+  ];
+
+  return (
+    <section id="hero" style={{ height:"100vh", display:"flex", flexDirection:"column",
+      justifyContent:"center", padding:"0 clamp(24px,8vw,140px)",
+      position:"relative", zIndex:1, overflow:"hidden" }}>
+
+      {/* one-time scan line on load */}
+      {loaded && <div className="hero-scan" />}
+
+      {/* large ghost monogram — decorative */}
+      <div aria-hidden style={{
+        position:"absolute", right:"-5%", top:"50%",
+        transform:"translateY(-50%)",
+        fontFamily:T.font.display, fontWeight:800,
+        fontSize:"clamp(280px,30vw,480px)",
+        letterSpacing:"-.06em", lineHeight:1,
+        color:C.textStrong, opacity: .025,
+        userSelect:"none", pointerEvents:"none",
+        zIndex:0,
+      }}>AC</div>
+
+      <div style={{ maxWidth:680, position:"relative", zIndex:1 }}>
+
+          {/* eyebrow */}
+          <div style={{ ...tr(.05), display:"flex", alignItems:"center", gap:12, marginBottom:36 }}>
+            <span style={{ width:32, height:1, background:C.accent, flexShrink:0 }} />
+            <span style={{ fontFamily:T.font.mono, fontSize:10.5, letterSpacing:".2em",
+              textTransform:"uppercase", color:C.accent, opacity:.9 }}>
+              Cybersécurité & Réseaux
+            </span>
+          </div>
+
+          {/* name */}
+          <h1 style={{ ...tr(.12), fontFamily:T.font.display, fontWeight:800,
+            fontSize:"clamp(52px,7.5vw,96px)", letterSpacing:"-.03em", lineHeight:1,
+            color:C.textStrong, marginBottom:24 }}>
+            Anthony<br />
+            <GlitchName style={{ color:C.accent }}>Cernon</GlitchName>
+            <span className="cursor-blink" style={{
+              color:C.accent, fontWeight:300, fontSize:".7em", verticalAlign:"middle",
+              marginLeft:4, transition:"color .5s" }}>█</span>
+          </h1>
+
+          {/* single clean line — replaces paragraph */}
+          <p style={{ ...tr(.22), fontSize:15, color:C.textMuted, lineHeight:1.8,
+            marginBottom:52, maxWidth:420, fontStyle:"italic" }}>
+            "Comprendre comment les systèmes fonctionnent
+            — et surtout comment les protéger."
+          </p>
+
+          {/* 2 CTAs only — clean, no third button cluttering */}
+          <div style={{ ...tr(.3), display:"flex", gap:14, flexWrap:"wrap", alignItems:"center",
+            marginBottom:52 }}>
+            <button
+              onClick={() => document.getElementById("projects")?.scrollIntoView({behavior:"smooth"})}
+              style={{ fontFamily:T.font.mono, fontSize:11.5, letterSpacing:".1em",
+                textTransform:"uppercase", padding:"14px 32px", borderRadius:T.radius.sm,
+                background:C.accent, color:"#fff", border:"none", cursor:"pointer",
+                transition:"background .2s, box-shadow .2s" }}
+              onMouseEnter={e => { e.target.style.background=C.accentSoft; e.target.style.boxShadow=T.shadow.glow; }}
+              onMouseLeave={e => { e.target.style.background=C.accent; e.target.style.boxShadow="none"; }}>
+              Mes projets
+            </button>
+            <a href="#" onClick={e => { e.preventDefault(); alert("CV bientôt disponible !"); }}
+              style={{ display:"inline-flex", alignItems:"center", gap:8,
+                fontFamily:T.font.mono, fontSize:11, letterSpacing:".1em",
+                textTransform:"uppercase", color:C.textMuted, textDecoration:"none",
+                cursor:"pointer", transition:"color .2s",
+                borderBottom:`1px solid ${C.borderHigh}`, paddingBottom:2 }}
+              onMouseEnter={e => { e.currentTarget.style.color=C.accent; e.currentTarget.style.borderBottomColor=C.accent; }}
+              onMouseLeave={e => { e.currentTarget.style.color=C.textMuted; e.currentTarget.style.borderBottomColor=C.borderHigh; }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+              </svg>
+              Télécharger le CV
+            </a>
+          </div>
+
+          {/* meta strip — minimal, separated by thin lines */}
+          <div style={{ ...tr(.38) }}>
+            <div className="hero-meta">
+              {META.map((m, i) => (
+                <span key={i} className={`hero-meta-item${i===META.length-1?" hero-meta-last":""}`}>
+                  {m.label}
+                </span>
+              ))}
+            </div>
+          </div>
+      </div>
+
+      <style>{`
+        @media(max-width:960px){
+          #hero > div:nth-of-type(2){grid-template-columns:1fr!important;gap:56px!important}
+        }
+        .hero-meta-last{border-right:none!important;padding-right:0!important;margin-right:0!important}
+      `}</style>
+    </section>
+  );
+}
+
+// timeline section
+const TIMELINE = [
+  {
+    year:"Juin 2025",
+    label:"Baccalauréat",
+    sub:"Maths · Physique-Chimie",
+    detail:"Bac obtenu, spécialités Maths et Physique-Chimie. Une formation qui a forgé la rigueur et la logique que j'applique aujourd'hui en informatique.",
+    done:true, now:false,
+  },
+  {
+    year:"Sept. 2025",
+    label:"BTS SIO — 1ère année",
+    sub:"Option SISR · Nexa Digital School, Paris",
+    detail:"Fondamentaux réseaux TCP/IP, administration Linux et Windows Server, virtualisation avec VirtualBox, premiers projets de sécurité.",
+    done:true, now:true,
+  },
+  {
+    year:"Sept. 2025",
+    label:"Alternance",
+    sub:"Cybersécurité & Réseaux",
+    detail:"En entreprise depuis le début du BTS — administration des systèmes, sécurité des infrastructures et gestion des incidents en conditions réelles.",
+    done:true, now:true,
+  },
+  {
+    year:"Sept. 2026",
+    label:"2ème année BTS SIO",
+    sub:"Approfondissement & épreuves E4/E5",
+    detail:"Montée en compétences sur la sécurité offensive, les audits d'infrastructure, préparation aux épreuves professionnelles E4 et E5.",
+    done:false, now:false,
+  },
+  {
+    year:"2027",
+    label:"Diplôme BTS SIO",
+    sub:"Et la suite",
+    detail:"Obtention du diplôme, puis poursuite vers un Bachelor cybersécurité ou une alternance dans la sécurité des systèmes d'information.",
+    done:false, now:false,
+  },
+];
+
+function Timeline() {
+  const { C } = useTheme();
+  const ref    = useRef();
+  const inView = useInView(ref, { threshold:0.05 });
+
+  return (
+    <section id="timeline" style={{
+      padding:"clamp(60px,8vw,100px) clamp(24px,10vw,180px)",
+      position:"relative", zIndex:1,
+    }}>
+
+      <div ref={ref} className={`reveal ${inView?"visible":""}`} style={{ marginBottom:56 }}>
+        <SectionLabel>Parcours</SectionLabel>
+        <h2 style={{
+          fontFamily:T.font.display, fontSize:"clamp(28px,3.5vw,44px)",
+          color:C.textStrong, letterSpacing:"-.02em", fontWeight:700, lineHeight:1.1,
+        }}>
+          Le chemin parcouru,<br/>et ce qui vient.
+        </h2>
+      </div>
+
+      {/* Alternating timeline */}
+      <div style={{ position:"relative", maxWidth:900, margin:"0 auto" }}>
+
+        {/* Centre vertical line */}
+        <div style={{
+          position:"absolute", left:"50%", top:0, bottom:0,
+          width:1, transform:"translateX(-50%)",
+          background:`linear-gradient(180deg, ${C.accent}88, ${C.accent}44, ${C.border})`,
+        }} />
+
+        {TIMELINE.map((item, i) => {
+          const isLeft = i % 2 === 0;
+          return (
+            <div key={i} style={{
+              display:"grid",
+              gridTemplateColumns:"1fr 40px 1fr",
+              alignItems:"center",
+              marginBottom: i < TIMELINE.length-1 ? 0 : 0,
+              minHeight:120,
+              opacity:    inView ? 1 : 0,
+              transform:  inView ? "translateY(0)" : "translateY(20px)",
+              transition: `opacity .55s ${i*.1}s cubic-bezier(.22,.68,0,1.2),
+                           transform .55s ${i*.1}s cubic-bezier(.22,.68,0,1.2)`,
+            }}>
+
+              {/* Left slot */}
+              <div style={{
+                paddingRight:36, paddingBottom:40,
+                textAlign: isLeft ? "right" : "left",
+                visibility: isLeft ? "visible" : "hidden",
+              }}>
+                {isLeft && <TimelineCard item={item} align="right" C={C} />}
+              </div>
+
+              {/* Centre dot */}
+              <div style={{ display:"flex", justifyContent:"center", alignItems:"center", zIndex:1 }}>
+                <div
+                  className={item.now ? "pulse" : ""}
+                  style={{
+                    width: item.now ? 14 : 12,
+                    height: item.now ? 14 : 12,
+                    borderRadius:"50%", flexShrink:0,
+                    background: item.done ? C.accent : C.bg,
+                    border:`2px solid ${item.done ? C.accent : C.border}`,
+                    boxShadow: item.now
+                      ? `0 0 0 4px ${C.accentGlow}, 0 0 16px ${C.accent}88`
+                      : item.done
+                        ? `0 0 0 3px ${C.accentGlow}`
+                        : "none",
+                    transition:"all .3s",
+                  }}
+                />
+              </div>
+
+              {/* Right slot */}
+              <div style={{
+                paddingLeft:36, paddingBottom:40,
+                visibility: !isLeft ? "visible" : "hidden",
+              }}>
+                {!isLeft && <TimelineCard item={item} align="left" C={C} />}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <style>{`@media(max-width:650px){
+        #timeline .tl-grid{grid-template-columns:1fr!important}
+        #timeline .tl-left{text-align:left!important;padding-right:0!important;padding-left:24px!important}
+      }`}</style>
+    </section>
+  );
+}
+
+function TimelineCard({ item, align, C }) {
+  const [hov, setHov] = useState(false);
+  const isRight = align === "right";
+
+  return (
+    <div
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        display:"inline-block", textAlign: isRight ? "right" : "left",
+        cursor:"default",
+      }}>
+
+      {/* Year */}
+      <div style={{
+        fontFamily:T.font.mono, fontSize:10.5, letterSpacing:".12em",
+        textTransform:"uppercase",
+        color: item.done ? C.accent : C.textDim,
+        marginBottom:6, opacity:.8,
+      }}>{item.year}</div>
+
+      {/* Title */}
+      <div style={{
+        fontFamily:T.font.display, fontSize:17, fontWeight:700,
+        color: hov ? C.textStrong : (item.done ? C.text : C.textMuted),
+        letterSpacing:"-.01em", marginBottom:6,
+        transition:"color .2s",
+      }}>{item.label}</div>
+
+      {/* Sub */}
+      <div style={{
+        fontFamily:T.font.mono, fontSize:10, letterSpacing:".07em",
+        textTransform:"uppercase",
+        color: item.done ? C.accentSoft : C.textDim,
+        marginBottom:10, opacity:.8,
+      }}>{item.sub}</div>
+
+      {/* Detail */}
+      <p style={{
+        fontSize:13, color:C.textMuted, lineHeight:1.75,
+        maxWidth:300,
+        opacity: hov ? 1 : .7,
+        transition:"opacity .2s",
+        marginLeft: isRight ? "auto" : 0,
+      }}>{item.detail}</p>
+
+
+    </div>
+  );
+}
+
+function EditorialStats() {
+  const { C } = useTheme();
+  const ref = useRef();
+  const inView = useInView(ref);
+
+  const LINES = [
+    { n:"01", text:"1ère année de BTS SIO option SISR" },
+    { n:"02", text:"6 projets réalisés en 2025" },
+    { n:"03", text:"2 certifications obtenues — Pix & SecNumAcadémie" },
+    { n:"04", text:"En alternance dans la cybersécurité depuis septembre 2025" },
+  ];
+
+  return (
+    <div ref={ref} style={{ position:"relative", paddingLeft:24 }}>
+
+      {/* animated vertical bar */}
+      <div style={{
+        position:"absolute", left:0, top:0, bottom:0, width:1,
+        background:C.border, overflow:"hidden",
+      }}>
+        <div style={{
+          position:"absolute", top:0, left:0, right:0,
+          height: inView ? "100%" : "0%",
+          background:`linear-gradient(180deg,${C.accent},${C.accentSoft})`,
+          transition:"height 1.1s cubic-bezier(.22,.68,0,1.2)",
+        }} />
+      </div>
+
+      {/* lines */}
+      <div style={{ display:"flex", flexDirection:"column", gap:0 }}>
+        {LINES.map((l, i) => (
+          <div key={i} style={{
+            display:"flex", alignItems:"baseline", gap:20,
+            padding:"18px 0",
+            borderBottom: i < LINES.length-1 ? `1px solid ${C.border}22` : "none",
+            opacity: inView ? 1 : 0,
+            transform: inView ? "translateX(0)" : "translateX(-12px)",
+            transition:`opacity .55s ${i*.12}s cubic-bezier(.22,.68,0,1.2),
+                        transform .55s ${i*.12}s cubic-bezier(.22,.68,0,1.2)`,
+          }}>
+            <span style={{
+              fontFamily:T.font.mono, fontSize:9, color:C.accent,
+              letterSpacing:".1em", flexShrink:0, opacity:.6,
+            }}>{l.n}</span>
+            <span style={{
+              fontFamily:T.font.body, fontSize:15, color:C.text,
+              lineHeight:1.5, letterSpacing:"-.01em",
+            }}>{l.text}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+function About() {
+  const { C } = useTheme();
+  const ref = useRef();
+  const inView = useInView(ref);
+
+  return (
+    <section id="about" style={{ padding:"clamp(80px,12vw,140px) clamp(24px,10vw,180px)",
+      position:"relative", zIndex:1 }}>
+
+      {/* text */}
+      <div ref={ref} className={`reveal ${inView?"visible":""}`}
+        style={{ maxWidth:620, marginBottom:64 }}>
+        <SectionLabel>À propos</SectionLabel>
+        <h2 style={{ fontFamily:T.font.display, fontSize:"clamp(30px,4vw,48px)",
+          color:C.textStrong, marginBottom:28, letterSpacing:"-.02em", fontWeight:700,
+          lineHeight:1.1 }}>
+          Curieux par nature,<br />rigoureux par choix.
+        </h2>
+        <p style={{ color:C.textMuted, marginBottom:16, fontSize:14.5, lineHeight:1.85 }}>
+          En BTS SIO option SISR à la Nexa Digital School, Paris, et en alternance
+          dans la cybersécurité depuis septembre 2025. Ce qui m'a amené là ? Une obsession
+          assez simple : comprendre comment les choses fonctionnent, et trouver
+          là où elles peuvent casser.
+        </p>
+        <p style={{ color:C.textMuted, fontSize:14.5, lineHeight:1.85 }}>
+          Je construis aujourd'hui mes bases en administration réseau et sécurité
+          des infrastructures, avec un œil aussi sur la partie offensive, parce
+          qu'on défend mieux ce qu'on a appris à attaquer.
+        </p>
+      </div>
+
+      {/* editorial stat lines */}
+      <div className={`reveal ${inView?"visible":""}`} style={{ marginTop:56 }}>
+        <EditorialStats />
+      </div>
+    </section>
+  );
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SKILLS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function Skills() {
+  const { C } = useTheme();
+  const tR = useRef(), gR = useRef();
+  const iT = useInView(tR), iG = useInView(gR);
+
+  return (
+    <section id="skills" style={{ padding:"clamp(80px,12vw,140px) clamp(24px,10vw,180px)",
+      background:C.surface, position:"relative", zIndex:1, transition:"background .55s" }}>
+      <div ref={tR} className={`reveal ${iT?"visible":""}`}>
+        <SectionLabel>Compétences</SectionLabel>
+        <h2 style={{ fontFamily:T.font.display, fontSize:"clamp(30px,4vw,50px)",
+          color:C.textStrong, marginBottom:52, letterSpacing:"-.02em", fontWeight:700 }}>
+          Ce que je maîtrise
+        </h2>
+      </div>
+      <div ref={gR} className={`stagger ${iG?"visible":""}`} style={{
+        display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",
+        background:C.border, border:`1px solid ${C.border}`,
+        borderRadius:T.radius.md, overflow:"hidden", gap:1 }}>
+        {SKILLS.map((s, i) => <SkillCard key={s.title} skill={s} delay={i*.08} />)}
+      </div>
+    </section>
+  );
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// CERTIFICATIONS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const CERTS = [
+  {
+    icon:"🎓",
+    title:"SecNumAcadémie",
+    org:"ANSSI",
+    desc:"Formation aux fondamentaux de la cybersécurité dispensée par l'Agence Nationale de la Sécurité des Systèmes d'Information.",
+    tags:["ANSSI","Cyber","Fondamentaux"],
+    year:"2025",
+  },
+  {
+    icon:"📊",
+    title:"Certification Pix",
+    org:"Pix — GIP",
+    desc:"Certification nationale des compétences numériques : traitement de l'information, communication, création de contenus, environnement numérique.",
+    tags:["Numérique","Compétences","Officiel"],
+    year:"2025",
+  },
+];
+
+function CertCard({ cert }) {
+  const { C } = useTheme();
+  const [hov, setHov] = useState(false);
+  return (
+    <div
+      className="card-hover"
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{ border:`1px solid ${hov?C.borderHigh:C.border}`, borderRadius:T.radius.lg,
+        background:C.surface, overflow:"hidden", position:"relative" }}
+    >
+      <div style={{ height:2, background:`linear-gradient(90deg,${C.accent},${C.accentSoft})`,
+        opacity:hov?1:0, transition:"opacity .3s" }} />
+      <div style={{ padding:"24px 26px" }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:16 }}>
+          <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+            <div style={{ width:40, height:40, borderRadius:8, background:C.bg,
+              border:`1px solid ${C.borderHigh}`, display:"flex", alignItems:"center",
+              justifyContent:"center", fontSize:18, flexShrink:0 }}>{cert.icon}</div>
+            <div>
+              <div style={{ fontFamily:T.font.display, fontSize:15, fontWeight:600,
+                color:hov?C.textStrong:C.text, transition:"color .2s" }}>{cert.title}</div>
+              <div style={{ fontFamily:T.font.mono, fontSize:10, color:C.accent,
+                letterSpacing:".08em", textTransform:"uppercase", marginTop:2 }}>{cert.org}</div>
+            </div>
+          </div>
+          <span style={{ fontFamily:T.font.mono, fontSize:10, color:C.textDim,
+            border:`1px solid ${C.border}`, padding:"3px 8px", borderRadius:T.radius.sm,
+            flexShrink:0 }}>{cert.year}</span>
+        </div>
+        <p style={{ fontSize:13, color:C.textMuted, lineHeight:1.7, marginBottom:16 }}>{cert.desc}</p>
+        <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
+          {cert.tags.map(t => <Tag key={t}>{t}</Tag>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Certifications() {
+  const { C } = useTheme();
+  const tR = useRef(), gR = useRef();
+  const iT = useInView(tR), iG = useInView(gR);
+  return (
+    <section id="certs" style={{ padding:"clamp(80px,12vw,140px) clamp(24px,10vw,180px)",
+      background:C.surface, position:"relative", zIndex:1, transition:"background .55s" }}>
+      <div ref={tR} className={`reveal ${iT?"visible":""}`}>
+        <SectionLabel>Certifications</SectionLabel>
+        <h2 style={{ fontFamily:T.font.display, fontSize:"clamp(30px,4vw,50px)",
+          color:C.textStrong, marginBottom:52, letterSpacing:"-.02em", fontWeight:700 }}>
+          Reconnaissances obtenues
+        </h2>
+      </div>
+      <div ref={gR} className={`stagger ${iG?"visible":""}`} style={{
+        display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(340px,1fr))", gap:18 }}>
+        {CERTS.map(c => <CertCard key={c.title} cert={c} />)}
+      </div>
+    </section>
+  );
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// PROJECTS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function Projects() {
+  const { C, isDark } = useTheme();
+  const tR       = useRef();
+  const iT       = useInView(tR);
+  const cylRef   = useRef();
+  const facesRef = useRef([]);
+  const [selected, setSelected] = useState(null);
+
+  // Lamppost: track angle via timestamp (reliable, no matrix parsing)
+  useEffect(() => {
+    const N        = PROJECTS.length;
+    const DURATION = 40000; // ms — matches CSS animation
+    const paused   = { val: false };
+    let raf;
+    let startTime  = null;
+    let pauseStart = null;
+    let pausedMs   = 0;
+
+    const scene = cylRef.current?.closest(".proj-scene");
+    const onEnter = () => { paused.val = true;  pauseStart = performance.now(); };
+    const onLeave = () => {
+      if (pauseStart) pausedMs += performance.now() - pauseStart;
+      paused.val = false;
+    };
+    scene?.addEventListener("mouseenter", onEnter);
+    scene?.addEventListener("mouseleave", onLeave);
+
+    const tick = (ts) => {
+      if (!startTime) startTime = ts;
+      // effective elapsed time excluding pauses
+      const elapsed = paused.val
+        ? ts - startTime - pausedMs - (ts - pauseStart)
+        : ts - startTime - pausedMs;
+
+      // current cylinder angle in radians (full turn = DURATION ms)
+      const cylAngle = (elapsed / DURATION) * 2 * Math.PI;
+
+      facesRef.current.forEach((face, i) => {
+        if (!face) return;
+        // angle of this card on the cylinder
+        const cardAngle = (2 * Math.PI / N) * i;
+        // dot product: how much this card faces the viewer (front = cos→1)
+        const cos = Math.cos(cylAngle + cardAngle);
+
+        // smooth mapping: use a power curve to make the peak sharper
+        // (like a real spotlight: bright only when directly in front)
+        const raw = (cos + 1) / 2;              // 0..1 linear
+        const t   = Math.pow(raw, 2.2);         // sharpen the peak
+
+        const bright = 0.18 + t * 0.92;         // 0.18 → 1.10
+        const opac   = 0.28 + t * 0.72;         // 0.28 → 1.00
+        const sat    = 0.45 + t * 0.55;         // 0.45 → 1.00
+
+        // apply lamppost: bright front, dim back
+        face.style.filter = `brightness(${bright.toFixed(2)}) saturate(${sat.toFixed(2)}) opacity(${opac.toFixed(2)})`;
+
+        // accent bar: visible only when near front
+        const bar = face.querySelector(".proj-face-bar");
+        if (bar) bar.style.opacity = (t > 0.6 ? (t - 0.6) / 0.4 : 0).toFixed(2);
+
+        // holographic border glow at peak
+        if (t > 0.85) {
+          const g = ((t - 0.85) / 0.15).toFixed(2);
+          face.style.boxShadow = `0 0 ${20 * t | 0}px rgba(75,142,255,${(g * 0.35).toFixed(2)}), inset 0 0 20px rgba(75,142,255,${(g * 0.06).toFixed(2)})`;
+          face.style.borderColor = `rgba(75,142,255,${(g * 0.7).toFixed(2)})`;
+        } else {
+          face.style.boxShadow = "none";
+          face.style.borderColor = "rgba(75,142,255,.15)";
+        }
+      });
+
+      raf = requestAnimationFrame(tick);
+    };
+
+    raf = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(raf);
+      scene?.removeEventListener("mouseenter", onEnter);
+      scene?.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  return (
+    <section id="projects" style={{ padding:"clamp(80px,12vw,140px) clamp(24px,10vw,180px)",
+      position:"relative", zIndex:1 }}>
+
+      <div ref={tR} className={`reveal ${iT?"visible":""}`} style={{ marginBottom:48 }}>
+        <SectionLabel>Projets</SectionLabel>
+        <div style={{ display:"flex", alignItems:"flex-end", justifyContent:"space-between", flexWrap:"wrap", gap:16 }}>
+          <h2 style={{ fontFamily:T.font.display, fontSize:"clamp(30px,4vw,50px)",
+            color:C.textStrong, letterSpacing:"-.02em", fontWeight:700 }}>
+            Réalisations
+          </h2>
+
+        </div>
+      </div>
+
+      <div className={`proj-scene reveal ${iT?"visible":""}`}>
+
+        {/* Holographic emitter base */}
+        <div className="proj-base" />
+        <div className="proj-cone" />
+        <div className="proj-cone-pulse" />
+        <div className="proj-ring-pulse" />
+        <div className="proj-ring-pulse" />
+
+
+        {/* Cylinder */}
+        <div className="proj-cylinder" ref={cylRef}>
+          {PROJECTS.map((p, i) => {
+            const angle  = (360 / PROJECTS.length) * i;
+            const color  = PROJ_COLORS[i % PROJ_COLORS.length];
+            const done   = p.status === "done";
+            return (
+              <div key={p.num}
+                className="proj-face"
+                ref={el => facesRef.current[i] = el}
+                style={{ "--c":color, "--angle":`${angle}deg` }}
+                onClick={() => setSelected(p)}>
+                <div className="proj-face-bar" />
+                <div className="proj-face-body">
+                  <div className="proj-face-num">// {p.num}</div>
+                  <div className="proj-face-middle">
+                    <div className="proj-face-title">{p.title}</div>
+                  </div>
+                  <div className="proj-face-pills">
+                    {p.tags.slice(0,2).map(t => (
+                      <span key={t} className="proj-face-pill">{t}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {selected && (
+        <ProjectModal project={selected} onClose={() => setSelected(null)} C={C} />
+      )}
+    </section>
+  );
+}
+
+
+function Contact() {
+  const { C } = useTheme();
+  const ref    = useRef();
+  const inView = useInView(ref);
+  const [form, setForm] = useState({ name:"", email:"", message:"" });
+  const [status, setStatus] = useState(null); // null | "sending" | "ok" | "error"
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("sending");
+    try {
+      const res = await fetch("https://formspree.io/f/xpwzgkno", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json", "Accept":"application/json" },
+        body: JSON.stringify({ name:form.name, email:form.email, message:form.message }),
+      });
+      setStatus(res.ok ? "ok" : "error");
+      if (res.ok) setForm({ name:"", email:"", message:"" });
+    } catch { setStatus("error"); }
+  };
+
+  const inputStyle = {
+    width:"100%", padding:"12px 16px",
+    background:C.bg, border:`1px solid ${C.border}`,
+    borderRadius:T.radius.sm, color:C.text,
+    fontFamily:T.font.body, fontSize:14,
+    outline:"none", transition:"border-color .2s, box-shadow .2s",
+  };
+
+  return (
+    <section id="contact" style={{ padding:"clamp(80px,12vw,140px) clamp(24px,10vw,180px)",
+      position:"relative", zIndex:1 }}>
+      <div ref={ref} className={`reveal ${inView?"visible":""}`}>
+        <SectionLabel>Contact</SectionLabel>
+        <h2 style={{ fontFamily:T.font.display, fontSize:"clamp(30px,4vw,50px)",
+          color:C.textStrong, marginBottom:16, letterSpacing:"-.02em", fontWeight:700 }}>
+          Travaillons ensemble
+        </h2>
+        <p style={{ color:C.textMuted, marginBottom:52, maxWidth:480 }}>
+          Pour un stage, une alternance ou simplement pour échanger autour de la cybersécurité.
+        </p>
+      </div>
+
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:64, alignItems:"start" }}>
+
+        {/* Form */}
+        <div className={`reveal-left ${inView?"visible":""}`}>
+          <div style={{ display:"flex", flexDirection:"column", gap:16 }}>
+            {[
+              { key:"name",    placeholder:"Votre nom",    type:"text"  },
+              { key:"email",   placeholder:"Votre email",  type:"email" },
+            ].map(f => (
+              <input key={f.key} type={f.type} placeholder={f.placeholder}
+                value={form[f.key]}
+                onChange={e => setForm(p => ({...p,[f.key]:e.target.value}))}
+                style={inputStyle}
+                onFocus={e => { e.target.style.borderColor=C.accent; e.target.style.boxShadow=`0 0 0 1px ${C.accent}33`; }}
+                onBlur={e  => { e.target.style.borderColor=C.border;  e.target.style.boxShadow="none"; }}
+              />
+            ))}
+            <textarea placeholder="Votre message" rows={5}
+              value={form.message}
+              onChange={e => setForm(p => ({...p,message:e.target.value}))}
+              style={{...inputStyle, resize:"vertical", minHeight:120}}
+              onFocus={e => { e.target.style.borderColor=C.accent; e.target.style.boxShadow=`0 0 0 1px ${C.accent}33`; }}
+              onBlur={e  => { e.target.style.borderColor=C.border;  e.target.style.boxShadow="none"; }}
+            />
+
+            <button onClick={handleSubmit} disabled={status==="sending"}
+              style={{ fontFamily:T.font.mono, fontSize:11.5, letterSpacing:".08em",
+                textTransform:"uppercase", padding:"13px 28px", borderRadius:T.radius.sm,
+                background: status==="ok" ? C.success : C.accent,
+                color:"#fff", border:"none", cursor:"pointer", alignSelf:"flex-start",
+                transition:"background .2s, box-shadow .2s, opacity .2s",
+                opacity: status==="sending" ? .6 : 1 }}
+              onMouseEnter={e => { if(status!=="sending") e.currentTarget.style.boxShadow="0 0 24px rgba(75,142,255,.35)"; }}
+              onMouseLeave={e => { e.currentTarget.style.boxShadow="none"; }}>
+              {status==="sending" ? "Envoi..." : status==="ok" ? "✓ Message envoyé" : "Envoyer"}
+            </button>
+            {status==="error" && (
+              <p style={{ fontFamily:T.font.mono, fontSize:11, color:C.warn }}>
+                Erreur — réessayez ou contactez directement par mail.
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Links */}
+        <div className={`reveal-right ${inView?"visible":""}`}
+          style={{ display:"flex", flexDirection:"column", gap:14 }}>
+          {[
+            { icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>, label:"anthonycernon@gmail.com", href:"mailto:anthonycernon@gmail.com" },
+            { icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>, label:"LinkedIn (bientôt)", href:"#" },
+            { icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>, label:"GitHub (bientôt)", href:"#" },
+          ].map(l => (
+            <a key={l.label} href={l.href}
+              style={{ display:"flex", alignItems:"center", gap:12,
+                fontFamily:T.font.mono, fontSize:12, letterSpacing:".06em",
+                color:C.textMuted, textDecoration:"none",
+                border:`1px solid ${C.borderHigh}`, padding:"14px 20px",
+                borderRadius:T.radius.sm, background:C.surface,
+                transition:"color .2s,border-color .2s,box-shadow .2s" }}
+              onMouseEnter={e => { e.currentTarget.style.color=C.accent; e.currentTarget.style.borderColor=C.accent; e.currentTarget.style.boxShadow=`0 0 14px ${C.accentGlow}`; }}
+              onMouseLeave={e => { e.currentTarget.style.color=C.textMuted; e.currentTarget.style.borderColor=C.borderHigh; e.currentTarget.style.boxShadow="none"; }}>
+              <span style={{ flexShrink:0, color:C.accent }}>{l.icon}</span>
+              {l.label}
+            </a>
+          ))}
+
+        </div>
+      </div>
+      <style>{`@media(max-width:850px){#contact>div:last-of-type{grid-template-columns:1fr!important}}`}</style>
+    </section>
+  );
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// FOOTER
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function Footer() {
+  const { C } = useTheme();
+  return (
+    <footer style={{ borderTop:`1px solid ${C.border}`, padding:"26px clamp(24px,10vw,180px)",
+      display:"flex", justifyContent:"space-between", alignItems:"center",
+      position:"relative", zIndex:1, flexWrap:"wrap", gap:12, transition:"border-color .55s" }}>
+      <span style={{ fontFamily:T.font.mono, fontSize:11, color:C.textDim, letterSpacing:".06em" }}>
+        © 2026 · Anthony Cernon · BTS SIO SISR
+      </span>
+      <div style={{ display:"flex", alignItems:"center", gap:20 }}>
+        <a href="mailto:anthonycernon@gmail.com"
+          style={{ fontFamily:T.font.mono, fontSize:11, color:C.textDim, letterSpacing:".06em",
+            textDecoration:"none", transition:"color .2s" }}
+          onMouseEnter={e => e.currentTarget.style.color=C.accent}
+          onMouseLeave={e => e.currentTarget.style.color=C.textDim}>
+          anthonycernon@gmail.com
+        </a>
+        <span style={{ fontFamily:T.font.mono, fontSize:11, color:C.textDim, letterSpacing:".06em" }}>
+          Nexa Digital School, Paris
+        </span>
+      </div>
+    </footer>
+  );
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ROOT
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// FlipOverlay — FLIP technique: screen rect → fullscreen → white flash → done
+function FlipOverlay({ rect, fading }) {
+  const [expanded, setExpanded] = useState(false);
+  const [flash,    setFlash   ] = useState(false);
+
+  useEffect(() => {
+    // Frame 1: paint at start position
+    // Frame 2: trigger transition to fullscreen
+    const raf = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setExpanded(true);
+        // After expansion completes, trigger flash
+        setTimeout(() => setFlash(true), 520);
+      });
+    });
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  return (
+    <div style={{
+      position:"fixed", zIndex:10001, overflow:"hidden",
+      background:"#090c12", pointerEvents:"none",
+      left:     expanded ? 0       : rect.left,
+      top:      expanded ? 0       : rect.top,
+      width:    expanded ? "100vw" : rect.width,
+      height:   expanded ? "100vh" : rect.height,
+      borderRadius: expanded ? 0 : 6,
+      transition: expanded
+        ? "left .48s cubic-bezier(.4,0,.2,1), top .48s cubic-bezier(.4,0,.2,1), width .48s cubic-bezier(.4,0,.2,1), height .48s cubic-bezier(.4,0,.2,1), border-radius .48s"
+        : "none",
+      opacity: fading ? 0 : 1,
+    }}>
+      <div className="crt-scanlines" style={{ opacity:.4 }} />
+
+      {/* White phosphor flash at end of zoom */}
+      {flash && (
+        <div style={{
+          position:"absolute", inset:0, pointerEvents:"none",
+          background:"#fff",
+          animation:"crt-flash .35s ease forwards",
+          zIndex:2,
+        }} />
+      )}
+    </div>
+  );
+}
+
+// ── CRT INTRO ──
+function CRTIntro({ onDone }) {
+  const [phase, setPhase]     = useState("off");    // off→poweron→content→zoom→done
+  const [showContent, setContent] = useState(false);
+  const [zooming, setZooming] = useState(false);
+  const [fading,  setFading]  = useState(false);
+  const [screenRect, setRect] = useState(null);     // measured position of screen div
+  const screenRef  = useRef();
+  const timers     = useRef([]);
+
+  const clearTimers = () => timers.current.forEach(clearTimeout);
+
+  // Measure screen position before zoom starts
+  const startZoom = () => {
+    if (screenRef.current) {
+      setRect(screenRef.current.getBoundingClientRect());
+    }
+    setZooming(true);
+  };
+
+  const skip = () => {
+    clearTimers();
+    startZoom();
+    const t1 = setTimeout(() => setFading(true), 500);
+    const t2 = setTimeout(() => onDone(), 650);
+    timers.current = [t1, t2];
+  };
+
+  useEffect(() => {
+    const schedule = [
+      [200,  () => setPhase("poweron")],
+      [1100, () => { setPhase("content"); setContent(true); }],
+      [2900, () => startZoom()],
+      [3450, () => setFading(true)],
+      [3600, () => onDone()],
+    ];
+    timers.current = schedule.map(([d, fn]) => setTimeout(fn, d));
+    return clearTimers;
+  }, []);
+
+  const isPowerOn  = phase === "poweron";
+  const hasContent = showContent;
+  const monitorW   = "min(72vw, 940px)";
+
+  return (
+    <>
+      {/* SVG filter for chromatic aberration */}
+      <svg width="0" height="0" style={{ position:"absolute" }}>
+        <defs>
+          <filter id="crt-aberration" x="-5%" y="-5%" width="110%" height="110%">
+            <feColorMatrix type="matrix" values="1 0 0 0 0.008  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"
+              in="SourceGraphic" result="red"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0"
+              in="SourceGraphic" result="green"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0.008  0 0 0 1 0"
+              in="SourceGraphic" result="blue"/>
+            <feOffset in="red"   dx="-1.5" dy="0" result="red-off"/>
+            <feOffset in="blue"  dx="1.5"  dy="0" result="blue-off"/>
+            <feBlend in="red-off"   in2="green"   mode="screen" result="rb"/>
+            <feBlend in="rb"        in2="blue-off" mode="screen"/>
+          </filter>
+        </defs>
+      </svg>
+
+      {/* ── Full-screen backdrop ── */}
+      <div style={{
+        position:"fixed", inset:0, zIndex:10000,
+        background:"#04060a",
+        display:"flex", alignItems:"center", justifyContent:"center",
+        pointerEvents: zooming ? "none" : "all",
+        opacity: fading ? 0 : 1,
+        transition: fading ? "opacity .12s linear" : "none",
+      }}>
+
+        {/* Room ambient glow */}
+        <div style={{
+          position:"absolute", inset:0,
+          background:"radial-gradient(ellipse 55% 48% at 50% 54%, #0c1120 0%, #04060a 68%)",
+          pointerEvents:"none",
+        }} />
+
+        {/* Monitor */}
+        <div style={{
+          position:"relative", zIndex:1,
+          display:"flex", flexDirection:"column", alignItems:"center",
+          animation:"monitor-enter .8s cubic-bezier(.22,.68,0,1.2) forwards",
+          opacity: zooming ? 0 : 1,
+          transition: zooming ? "opacity .15s ease" : "none",
+          transformOrigin:"center bottom",
+        }}>
+
+          {/* Bezel */}
+          <div style={{
+            background:"linear-gradient(145deg,#1a1d24,#0f1117)",
+            borderRadius:16, padding:"32px 32px 56px",
+            width: monitorW,
+            boxShadow:`0 0 0 1px #2a2d36,0 8px 32px rgba(0,0,0,.8),0 24px 64px rgba(0,0,0,.6),inset 0 1px 0 #2e3240`,
+            position:"relative",
+          }}>
+
+            {/* Screen */}
+            <div ref={screenRef} style={{
+              background:"#000", borderRadius:6,
+              position:"relative", overflow:"hidden",
+              aspectRatio:"16/10",
+              boxShadow:"inset 0 0 20px rgba(0,0,0,.9), 0 0 0 1px #111",
+            }}>
+
+              {/* power-on line */}
+              {isPowerOn && !hasContent && (
+                <div style={{
+                  position:"absolute", inset:0, zIndex:10,
+                  display:"flex", alignItems:"center", justifyContent:"center",
+                }}>
+                  <div style={{
+                    width:"100%", height:"100%",
+                    background:"linear-gradient(180deg,rgba(75,142,255,.02) 0%,rgba(75,142,255,.06) 50%,rgba(75,142,255,.02) 100%)",
+                    animation:"crt-line-expand .9s cubic-bezier(.4,0,.2,1) forwards",
+                    transformOrigin:"center center",
+                  }} />
+                </div>
+              )}
+
+              {/* phosphor flicker */}
+              {isPowerOn && !hasContent && (
+                <div style={{
+                  position:"absolute", inset:0, zIndex:8,
+                  background:"rgba(75,142,255,.04)",
+                  animation:"crt-flicker .9s ease forwards",
+                }} />
+              )}
+
+              {/* content with chromatic aberration */}
+              {hasContent && (
+                <div style={{
+                  position:"absolute", inset:0,
+                  animation:"crt-content-in .6s ease forwards",
+                  filter:"url(#crt-aberration)",
+                }}>
+                  <div style={{
+                    width:"100%", height:"100%", background:"#090c12",
+                    display:"flex", flexDirection:"column", justifyContent:"center",
+                    padding:"8% 10%", overflow:"hidden",
+                  }}>
+                    <div style={{ fontSize:"min(1.2vw,11px)", color:"#4b8eff",
+                      letterSpacing:".15em", textTransform:"uppercase", marginBottom:"3%", opacity:.8 }}>
+                      — Cybersécurité & Réseaux
+                    </div>
+                    <div style={{
+                      fontFamily:"'Syne',sans-serif", fontWeight:800,
+                      fontSize:"min(5vw,52px)", lineHeight:1.05,
+                      letterSpacing:"-.025em", color:"#fff", marginBottom:"4%",
+                    }}>
+                      Anthony<br/>
+                      <span style={{ color:"#4b8eff" }}>Cernon</span>
+                      <span style={{ color:"#3a4258", fontWeight:300 }}>█</span>
+                    </div>
+                    <div style={{
+                      fontFamily:"'DM Sans',sans-serif", fontSize:"min(1.4vw,13px)",
+                      color:"#5e6a88", fontStyle:"italic", maxWidth:"55%", lineHeight:1.7, marginBottom:"6%",
+                    }}>
+                      "Comprendre comment les systèmes fonctionnent, et surtout comment les protéger."
+                    </div>
+                    <div style={{ display:"flex", gap:"2%", alignItems:"center" }}>
+                      <div style={{
+                        fontFamily:"'JetBrains Mono',monospace", fontSize:"min(1vw,9px)",
+                        letterSpacing:".1em", textTransform:"uppercase",
+                        background:"#4b8eff", color:"#fff", padding:"1% 2.5%", borderRadius:2,
+                      }}>Mes projets</div>
+                      <div style={{
+                        fontFamily:"'JetBrains Mono',monospace", fontSize:"min(1vw,9px)",
+                        letterSpacing:".1em", textTransform:"uppercase",
+                        color:"#5e6a88", borderBottom:"1px solid #252c42", paddingBottom:2,
+                      }}>Télécharger le CV</div>
+                    </div>
+                    <div style={{
+                      position:"absolute", inset:0, pointerEvents:"none",
+                      backgroundImage:"radial-gradient(circle,rgba(255,255,255,.04) 1px,transparent 1px)",
+                      backgroundSize:"18px 18px",
+                    }} />
+                  </div>
+                </div>
+              )}
+
+              {!phase.includes("off") && <div className="crt-scanlines" />}
+              {!phase.includes("off") && <div className="crt-sweep"     />}
+              {!phase.includes("off") && <div className="crt-vignette"  />}
+              {hasContent              && <div className="crt-glow"      />}
+            </div>
+
+            {/* Bezel labels */}
+            <div style={{
+              position:"absolute", bottom:18, left:"50%", transform:"translateX(-50%)",
+              fontFamily:"'JetBrains Mono',monospace", fontSize:9,
+              letterSpacing:".2em", textTransform:"uppercase",
+              color:"#2a2e3a", userSelect:"none",
+            }}>CERNON · SYS-1</div>
+
+            <div style={{
+              position:"absolute", bottom:20, right:36,
+              width:5, height:5, borderRadius:"50%",
+              background: hasContent ? "#2dd97e" : "#1a1f2a",
+              boxShadow: hasContent ? "0 0 6px #2dd97e" : "none",
+              transition:"background .3s, box-shadow .5s",
+            }} />
+          </div>
+
+          {/* Stand */}
+          <div style={{ display:"flex", flexDirection:"column", alignItems:"center" }}>
+            <div style={{ width:80, height:24, background:"linear-gradient(180deg,#141720,#0f1117)",
+              borderRadius:"0 0 4px 4px", boxShadow:"0 4px 12px rgba(0,0,0,.5)" }} />
+            <div style={{ width:140, height:8, background:"linear-gradient(180deg,#0f1117,#0b0d14)",
+              borderRadius:"0 0 8px 8px", boxShadow:"0 4px 16px rgba(0,0,0,.5)" }} />
+          </div>
+        </div>
+
+        {/* Skip */}
+        {!zooming && (
+          <button onClick={skip} style={{
+            position:"absolute", bottom:32, right:40,
+            fontFamily:"'JetBrains Mono',monospace", fontSize:10,
+            letterSpacing:".12em", textTransform:"uppercase",
+            color:"#3a4258", background:"none", border:"none", cursor:"pointer",
+            transition:"color .2s", pointerEvents:"all",
+          }}
+          onMouseEnter={e => e.target.style.color="#4b8eff"}
+          onMouseLeave={e => e.target.style.color="#3a4258"}>
+            passer →
+          </button>
+        )}
+      </div>
+
+      {/* ── FLIP zoom overlay ── */}
+      {zooming && screenRect && (
+        <FlipOverlay rect={screenRect} fading={fading} />
+      )}
+    </>
+  );
+}
+
+function Portfolio() {
+  const [isDark, setIsDark] = useState(true);
+  const [intro, setIntro] = useState(true);
+  const C        = isDark ? DARK : LIGHT;
+  const toggle   = () => setIsDark(d => !d);
+  const progress = useScrollProgress();
+
+  useEffect(() => {
+    document.title = "Anthony Cernon — Portfolio Cybersécurité";
+    const metas = [
+      { name:"description", content:"Portfolio d'Anthony Cernon, étudiant BTS SIO SISR à la Nexa Digital School, Paris. Cybersécurité, réseaux, administration système." },
+      { property:"og:title", content:"Anthony Cernon — Cybersécurité & Réseaux" },
+      { property:"og:description", content:"BTS SIO SISR · Nexa Digital School, Paris · En alternance" },
+      { name:"author", content:"Anthony Cernon" },
+    ];
+    metas.forEach(m => {
+      const key = m.property ? "property" : "name";
+      let el = document.querySelector(`meta[${key}="${m[key]}"]`);
+      if (!el) { el = document.createElement("meta"); document.head.appendChild(el); }
+      el.setAttribute(key, m[key]);
+      el.setAttribute("content", m.content);
+    });
+  }, []);
+
+  useEffect(() => {
+    const el = document.getElementById("cursor-glow");
+    if (!el) return;
+    const fn = (e) => { el.style.left = e.clientX+"px"; el.style.top = e.clientY+"px"; };
+    window.addEventListener("mousemove", fn);
+    return () => window.removeEventListener("mousemove", fn);
+  }, []);
+
+  return (
+    <ThemeCtx.Provider value={{ C, isDark, toggle }}>
+      <style>{makeCSS(C, isDark)}</style>
+
+      {intro && <CRTIntro key="crt" onDone={() => setIntro(false)} />}
+
+      <div id="scroll-progress" style={{ transform:`scaleX(${progress})` }} />
+      <div id="cursor-glow" />
+
+      <Navbar />
+
+      <main>
+        <Hero />
+        <Divider />
+        <About />
+        <Divider />
+        <Timeline />
+        <Divider />
+        <Skills />
+        <Divider />
+        <Certifications />
+        <Divider />
+        <Projects />
+        <Divider />
+        <Contact />
+      </main>
+      <Footer />
+    </ThemeCtx.Provider>
+  );
+}
+
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<Portfolio />);
+  </script>
+</body>
+</html>
