@@ -416,6 +416,10 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;height:600px;backgrou
   max-height:88vh;overflow-y:auto;
 }
 @keyframes modal-up{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes live-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:rgb(40,200,120);animation:live-pulse 2s ease-in-out infinite}
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+.skeleton{background:${isDark?'linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.04) 75%)':'linear-gradient(90deg,rgba(0,0,0,.04) 25%,rgba(0,0,0,.08) 50%,rgba(0,0,0,.04) 75%)'};background-size:400px 100%;animation:shimmer 1.4s ease-in-out infinite}
 `;
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -499,50 +503,6 @@ const PROJECTS = [
     tags:["Docker","WSL2","LLM","CrewAI"], github:null },
 ];
 
-const VEILLE_ITEMS = [
-  {
-    icon:"??",
-    category:"Veille institutionnelle",
-    title:"ANSSI / CERT-FR",
-    desc:"Alertes et avis de s�curit� publi�s par l'ANSSI. Suivi des bulletins hebdomadaires, recommandations et signalements officiels.",
-    tags:["CERT-FR","Alertes","Officiel"],
-  },
-  {
-    icon:"??",
-    category:"Base de vuln�rabilit�s",
-    title:"CVE / NVD",
-    desc:"Consultation r�guli�re de la base nationale des vuln�rabilit�s pour suivre les CVE critiques affectant les syst�mes courants.",
-    tags:["CVE","CVSS","Patch"],
-  },
-  {
-    icon:"??",
-    category:"Actualit� s�curit�",
-    title:"The Hacker News",
-    desc:"Suivi quotidien de l'actualit� cybers�curit� mondiale : incidents, nouvelles techniques d'attaque, correctifs et outils d�fensifs.",
-    tags:["News","Incidents","Threat Intel"],
-  },
-  {
-    icon:"??",
-    category:"Pratique offensive",
-    title:"HackTheBox / TryHackMe",
-    desc:"Entra�nement sur des environnements r�alistes : machines vuln�rables, challenges guid�s, apprentissage des techniques red team.",
-    tags:["CTF","Pentest","Labs"],
-  },
-  {
-    icon:"???",
-    category:"Threat Intelligence",
-    title:"MITRE ATT&CK",
-    desc:"R�f�rentiel des tactiques et techniques adversariales. Utilis� pour comprendre les modes op�ratoires des groupes APT et structurer la d�fense.",
-    tags:["ATT&CK","TTPs","APT"],
-  },
-  {
-    icon:"??",
-    category:"Communaut� & Forums",
-    title:"Reddit r/netsec & Discord",
-    desc:"�changes avec la communaut� s�curit� francophone et internationale. Partage de writeups, d'outils et de retours d'exp�rience.",
-    tags:["Community","Writeups","Open Source"],
-  },
-];
 
 const NAV_MENU = [
   { id:"hero",     label:"Accueil",        icon:"◎", num:"00", subs:[] },
@@ -1537,38 +1497,188 @@ function Projects() {
 }
 
 
-// ????????????????????????????????????????????????
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // VEILLE TECHNOLOGIQUE
-// ????????????????????????????????????????????????
-function VeilleCard({ item }) {
-  const { C } = useTheme();
-  const [hov, setHov] = useState(false);
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function LiveDot() {
   return (
-    <div
-      className="card-hover"
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{ border:`1px solid ${hov?C.borderHigh:C.border}`, borderRadius:T.radius.lg,
-        background:C.surface, overflow:"hidden", position:"relative" }}
-    >
-      <div style={{ height:2, background:`linear-gradient(90deg,${C.accent},${C.accentSoft})`,
-        opacity:hov?1:0, transition:"opacity .3s" }} />
-      <div style={{ padding:"24px 26px" }}>
-        <div style={{ marginBottom:10 }}>
-          <span style={{ fontFamily:T.font.mono, fontSize:9.5, letterSpacing:".12em",
-            textTransform:"uppercase", color:C.accent, opacity:.75 }}>{item.category}</span>
+    <span style={{ display:"inline-flex", alignItems:"center", gap:6 }}>
+      <span className="live-dot" />
+      <span style={{ fontFamily:T.font.mono, fontSize:10, letterSpacing:".1em",
+        textTransform:"uppercase", color:"rgb(40,200,120)", opacity:.85 }}>live</span>
+    </span>
+  );
+}
+
+function CVEFeed() {
+  const { C } = useTheme();
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState(false);
+  const [lastUp, setLastUp] = useState(null);
+
+  const load = async () => {
+    setLoading(true); setErr(false);
+    try {
+      const r = await fetch("https://services.nvd.nist.gov/rest/json/cves/2.0?resultsPerPage=5&cvssV3Severity=CRITICAL");
+      if (!r.ok) throw new Error();
+      const d = await r.json();
+      setItems(d.vulnerabilities || []);
+      setLastUp(new Date());
+    } catch { setErr(true); }
+    finally { setLoading(false); }
+  };
+
+  useEffect(() => {
+    load();
+    const t = setInterval(load, 5 * 60 * 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const getCvss = (v) => {
+    try {
+      const m = v.cve.metrics;
+      const s = m.cvssMetricV31 || m.cvssMetricV30 || m.cvssMetricV2 || [];
+      return s.length ? s[0].cvssData.baseScore : null;
+    } catch { return null; }
+  };
+
+  const scoreColor = (s) => s >= 9 ? "220,70,70" : s >= 7 ? "255,165,40" : "40,200,120";
+
+  return (
+    <div style={{ background:C.surface, border:`1px solid ${C.border}`, borderRadius:T.radius.lg, overflow:"hidden" }}>
+      <div style={{ padding:"18px 22px 14px", borderBottom:`1px solid ${C.border}`,
+        display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+        <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+          <LiveDot />
+          <span style={{ fontFamily:T.font.display, fontWeight:600, fontSize:14, color:C.textStrong }}>CVE Critiques — NVD</span>
         </div>
-        <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:14 }}>
-          <div style={{ width:36, height:36, borderRadius:7, background:C.bg,
-            border:`1px solid ${C.borderHigh}`, display:"flex", alignItems:"center",
-            justifyContent:"center", fontSize:16, flexShrink:0 }}>{item.icon}</div>
-          <div style={{ fontFamily:T.font.display, fontSize:15, fontWeight:600,
-            color:hov?C.textStrong:C.text, transition:"color .2s" }}>{item.title}</div>
+        <button onClick={load} style={{ background:"none", border:`1px solid ${C.border}`, borderRadius:6,
+          padding:"4px 10px", color:C.textMuted, fontFamily:T.font.mono, fontSize:10, cursor:"pointer", letterSpacing:".08em" }}>
+          ↻
+        </button>
+      </div>
+      <div style={{ padding:"14px 22px 20px" }}>
+        {loading && [1,2,3,4,5].map(i => (
+          <div key={i} className="skeleton" style={{ height:52, borderRadius:8, marginBottom:10 }} />
+        ))}
+        {!loading && err && (
+          <p style={{ color:C.textMuted, fontFamily:T.font.mono, fontSize:12, padding:"12px 0" }}>
+            Impossible de charger les données NVD.
+          </p>
+        )}
+        {!loading && !err && items.map((v, i) => {
+          const score = getCvss(v);
+          const id = v.cve.id;
+          const desc = v.cve.descriptions?.find(d => d.lang === "en")?.value || "";
+          return (
+            <div key={id} style={{ borderBottom: i < items.length - 1 ? `1px solid ${C.border}` : "none",
+              padding:"12px 0", display:"flex", gap:12, alignItems:"flex-start" }}>
+              {score !== null && (
+                <span style={{ flexShrink:0, fontFamily:T.font.mono, fontSize:11, fontWeight:700,
+                  color:`rgb(${scoreColor(score)})`, background:`rgba(${scoreColor(score)},.12)`,
+                  borderRadius:5, padding:"2px 7px", marginTop:1 }}>{score.toFixed(1)}</span>
+              )}
+              <div style={{ flex:1, minWidth:0 }}>
+                <div style={{ fontFamily:T.font.mono, fontSize:11, color:C.accent, marginBottom:4 }}>{id}</div>
+                <div style={{ fontSize:12.5, color:C.textMuted, lineHeight:1.6,
+                  overflow:"hidden", display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical" }}>{desc}</div>
+              </div>
+            </div>
+          );
+        })}
+        {lastUp && (
+          <div style={{ marginTop:8, fontFamily:T.font.mono, fontSize:10, color:C.textMuted, opacity:.55 }}>
+            Mis à jour : {lastUp.toLocaleTimeString("fr-FR")}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function CERTFeed() {
+  const { C } = useTheme();
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState(false);
+  const [lastUp, setLastUp] = useState(null);
+
+  const load = async () => {
+    setLoading(true); setErr(false);
+    try {
+      const r = await fetch("https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.cert.ssi.gouv.fr%2Ffeed%2F&count=6");
+      if (!r.ok) throw new Error();
+      const d = await r.json();
+      if (d.status !== "ok") throw new Error();
+      setItems(d.items || []);
+      setLastUp(new Date());
+    } catch { setErr(true); }
+    finally { setLoading(false); }
+  };
+
+  useEffect(() => {
+    load();
+    const t = setInterval(load, 5 * 60 * 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const getType = (title) => {
+    const t = (title || "").toUpperCase();
+    if (t.includes("ALERTE")) return { label:"ALERTE", color:"220,70,70" };
+    if (t.includes("AVIS"))   return { label:"AVIS",   color:"255,165,40" };
+    return { label:"INFO", color:"75,142,255" };
+  };
+
+  return (
+    <div style={{ background:C.surface, border:`1px solid ${C.border}`, borderRadius:T.radius.lg, overflow:"hidden" }}>
+      <div style={{ padding:"18px 22px 14px", borderBottom:`1px solid ${C.border}`,
+        display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+        <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+          <LiveDot />
+          <span style={{ fontFamily:T.font.display, fontWeight:600, fontSize:14, color:C.textStrong }}>Alertes CERT-FR — ANSSI</span>
         </div>
-        <p style={{ fontSize:13, color:C.textMuted, lineHeight:1.7, marginBottom:16 }}>{item.desc}</p>
-        <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
-          {item.tags.map(t => <Tag key={t}>{t}</Tag>)}
-        </div>
+        <button onClick={load} style={{ background:"none", border:`1px solid ${C.border}`, borderRadius:6,
+          padding:"4px 10px", color:C.textMuted, fontFamily:T.font.mono, fontSize:10, cursor:"pointer", letterSpacing:".08em" }}>
+          ↻
+        </button>
+      </div>
+      <div style={{ padding:"14px 22px 20px" }}>
+        {loading && [1,2,3,4,5,6].map(i => (
+          <div key={i} className="skeleton" style={{ height:44, borderRadius:8, marginBottom:10 }} />
+        ))}
+        {!loading && err && (
+          <p style={{ color:C.textMuted, fontFamily:T.font.mono, fontSize:12, padding:"12px 0" }}>
+            Impossible de charger les alertes CERT-FR.
+          </p>
+        )}
+        {!loading && !err && items.map((item, i) => {
+          const type = getType(item.title);
+          const date = item.pubDate ? new Date(item.pubDate).toLocaleDateString("fr-FR") : "";
+          return (
+            <div key={item.guid || i} style={{ borderBottom: i < items.length - 1 ? `1px solid ${C.border}` : "none",
+              padding:"11px 0", display:"flex", gap:10, alignItems:"flex-start" }}>
+              <span style={{ flexShrink:0, fontFamily:T.font.mono, fontSize:9.5, fontWeight:700,
+                color:`rgb(${type.color})`, background:`rgba(${type.color},.12)`,
+                borderRadius:4, padding:"2px 6px", marginTop:2, letterSpacing:".06em" }}>{type.label}</span>
+              <div style={{ flex:1, minWidth:0 }}>
+                <a href={item.link} target="_blank" rel="noopener noreferrer"
+                  style={{ fontSize:12.5, color:C.text, textDecoration:"none", lineHeight:1.5,
+                    display:"block", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}
+                  onMouseEnter={e => e.target.style.color = C.accent}
+                  onMouseLeave={e => e.target.style.color = C.text}>
+                  {item.title}
+                </a>
+                {date && <span style={{ fontFamily:T.font.mono, fontSize:10, color:C.textMuted, opacity:.55 }}>{date}</span>}
+              </div>
+            </div>
+          );
+        })}
+        {lastUp && (
+          <div style={{ marginTop:8, fontFamily:T.font.mono, fontSize:10, color:C.textMuted, opacity:.55 }}>
+            Mis à jour : {lastUp.toLocaleTimeString("fr-FR")}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -1578,6 +1688,16 @@ function Veille() {
   const { C } = useTheme();
   const tR = useRef(), gR = useRef();
   const iT = useInView(tR), iG = useInView(gR);
+
+  const sources = [
+    { name:"ANSSI / CERT-FR", url:"https://www.cert.ssi.gouv.fr/", desc:"Alertes officielles" },
+    { name:"NVD — NIST",      url:"https://nvd.nist.gov/",          desc:"Base CVE nationale" },
+    { name:"The Hacker News", url:"https://thehackernews.com/",     desc:"Actu cybersécurité" },
+    { name:"MITRE ATT&CK",   url:"https://attack.mitre.org/",      desc:"Référentiel TTPs" },
+    { name:"HackTheBox",      url:"https://www.hackthebox.com/",    desc:"Labs offensifs" },
+    { name:"CVE Details",     url:"https://www.cvedetails.com/",    desc:"Détails & stats CVE" },
+  ];
+
   return (
     <section id="veille" style={{ padding:"clamp(80px,12vw,140px) clamp(24px,10vw,180px)",
       position:"relative", zIndex:1 }}>
@@ -1585,15 +1705,33 @@ function Veille() {
         <SectionLabel>Veille technologique</SectionLabel>
         <h2 style={{ fontFamily:T.font.display, fontSize:"clamp(30px,4vw,50px)",
           color:C.textStrong, marginBottom:16, letterSpacing:"-.02em", fontWeight:700 }}>
-          Rester � jour, chaque jour.
+          Infos en temps réel.
         </h2>
         <p style={{ color:C.textMuted, marginBottom:52, maxWidth:520, fontSize:14.5, lineHeight:1.85 }}>
-          Sources, outils et communaut�s qui alimentent ma veille en cybers�curit� au quotidien.
+          CVE critiques et alertes CERT-FR chargés en direct depuis les APIs officielles.
         </p>
       </div>
-      <div ref={gR} className={`stagger ${iG?"visible":""}`} style={{
-        display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))", gap:18 }}>
-        {VEILLE_ITEMS.map(item => <VeilleCard key={item.title} item={item} />)}
+      <div ref={gR} className={`reveal ${iG?"visible":""}`} style={{
+        display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(340px,1fr))", gap:22, marginBottom:48 }}>
+        <CVEFeed />
+        <CERTFeed />
+      </div>
+      <div style={{ borderTop:`1px solid ${C.border}`, paddingTop:32 }}>
+        <div style={{ fontFamily:T.font.mono, fontSize:10, letterSpacing:".14em", textTransform:"uppercase",
+          color:C.textMuted, marginBottom:18, opacity:.7 }}>Sources suivies</div>
+        <div style={{ display:"flex", flexWrap:"wrap", gap:10 }}>
+          {sources.map(s => (
+            <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer"
+              style={{ display:"flex", alignItems:"center", gap:8, padding:"7px 14px",
+                border:`1px solid ${C.border}`, borderRadius:8, textDecoration:"none",
+                background:C.surface, transition:"border-color .2s, background .2s" }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = C.borderHigh; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; }}>
+              <span style={{ fontFamily:T.font.display, fontSize:13, color:C.text, fontWeight:500 }}>{s.name}</span>
+              <span style={{ fontFamily:T.font.mono, fontSize:10.5, color:C.textMuted }}>{s.desc}</span>
+            </a>
+          ))}
+        </div>
       </div>
     </section>
   );
