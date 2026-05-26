@@ -1,4 +1,3 @@
-?
 const { useState, useEffect, useRef, createContext, useContext } = React;
 
 // React available globally via CDN
@@ -69,7 +68,7 @@ const useTheme = () => useContext(ThemeCtx);
 const makeCSS = (C, isDark) => `
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;scroll-padding-top:56px}
 body{
   background:${C.bg};color:${C.text};
   font-family:${T.font.body};font-size:15px;line-height:1.7;overflow-x:hidden;
@@ -107,32 +106,62 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;height:600px;backgrou
 .tag:hover{color:${C.accentSoft}!important;border-color:${C.accent}33!important;background:${C.accentGlow}!important}
 #cursor-glow{position:fixed;pointer-events:none;z-index:9999;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,${C.accentGlow} 0%,transparent 70%);transform:translate(-50%,-50%);opacity:${isDark?1:0};transition:opacity .4s ease}
 
-/* hamburger */
-.loader{
-  display:flex;align-items:center;gap:0;
-  transition:transform .4s cubic-bezier(.22,.68,0,1.2);
-}
+/* hamburger (mobile) */
+.loader{display:flex;align-items:center;gap:0;transition:transform .4s cubic-bezier(.22,.68,0,1.2)}
 .loader:hover{transform:rotate(90deg)}
 .bar{display:inline-block;width:3px;height:16px;background-color:${C.textMuted};border-radius:10px;animation:scale-up4 1s linear infinite}
 .bar:nth-child(2){height:26px;margin:0 4px;animation-delay:.25s}
 .bar:nth-child(3){animation-delay:.5s}
 @keyframes scale-up4{20%{background-color:${C.accentSoft};transform:scaleY(1.5)}40%{transform:scaleY(1)}}
 
-/* drawer */
+/* drawer (mobile) */
 .drawer-overlay{position:fixed;inset:0;z-index:149;background:rgba(4,6,10,.6);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .4s ease}
 .drawer-overlay.open{opacity:1;pointer-events:all}
-.drawer-panel{position:fixed;top:0;right:0;bottom:0;width:min(360px,90vw);z-index:150;background:${C.surface};border-left:1px solid ${C.border};transform:translateX(100%);transition:transform .48s cubic-bezier(.22,.68,0,1.2),background-color .55s,border-color .55s;display:flex;flex-direction:column;overflow:hidden}
+.drawer-panel{position:fixed;top:0;right:0;bottom:0;width:min(320px,88vw);z-index:150;background:${C.surface};border-left:1px solid ${C.border};transform:translateX(100%);transition:transform .44s cubic-bezier(.22,.68,0,1.2),background-color .55s,border-color .55s;display:flex;flex-direction:column;overflow:hidden}
 .drawer-panel.open{transform:translateX(0)}
-.drawer-item{opacity:0;transform:translateX(24px);transition:opacity .4s cubic-bezier(.22,.68,0,1.2),transform .4s cubic-bezier(.22,.68,0,1.2)}
-.drawer-panel.open .drawer-item:nth-child(1){opacity:1;transform:translateX(0);transition-delay:.08s}
-.drawer-panel.open .drawer-item:nth-child(2){opacity:1;transform:translateX(0);transition-delay:.14s}
-.drawer-panel.open .drawer-item:nth-child(3){opacity:1;transform:translateX(0);transition-delay:.20s}
-.drawer-panel.open .drawer-item:nth-child(4){opacity:1;transform:translateX(0);transition-delay:.26s}
-.drawer-panel.open .drawer-item:nth-child(5){opacity:1;transform:translateX(0);transition-delay:.32s}
+.drawer-item{opacity:0;transform:translateX(20px);transition:opacity .35s cubic-bezier(.22,.68,0,1.2),transform .35s cubic-bezier(.22,.68,0,1.2)}
+.drawer-panel.open .drawer-item:nth-child(1){opacity:1;transform:translateX(0);transition-delay:.06s}
+.drawer-panel.open .drawer-item:nth-child(2){opacity:1;transform:translateX(0);transition-delay:.11s}
+.drawer-panel.open .drawer-item:nth-child(3){opacity:1;transform:translateX(0);transition-delay:.16s}
+.drawer-panel.open .drawer-item:nth-child(4){opacity:1;transform:translateX(0);transition-delay:.21s}
+.drawer-panel.open .drawer-item:nth-child(5){opacity:1;transform:translateX(0);transition-delay:.26s}
+.drawer-panel.open .drawer-item:nth-child(6){opacity:1;transform:translateX(0);transition-delay:.31s}
+.drawer-panel.open .drawer-item:nth-child(7){opacity:1;transform:translateX(0);transition-delay:.36s}
+.drawer-panel.open .drawer-item:nth-child(8){opacity:1;transform:translateX(0);transition-delay:.41s}
 .submenu{overflow:hidden;max-height:0;transition:max-height .38s cubic-bezier(.22,.68,0,1.2),opacity .3s ease;opacity:0}
 .submenu.open{max-height:200px;opacity:1}
 .sub-item{transition:color .2s,background .2s,padding-left .2s}
 .sub-item:hover{color:${C.accentSoft}!important;background:${C.accentGlow}!important;padding-left:28px!important}
+
+/* ── TOP NAV BAR ── */
+.nav-bar{
+  position:fixed;top:0;left:0;right:0;z-index:100;height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(18px,4vw,52px);
+  background:${C.bg}e0;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid ${C.border};
+  transition:background .55s,border-color .55s;
+}
+.nav-links{display:flex;align-items:center;gap:2px}
+@media(max-width:800px){.nav-links{display:none}}
+.nav-link{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 10px;border-radius:6px;
+  background:none;border:none;cursor:pointer;
+  font-family:${T.font.mono};font-size:11px;letter-spacing:.05em;
+  color:${C.textMuted};text-transform:uppercase;white-space:nowrap;
+  transition:color .18s,background .18s;
+}
+.nav-link:hover{color:${C.text};background:${C.surface}}
+.nav-link.active{color:${C.accent};background:${C.accentGlow}}
+.nav-num{font-size:8.5px;opacity:.5;letter-spacing:.08em;color:inherit;line-height:1}
+.nav-mobile-btn{display:none;align-items:center;justify-content:center;
+  background:${C.surface};border:1px solid ${C.border};
+  border-radius:6px;cursor:pointer;padding:0 12px;height:32px;
+  transition:border-color .2s,box-shadow .2s}
+.nav-mobile-btn:hover{border-color:${C.accent};box-shadow:0 0 0 1px ${C.accent}44}
+@media(max-width:800px){.nav-mobile-btn{display:flex}}
 
 /* keyframes */
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
@@ -264,161 +293,60 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;height:600px;backgrou
   background:linear-gradient(90deg,${C.accent},${C.accentSoft},transparent);
 }
 
-/* ════════════════════════════════════════════
-   HOLOGRAPHIC CYLINDER — extraordinary effect
-   ════════════════════════════════════════════ */
-
-/* scene container */
-.proj-scene{
-  width:100%;height:560px;
-  display:flex;align-items:flex-start;justify-content:center;
-  padding-top:40px;
-  position:relative;overflow:hidden;
+/* ── PROJECT GRID ── */
+.proj-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:18px;
 }
-
-/* floor fade */
-.proj-scene::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:50%;
-  background:linear-gradient(0deg,${C.bg} 0%,transparent 100%);
-  pointer-events:none;z-index:4;
+.proj-card{
+  border:1px solid ${C.border};border-radius:12px;
+  background:${C.surface};overflow:hidden;cursor:pointer;
+  position:relative;
+  transition:transform .25s cubic-bezier(.22,.68,0,1.2),
+             box-shadow .25s ease,border-color .25s ease;
 }
-
-/* floor mirror reflection */
-.proj-floor-mirror{
-  position:absolute;bottom:0;left:0;right:0;height:200px;
-  pointer-events:none;z-index:2;overflow:hidden;
+.proj-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 12px 40px rgba(0,0,0,.35),0 0 0 1px rgba(75,142,255,.18);
+  border-color:${C.borderHigh};
 }
-
-/* hologram emitter base */
-.proj-base{
-  position:absolute;bottom:60px;left:50%;transform:translateX(-50%);
-  width:180px;height:6px;
-  background:linear-gradient(90deg,transparent,${C.accent}88,${C.accent},${C.accent}88,transparent);
-  border-radius:3px;
-  box-shadow:0 0 20px ${C.accent}66, 0 0 40px ${C.accent}33;
-  z-index:5;
+.proj-card-bar{
+  height:2px;width:100%;
+  opacity:0;transition:opacity .25s ease;
 }
-.proj-base::before{
-  content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);
-  width:2px;height:80px;
-  background:linear-gradient(0deg,${C.accent}88,transparent);
+.proj-card:hover .proj-card-bar{opacity:1}
+.proj-card-body{padding:22px 24px 20px}
+.proj-card-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:14px;
 }
-
-/* cone of light from emitter upward */
-.proj-cone{
-  position:absolute;bottom:66px;left:50%;transform:translateX(-50%);
-  width:0;height:0;
-  border-left:160px solid transparent;
-  border-right:160px solid transparent;
-  border-bottom:280px solid rgba(75,142,255,.025);
-  filter:blur(12px);
-  pointer-events:none;z-index:1;
+.proj-card-num{
+  font-family:'JetBrains Mono',monospace;font-size:9.5px;
+  letter-spacing:.16em;text-transform:uppercase;opacity:.9;
 }
-
-/* ambient scan sweep — moves through cone */
-@keyframes cone-sweep{
-  0%  {opacity:0;transform:translateX(-50%) scaleX(.3)}
-  20% {opacity:1}
-  50% {opacity:.4;transform:translateX(-50%) scaleX(1)}
-  80% {opacity:1}
-  100%{opacity:0;transform:translateX(-50%) scaleX(.3)}
+.proj-card-badge{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  letter-spacing:.07em;text-transform:uppercase;
+  padding:3px 9px;border-radius:4px;
 }
-.proj-cone-pulse{
-  position:absolute;bottom:66px;left:50%;transform:translateX(-50%);
-  width:320px;height:280px;
-  background:radial-gradient(ellipse 50% 100% at 50% 100%,rgba(75,142,255,.04),transparent 70%);
-  pointer-events:none;z-index:1;
-  animation:cone-sweep 4s ease-in-out infinite;
+.proj-card-title{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:15.5px;
+  line-height:1.3;margin-bottom:10px;letter-spacing:-.01em;
 }
-
-/* circular scan ring at base */
-@keyframes ring-pulse{
-  0%  {transform:translateX(-50%) scale(.8);opacity:.8}
-  100%{transform:translateX(-50%) scale(2.2);opacity:0}
+.proj-card-desc{
+  font-size:12.5px;line-height:1.7;margin-bottom:18px;
+  color:${C.textMuted};
 }
-.proj-ring-pulse{
-  position:absolute;bottom:60px;left:50%;
-  width:180px;height:6px;
-  border-radius:50%;
-  border:1px solid ${C.accent}66;
-  animation:ring-pulse 2.5s ease-out infinite;
-  pointer-events:none;z-index:5;
+.proj-card-footer{
+  display:flex;justify-content:space-between;
+  align-items:flex-end;gap:8px;
 }
-.proj-ring-pulse:nth-child(2){animation-delay:1.25s}
-
-/* cylinder */
-.proj-cylinder{
-  --cw:200px;--ch:280px;--tz:230px;--rx:-8deg;
-  width:var(--cw);height:var(--ch);
-  position:relative;transform-style:preserve-3d;
-  animation:cyl-spin 36s linear infinite;
-  transform:perspective(1000px) rotateX(var(--rx)) rotateY(0deg);
-  z-index:3;
+.proj-card-arrow{
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  flex-shrink:0;opacity:.5;transition:opacity .2s,transform .2s;
 }
-.proj-scene:hover .proj-cylinder{animation-play-state:paused}
-@keyframes cyl-spin{
-  from{transform:perspective(1000px) rotateX(var(--rx)) rotateY(0)}
-  to  {transform:perspective(1000px) rotateX(var(--rx)) rotateY(360deg)}
-}
-
-/* individual card face */
-.proj-face{
-  position:absolute;inset:0;
-  transform:rotateY(calc(var(--angle))) translateZ(var(--tz));
-  border-radius:12px;overflow:hidden;
-  cursor:pointer;backface-visibility:hidden;
-  border:1px solid rgba(75,142,255,.15);
-  background:linear-gradient(145deg,rgba(75,142,255,.05) 0%,${C.surface} 100%);
-  /* filter managed by JS lamppost */
-  will-change:filter;
-}
-
-/* holographic scanline overlay on each card */
-.proj-face::after{
-  content:'';position:absolute;inset:0;pointer-events:none;z-index:2;
-  background:repeating-linear-gradient(
-    0deg,
-    transparent,transparent 3px,
-    rgba(75,142,255,.03) 3px,rgba(75,142,255,.03) 4px
-  );
-}
-
-/* top accent line */
-.proj-face-bar{
-  position:absolute;top:0;left:0;right:0;height:1.5px;z-index:3;
-  background:linear-gradient(90deg,transparent,rgba(75,142,255,.9),transparent);
-  opacity:0;transition:opacity .4s;
-}
-
-/* card inner */
-.proj-face-body{
-  position:relative;z-index:1;
-  width:100%;height:100%;
-  display:flex;flex-direction:column;justify-content:space-between;
-  padding:22px 18px;
-}
-.proj-face-num{
-  font-family:'JetBrains Mono',monospace;font-size:8.5px;
-  letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(75,142,255,.7);margin-bottom:auto;
-}
-.proj-face-middle{
-  flex:1;display:flex;flex-direction:column;
-  justify-content:center;padding:14px 0;
-}
-.proj-face-title{
-  font-family:'Syne',sans-serif;font-weight:800;font-size:15px;
-  color:${C.textStrong};line-height:1.25;
-  text-shadow:0 0 20px rgba(75,142,255,.2);
-}
-.proj-face-pills{display:flex;flex-wrap:wrap;gap:4px}
-.proj-face-pill{
-  font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.04em;
-  padding:2px 7px;border-radius:2px;
-  background:rgba(75,142,255,.08);
-  color:rgba(75,142,255,.75);
-  border:1px solid rgba(75,142,255,.2);
-}
+.proj-card:hover .proj-card-arrow{opacity:1;transform:translateX(3px)}
 
 /* modal */
 .proj-modal-bg{
@@ -824,25 +752,25 @@ function Chevron({ open }) {
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// NAVBAR — side drawer
+// NAVBAR — top bar + mobile drawer
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function Navbar() {
   const { C } = useTheme();
-  const [open, setOpen]   = useState(false);
-  const [sub,  setSub  ]  = useState(null);
-  const [active, setAct]  = useState("hero");
+  const [open, setOpen]  = useState(false);
+  const [sub,  setSub]   = useState(null);
+  const [active, setAct] = useState("hero");
 
   useEffect(() => {
     const obs = new IntersectionObserver(
       (es) => { es.forEach(e => { if (e.isIntersecting) setAct(e.target.id); }); },
-      { threshold: 0.4 }
+      { threshold: 0.35 }
     );
     NAV_MENU.forEach(n => { const el = document.getElementById(n.id); if (el) obs.observe(el); });
     return () => obs.disconnect();
   }, []);
 
   useEffect(() => {
-    const fn = (e) => { if (e.key==="Escape") setOpen(false); };
+    const fn = (e) => { if (e.key === "Escape") setOpen(false); };
     window.addEventListener("keydown", fn);
     return () => window.removeEventListener("keydown", fn);
   }, []);
@@ -856,36 +784,36 @@ function Navbar() {
 
   return (
     <>
-      {/* Top bar */}
-      <div style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, height:60,
-        display:"flex", alignItems:"center", justifyContent:"space-between",
-        padding:"0 clamp(24px,5vw,72px)", pointerEvents:"none" }}>
-
-        <button onClick={() => go("hero")} style={{ fontFamily:T.font.mono, fontSize:13,
-          color:C.accent, letterSpacing:".07em", background:"none", border:"none",
-          cursor:"pointer", pointerEvents:"all", padding:0 }}>
-          <span style={{ color:C.textMuted }}>root@anthony:</span><span style={{ color:C.textMuted }}>~</span><span style={{ color:C.accent }}>#</span>
+      {/* ── Top nav bar ── */}
+      <div className="nav-bar">
+        {/* Logo */}
+        <button onClick={() => go("hero")} style={{
+          fontFamily:T.font.mono, fontSize:13, color:C.accent,
+          background:"none", border:"none", cursor:"pointer", padding:0,
+          letterSpacing:".05em", flexShrink:0,
+        }}>
+          <span style={{ color:C.textMuted }}>root@anthony</span>
+          <span style={{ color:C.textDim }}>:</span>
+          <span style={{ color:C.textMuted }}>~</span>
+          <span style={{ color:C.accent }}>#</span>
         </button>
 
-        {/* Right cluster: theme toggle + menu trigger */}
-        <div style={{ display:"flex", alignItems:"center", gap:8, pointerEvents:"all",
-          height:36 }}>
-          <div style={{ display:"flex", alignItems:"center", height:36 }}>
-            <ThemeToggle />
-          </div>
-          <button
-            onClick={() => setOpen(o => !o)} aria-label="Menu"
-            style={{
-              display:"flex", alignItems:"center", justifyContent:"center",
-              background:C.surface, border:`1px solid ${open ? C.accent : C.border}`,
-              borderRadius:T.radius.md, cursor:"pointer",
-              padding:"0 14px", height:36,
-              transition:"border-color .2s, background .2s, box-shadow .2s",
-              boxShadow: open ? `0 0 0 1px ${C.accent}44` : "none",
-            }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor=C.accent; e.currentTarget.style.boxShadow=`0 0 0 1px ${C.accent}44`; }}
-            onMouseLeave={e => { if (!open) { e.currentTarget.style.borderColor=C.border; e.currentTarget.style.boxShadow="none"; } }}
-          >
+        {/* Links — desktop */}
+        <nav className="nav-links">
+          {NAV_MENU.map(item => (
+            <button key={item.id}
+              className={`nav-link${active === item.id ? " active" : ""}`}
+              onClick={() => go(item.id)}>
+              <span className="nav-num">{item.num}</span>
+              {item.label}
+            </button>
+          ))}
+        </nav>
+
+        {/* Right: theme toggle + mobile hamburger */}
+        <div style={{ display:"flex", alignItems:"center", gap:8, flexShrink:0 }}>
+          <ThemeToggle />
+          <button className="nav-mobile-btn" onClick={() => setOpen(o => !o)} aria-label="Menu">
             <div className="loader">
               <span className="bar" />
               <span className="bar" />
@@ -1536,86 +1464,10 @@ function Certifications() {
 // PROJECTS
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function Projects() {
-  const { C, isDark } = useTheme();
-  const tR       = useRef();
-  const iT       = useInView(tR);
-  const cylRef   = useRef();
-  const facesRef = useRef([]);
+  const { C } = useTheme();
+  const tR = useRef();
+  const iT = useInView(tR);
   const [selected, setSelected] = useState(null);
-
-  // Lamppost: track angle via timestamp (reliable, no matrix parsing)
-  useEffect(() => {
-    const N        = PROJECTS.length;
-    const DURATION = 40000; // ms — matches CSS animation
-    const paused   = { val: false };
-    let raf;
-    let startTime  = null;
-    let pauseStart = null;
-    let pausedMs   = 0;
-
-    const scene = cylRef.current?.closest(".proj-scene");
-    const onEnter = () => { paused.val = true;  pauseStart = performance.now(); };
-    const onLeave = () => {
-      if (pauseStart) pausedMs += performance.now() - pauseStart;
-      paused.val = false;
-    };
-    scene?.addEventListener("mouseenter", onEnter);
-    scene?.addEventListener("mouseleave", onLeave);
-
-    const tick = (ts) => {
-      if (!startTime) startTime = ts;
-      // effective elapsed time excluding pauses
-      const elapsed = paused.val
-        ? ts - startTime - pausedMs - (ts - pauseStart)
-        : ts - startTime - pausedMs;
-
-      // current cylinder angle in radians (full turn = DURATION ms)
-      const cylAngle = (elapsed / DURATION) * 2 * Math.PI;
-
-      facesRef.current.forEach((face, i) => {
-        if (!face) return;
-        // angle of this card on the cylinder
-        const cardAngle = (2 * Math.PI / N) * i;
-        // dot product: how much this card faces the viewer (front = cos→1)
-        const cos = Math.cos(cylAngle + cardAngle);
-
-        // smooth mapping: use a power curve to make the peak sharper
-        // (like a real spotlight: bright only when directly in front)
-        const raw = (cos + 1) / 2;              // 0..1 linear
-        const t   = Math.pow(raw, 2.2);         // sharpen the peak
-
-        const bright = 0.18 + t * 0.92;         // 0.18 → 1.10
-        const opac   = 0.28 + t * 0.72;         // 0.28 → 1.00
-        const sat    = 0.45 + t * 0.55;         // 0.45 → 1.00
-
-        // apply lamppost: bright front, dim back
-        face.style.filter = `brightness(${bright.toFixed(2)}) saturate(${sat.toFixed(2)}) opacity(${opac.toFixed(2)})`;
-
-        // accent bar: visible only when near front
-        const bar = face.querySelector(".proj-face-bar");
-        if (bar) bar.style.opacity = (t > 0.6 ? (t - 0.6) / 0.4 : 0).toFixed(2);
-
-        // holographic border glow at peak
-        if (t > 0.85) {
-          const g = ((t - 0.85) / 0.15).toFixed(2);
-          face.style.boxShadow = `0 0 ${20 * t | 0}px rgba(75,142,255,${(g * 0.35).toFixed(2)}), inset 0 0 20px rgba(75,142,255,${(g * 0.06).toFixed(2)})`;
-          face.style.borderColor = `rgba(75,142,255,${(g * 0.7).toFixed(2)})`;
-        } else {
-          face.style.boxShadow = "none";
-          face.style.borderColor = "rgba(75,142,255,.15)";
-        }
-      });
-
-      raf = requestAnimationFrame(tick);
-    };
-
-    raf = requestAnimationFrame(tick);
-    return () => {
-      cancelAnimationFrame(raf);
-      scene?.removeEventListener("mouseenter", onEnter);
-      scene?.removeEventListener("mouseleave", onLeave);
-    };
-  }, []);
 
   return (
     <section id="projects" style={{ padding:"clamp(80px,12vw,140px) clamp(24px,10vw,180px)",
@@ -1623,53 +1475,43 @@ function Projects() {
 
       <div ref={tR} className={`reveal ${iT?"visible":""}`} style={{ marginBottom:48 }}>
         <SectionLabel>Projets</SectionLabel>
-        <div style={{ display:"flex", alignItems:"flex-end", justifyContent:"space-between", flexWrap:"wrap", gap:16 }}>
-          <h2 style={{ fontFamily:T.font.display, fontSize:"clamp(30px,4vw,50px)",
-            color:C.textStrong, letterSpacing:"-.02em", fontWeight:700 }}>
-            Réalisations
-          </h2>
-
-        </div>
+        <h2 style={{ fontFamily:T.font.display, fontSize:"clamp(30px,4vw,50px)",
+          color:C.textStrong, letterSpacing:"-.02em", fontWeight:700 }}>
+          Réalisations
+        </h2>
       </div>
 
-      <div className={`proj-scene reveal ${iT?"visible":""}`}>
-
-        {/* Holographic emitter base */}
-        <div className="proj-base" />
-        <div className="proj-cone" />
-        <div className="proj-cone-pulse" />
-        <div className="proj-ring-pulse" />
-        <div className="proj-ring-pulse" />
-
-
-        {/* Cylinder */}
-        <div className="proj-cylinder" ref={cylRef}>
-          {PROJECTS.map((p, i) => {
-            const angle  = (360 / PROJECTS.length) * i;
-            const color  = PROJ_COLORS[i % PROJ_COLORS.length];
-            const done   = p.status === "done";
-            return (
-              <div key={p.num}
-                className="proj-face"
-                ref={el => facesRef.current[i] = el}
-                style={{ "--c":color, "--angle":`${angle}deg` }}
-                onClick={() => setSelected(p)}>
-                <div className="proj-face-bar" />
-                <div className="proj-face-body">
-                  <div className="proj-face-num">// {p.num}</div>
-                  <div className="proj-face-middle">
-                    <div className="proj-face-title">{p.title}</div>
+      <div className={`proj-grid stagger ${iT?"visible":""}`}>
+        {PROJECTS.map((p, i) => {
+          const color = PROJ_COLORS[i % PROJ_COLORS.length];
+          const done  = p.status === "done";
+          return (
+            <div key={p.num} className="proj-card" onClick={() => setSelected(p)}>
+              <div className="proj-card-bar"
+                style={{ background:`linear-gradient(90deg,rgba(${color},1),rgba(${color},.4),transparent)` }} />
+              <div className="proj-card-body">
+                <div className="proj-card-header">
+                  <span className="proj-card-num" style={{ color:`rgba(${color},1)` }}>// {p.num}</span>
+                  <span className="proj-card-badge" style={{
+                    background: done ? `${C.success}1a` : `${C.warn}1a`,
+                    color:      done ? C.success : C.warn,
+                    border:    `1px solid ${done ? C.success+"44" : C.warn+"44"}`,
+                  }}>
+                    {done ? "✓ terminé" : "⟳ en cours"}
+                  </span>
+                </div>
+                <div className="proj-card-title" style={{ color:C.textStrong }}>{p.title}</div>
+                <div className="proj-card-desc">{p.desc}</div>
+                <div className="proj-card-footer">
+                  <div style={{ display:"flex", flexWrap:"wrap", gap:5 }}>
+                    {p.tags.map(t => <Tag key={t}>{t}</Tag>)}
                   </div>
-                  <div className="proj-face-pills">
-                    {p.tags.slice(0,2).map(t => (
-                      <span key={t} className="proj-face-pill">{t}</span>
-                    ))}
-                  </div>
+                  <span className="proj-card-arrow" style={{ color:C.accent }}>→</span>
                 </div>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
       </div>
 
       {selected && (
