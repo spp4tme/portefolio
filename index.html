@@ -1037,9 +1037,9 @@ function Hero() {
 
           {/* single clean line — replaces paragraph */}
           <p style={{ ...tr(.22), fontSize:15, color:C.textMuted, lineHeight:1.8,
-            marginBottom:52, maxWidth:420, fontStyle:"italic" }}>
-            "Comprendre comment les systèmes fonctionnent
-            — et surtout comment les protéger."
+            marginBottom:52, maxWidth:420 }}>
+            Étudiant en BTS SIO SISR, en alternance dans la cybersécurité.
+            Je construis des outils réseau et des stacks IA depuis chez moi.
           </p>
 
           {/* 2 CTAs only — clean, no third button cluttering */}
@@ -1098,7 +1098,7 @@ const TIMELINE = [
     year:"Juin 2025",
     label:"Baccalauréat",
     sub:"Maths · Physique-Chimie",
-    detail:"Bac obtenu, spécialités Maths et Physique-Chimie. Une formation qui a forgé la rigueur et la logique que j'applique aujourd'hui en informatique.",
+    detail:"Bac obtenu, spécialités Maths et Physique-Chimie.",
     done:true, now:false,
   },
   {
@@ -1112,21 +1112,21 @@ const TIMELINE = [
     year:"Sept. 2025",
     label:"Alternance",
     sub:"Cybersécurité & Réseaux",
-    detail:"En entreprise depuis le début du BTS — administration des systèmes, sécurité des infrastructures et gestion des incidents en conditions réelles.",
+    detail:"En entreprise depuis le début du BTS. Administration des systèmes, sécurité des infrastructures, gestion des incidents.",
     done:true, now:true,
   },
   {
     year:"Sept. 2026",
     label:"2ème année BTS SIO",
     sub:"Approfondissement & épreuves E4/E5",
-    detail:"Montée en compétences sur la sécurité offensive, les audits d'infrastructure, préparation aux épreuves professionnelles E4 et E5.",
+    detail:"Sécurité offensive, audits d'infrastructure, épreuves E4 et E5.",
     done:false, now:false,
   },
   {
     year:"2027",
     label:"Diplôme BTS SIO",
     sub:"Et la suite",
-    detail:"Obtention du diplôme, puis poursuite vers un Bachelor cybersécurité ou une alternance dans la sécurité des systèmes d'information.",
+    detail:"Diplôme obtenu. Suite : Bachelor cybersécurité ou poursuite en alternance.",
     done:false, now:false,
   },
 ];
@@ -1284,7 +1284,7 @@ function EditorialStats() {
 
   const LINES = [
     { n:"01", text:"1ère année de BTS SIO option SISR" },
-    { n:"02", text:"6 projets réalisés en 2025" },
+    { n:"02", text:"3 projets personnels publiés en 2025" },
     { n:"03", text:"Certification SecNumAcadémie — ANSSI" },
     { n:"04", text:"En alternance dans la cybersécurité depuis septembre 2025" },
   ];
@@ -1349,18 +1349,15 @@ function About() {
         <h2 style={{ fontFamily:T.font.display, fontSize:"clamp(30px,4vw,48px)",
           color:C.textStrong, marginBottom:28, letterSpacing:"-.02em", fontWeight:700,
           lineHeight:1.1 }}>
-          Curieux par nature,<br />rigoureux par choix.
+          BTS SIO SISR,<br />Nexa Digital School Paris.
         </h2>
         <p style={{ color:C.textMuted, marginBottom:16, fontSize:14.5, lineHeight:1.85 }}>
-          En BTS SIO option SISR à la Nexa Digital School, Paris, et en alternance
-          dans la cybersécurité depuis septembre 2025. Ce qui m'a amené là ? Une obsession
-          assez simple : comprendre comment les choses fonctionnent, et trouver
-          là où elles peuvent casser.
+          En alternance dans la cybersécurité depuis septembre 2025.
+          J'apprends l'administration réseau et la sécurité des infrastructures en cours,
+          et je construis des projets perso à côté — un scanner réseau en Python, un gestionnaire de pare-feu en Bash, une stack IA self-hosted.
         </p>
         <p style={{ color:C.textMuted, fontSize:14.5, lineHeight:1.85 }}>
-          Je construis aujourd'hui mes bases en administration réseau et sécurité
-          des infrastructures, avec un œil aussi sur la partie offensive, parce
-          qu'on défend mieux ce qu'on a appris à attaquer.
+          Pas encore expert, mais je travaille dessus tous les jours.
         </p>
       </div>
 
@@ -1467,7 +1464,7 @@ function Certifications() {
         <SectionLabel>Certifications</SectionLabel>
         <h2 style={{ fontFamily:T.font.display, fontSize:"clamp(30px,4vw,50px)",
           color:C.textStrong, marginBottom:52, letterSpacing:"-.02em", fontWeight:700 }}>
-          Reconnaissances obtenues
+          Certifications
         </h2>
       </div>
       <div ref={gR} className={`stagger ${iG?"visible":""}`} style={{
@@ -1638,10 +1635,10 @@ function Contact() {
         <SectionLabel>Contact</SectionLabel>
         <h2 style={{ fontFamily:T.font.display, fontSize:"clamp(30px,4vw,50px)",
           color:C.textStrong, marginBottom:16, letterSpacing:"-.02em", fontWeight:700 }}>
-          Travaillons ensemble
+          Contact
         </h2>
         <p style={{ color:C.textMuted, marginBottom:52, maxWidth:480 }}>
-          Pour un stage, une alternance ou simplement pour échanger autour de la cybersécurité.
+          Pour une alternance, un stage, ou juste pour parler d'un projet.
         </p>
       </div>
 
