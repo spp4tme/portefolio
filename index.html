@@ -310,31 +310,40 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;height:600px;backgrou
   background:linear-gradient(90deg,${C.accent},${C.accentSoft},transparent);
 }
 
-/* ── SKILL CARDS ── */
-.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
-.skill-card{
-  border:1px solid ${C.border};border-left:3px solid rgb(var(--ac));
-  border-radius:0 10px 10px 0;background:${C.surface};overflow:hidden;position:relative;
-  transition:transform .25s cubic-bezier(.22,.68,0,1.2),box-shadow .25s,border-color .25s;
+/* ── SKILL TREE ── */
+.skill-tree-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 72px}
+@media(max-width:720px){.skill-tree-grid{grid-template-columns:1fr}}
+.skill-tree-col{position:relative;padding-left:30px}
+.skill-tree-col::before{
+  content:'';position:absolute;left:5px;top:6px;bottom:6px;width:1px;
+  background:linear-gradient(180deg,transparent,${C.accent}44 15%,${C.accent}44 85%,transparent);
 }
-.skill-card::before{
-  content:'';position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(circle at 0% 50%,rgba(var(--ac),.07),transparent 55%);
-  opacity:0;transition:opacity .25s;
+.skill-node{position:relative;margin-bottom:34px}
+.skill-node:last-child{margin-bottom:0}
+.skill-node::before{
+  content:'';position:absolute;left:-24px;top:8px;width:18px;height:1px;
+  background:${C.borderHigh};transition:background .2s;
 }
-.skill-card:hover{transform:translateY(-3px) translateX(2px);box-shadow:-3px 0 0 rgb(var(--ac)),0 10px 30px rgba(0,0,0,.3);border-color:${C.borderHigh}}
-.skill-card:hover::before{opacity:1}
-.skill-card-head{padding:15px 18px 13px;border-bottom:1px solid ${C.border};display:flex;align-items:center;gap:9px}
-.skill-card-label{font-family:'Syne',sans-serif;font-size:13.5px;font-weight:700;letter-spacing:-.01em;color:${C.textStrong};flex:1}
-.skill-card-count{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgb(var(--ac));opacity:.7;flex-shrink:0}
-.skill-card-body{padding:14px 18px 16px;display:flex;flex-wrap:wrap;gap:5px}
-.skill-pill{
+.skill-node:hover::before{background:rgb(var(--sac))}
+.skill-node-dot{
+  position:absolute;left:-31px;top:3px;width:11px;height:11px;
+  border-radius:50%;background:rgb(var(--sac));border:2px solid ${C.surface};
+  box-shadow:0 0 5px rgba(var(--sac),.4);transition:box-shadow .25s;z-index:1;
+}
+.skill-node:hover .skill-node-dot{box-shadow:0 0 14px rgba(var(--sac),.7)}
+.skill-node-label{
+  font-family:'Syne',sans-serif;font-size:13.5px;font-weight:700;letter-spacing:-.01em;
+  color:${C.textStrong};margin-bottom:10px;transition:color .2s;
+}
+.skill-node:hover .skill-node-label{color:rgb(var(--sac))}
+.skill-node-tags{display:flex;flex-wrap:wrap;gap:5px}
+.skill-tag-item{
   font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.03em;
-  padding:3px 9px;border-radius:3px;
-  background:rgba(var(--ac),.09);color:rgb(var(--ac));border:1px solid rgba(var(--ac),.2);
-  transition:background .15s;cursor:default;
+  padding:3px 9px;border-radius:3px;cursor:default;
+  background:rgba(var(--sac),.08);color:rgba(var(--sac),.8);border:1px solid rgba(var(--sac),.18);
+  transition:background .15s,color .15s,border-color .15s;
 }
-.skill-pill:hover{background:rgba(var(--ac),.2)}
+.skill-node:hover .skill-tag-item{background:rgba(var(--sac),.15);color:rgb(var(--sac));border-color:rgba(var(--sac),.3)}
 
 /* ── PROJECT GRID ── */
 .proj-grid{
@@ -447,27 +456,27 @@ function useScrollProgress() {
 const SKILL_DOMAINS = [
   {
     id:"offensive", label:"Sécurité offensive", accent:"220,70,70",
-    items:["Reconnaissance réseau","Port scan TCP SYN","OS Fingerprinting","Banner Grabbing","CVE Enrichissement","ARP Discovery","mDNS / Bonjour","Nmap / NSE Scripts","Wireshark","Analyse PCAP"],
+    items:["Reconnaissance réseau","Port scan TCP SYN","OS Fingerprinting","Banner Grabbing","CVE Enrichissement","ARP Discovery","mDNS / Bonjour","Nmap / NSE","Wireshark"],
   },
   {
     id:"infra", label:"Infrastructure & DevOps", accent:"75,142,255",
-    items:["Docker","Docker Compose","Traefik","Reverse Proxy","CI/CD GitHub Actions","GitOps Webhook","WSL2","GPU Passthrough","Linux Services","Nginx"],
+    items:["Docker","Docker Compose","Traefik","CI/CD GitHub Actions","GitOps","WSL2","GPU Passthrough","Nginx","Reverse Proxy"],
   },
   {
     id:"ai", label:"IA & LLM", accent:"160,100,255",
-    items:["LLM Self-Hosted","Ollama","CrewAI","Agents collaboratifs","LoRA Fine-tuning","Vision Multimodale","RAG / Mémoire long terme","Proxy LLM unifié","Sandbox d'exécution","Contrôle par gestes"],
+    items:["LLM Self-Hosted","Ollama","CrewAI","LoRA Fine-tuning","Vision Multimodale","RAG","Mémoire long terme","Agents autonomes"],
   },
   {
     id:"dev", label:"Développement", accent:"40,200,120",
-    items:["Python 3.10+","Bash 5+","Raw Sockets","WebGL 3D","Git / GitHub","API REST","Scripts système","Terminal UI","Zéro dépendance externe"],
+    items:["Python 3.10+","Bash 5+","Raw Sockets","WebGL 3D","Git / GitHub","API REST","Scripts système","Terminal UI"],
   },
   {
     id:"networks", label:"Réseaux & Protocoles", accent:"255,165,40",
-    items:["TCP/IP","ARP","ICMP","DNS / DHCP","HTTP / HTTPS","mDNS","Routage inter-VLAN","Analyse de trafic","Mesure de latence"],
+    items:["TCP/IP","ARP","ICMP","DNS / DHCP","HTTP / HTTPS","mDNS","Routage inter-VLAN","Analyse de trafic"],
   },
   {
     id:"linux", label:"Systèmes Linux", accent:"60,185,155",
-    items:["Administration Linux","iptables","Gestion pare-feu","Chaînes INPUT/OUTPUT/FORWARD","NAT / PAT","Systemd","Gestion des droits","Logs & Monitoring","Shell interactif coloré"],
+    items:["Administration Linux","iptables","NAT / PAT","Systemd","Gestion des droits","Logs & Monitoring","Pare-feu","Audit de sécurité"],
   },
 ];
 
@@ -617,31 +626,16 @@ function Divider() {
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SKILL CARD
+// SKILL TREE NODE
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-function SkillDomainCard({ domain }) {
-  const { C } = useTheme();
-  const [hov, setHov] = useState(false);
-  const ac = domain.accent;
+function SkillNode({ domain }) {
   return (
-    <div
-      className="skill-card"
-      style={{ "--ac": ac }}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-    >
-      <div className="skill-card-head">
-        <div style={{
-          width:6, height:6, borderRadius:"50%",
-          background:`rgb(${ac})`, flexShrink:0,
-          boxShadow:`0 0 6px rgba(${ac},.7)`,
-        }} />
-        <span className="skill-card-label">{domain.label}</span>
-        <span className="skill-card-count">{domain.items.length} skills</span>
-      </div>
-      <div className="skill-card-body">
+    <div className="skill-node" style={{ "--sac": domain.accent }}>
+      <div className="skill-node-dot" />
+      <div className="skill-node-label">{domain.label}</div>
+      <div className="skill-node-tags">
         {domain.items.map(item => (
-          <span key={item} className="skill-pill">{item}</span>
+          <span key={item} className="skill-tag-item">{item}</span>
         ))}
       </div>
     </div>
@@ -1392,8 +1386,13 @@ function Skills() {
           Stack technique
         </h2>
       </div>
-      <div ref={gR} className={`skills-grid stagger ${iG?"visible":""}`}>
-        {SKILL_DOMAINS.map(d => <SkillDomainCard key={d.id} domain={d} />)}
+      <div ref={gR} className={`skill-tree-grid reveal ${iG?"visible":""}`}>
+        <div className="skill-tree-col">
+          {SKILL_DOMAINS.slice(0,3).map(d => <SkillNode key={d.id} domain={d} />)}
+        </div>
+        <div className="skill-tree-col">
+          {SKILL_DOMAINS.slice(3).map(d => <SkillNode key={d.id} domain={d} />)}
+        </div>
       </div>
     </section>
   );
