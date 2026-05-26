@@ -439,7 +439,7 @@ function useScrollProgress() {
 const SKILL_DOMAINS = [
   {
     id:"networks", label:"Réseaux & Protocoles", accent:"255,165,40",
-    items:["TCP/IP","Modèle OSI","DNS / DHCP","HTTP / HTTPS","ARP","ICMP","mDNS","VPN","Wi-Fi (WPA2/3)","Routage inter-VLAN","Spanning Tree","OSPF","NAT / PAT","Analyse de trafic","Wireshark"],
+    items:["TCP/IP","Modèle OSI","DNS / DHCP","HTTP / HTTPS","ARP","ICMP","mDNS","VPN","Wi-Fi (WPA2/3)","Routage inter-VLAN","NAT / PAT","Analyse de trafic","Wireshark"],
   },
   {
     id:"linux", label:"Systèmes Linux", accent:"60,185,155",
@@ -451,11 +451,7 @@ const SKILL_DOMAINS = [
   },
   {
     id:"dev", label:"Développement", accent:"40,200,120",
-    items:["Python 3.10+","Bash 5+","HTML / CSS","JavaScript","PHP","SQL","Git / GitHub","API REST","Raw Sockets","WebGL 3D","Scripts système","Terminal UI"],
-  },
-  {
-    id:"db", label:"Bases de données", accent:"255,120,60",
-    items:["SQL","MariaDB / MySQL","PostgreSQL","Merise","MCD / MLD","Requêtes complexes","Procédures stockées","Sauvegardes BDD"],
+    items:["Python 3.10+","Bash 5+","HTML / CSS","JavaScript","PHP","Git / GitHub","API REST","Raw Sockets","WebGL 3D","Scripts système","Terminal UI"],
   },
   {
     id:"infra", label:"Infrastructure & DevOps", accent:"75,142,255",
@@ -1384,6 +1380,7 @@ function Skills() {
         <div className="skill-tree-col">
           {SKILL_DOMAINS.slice(4).map(d => <SkillNode key={d.id} domain={d} />)}
         </div>
+
       </div>
     </section>
   );
