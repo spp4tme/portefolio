@@ -1,4 +1,6 @@
 ﻿
+const { useState, useEffect, useRef, createContext, useContext } = React;
+
 // React available globally via CDN
 
 // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
