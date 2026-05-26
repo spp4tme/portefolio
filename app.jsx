@@ -507,6 +507,51 @@ const PROJECTS = [
     tags:["Python","psutil","Monitoring"], github:null },
 ];
 
+const VEILLE_ITEMS = [
+  {
+    icon:"📡",
+    category:"Veille institutionnelle",
+    title:"ANSSI / CERT-FR",
+    desc:"Alertes et avis de sécurité publiés par l'ANSSI. Suivi des bulletins hebdomadaires, recommandations et signalements officiels.",
+    tags:["CERT-FR","Alertes","Officiel"],
+  },
+  {
+    icon:"🔍",
+    category:"Base de vulnérabilités",
+    title:"CVE / NVD",
+    desc:"Consultation régulière de la base nationale des vulnérabilités pour suivre les CVE critiques affectant les systèmes courants.",
+    tags:["CVE","CVSS","Patch"],
+  },
+  {
+    icon:"📰",
+    category:"Actualité sécurité",
+    title:"The Hacker News",
+    desc:"Suivi quotidien de l'actualité cybersécurité mondiale : incidents, nouvelles techniques d'attaque, correctifs et outils défensifs.",
+    tags:["News","Incidents","Threat Intel"],
+  },
+  {
+    icon:"🧪",
+    category:"Pratique offensive",
+    title:"HackTheBox / TryHackMe",
+    desc:"Entraînement sur des environnements réalistes : machines vulnérables, challenges guidés, apprentissage des techniques red team.",
+    tags:["CTF","Pentest","Labs"],
+  },
+  {
+    icon:"🛡️",
+    category:"Threat Intelligence",
+    title:"MITRE ATT&CK",
+    desc:"Référentiel des tactiques et techniques adversariales. Utilisé pour comprendre les modes opératoires des groupes APT et structurer la défense.",
+    tags:["ATT&CK","TTPs","APT"],
+  },
+  {
+    icon:"🌐",
+    category:"Communauté & Forums",
+    title:"Reddit r/netsec & Discord",
+    desc:"Échanges avec la communauté sécurité francophone et internationale. Partage de writeups, d'outils et de retours d'expérience.",
+    tags:["Community","Writeups","Open Source"],
+  },
+];
+
 const NAV_MENU = [
   { id:"hero",     label:"Accueil",        icon:"â—Ž", num:"00", subs:[] },
   { id:"about",    label:"Ã€ propos",       icon:"â—ˆ", num:"01", subs:[] },
@@ -514,7 +559,8 @@ const NAV_MENU = [
   { id:"skills",   label:"CompÃ©tences",    icon:"â—‰", num:"03", subs:[] },
   { id:"certs",    label:"Certifications", icon:"â—‘", num:"04", subs:[] },
   { id:"projects", label:"Projets",        icon:"â—‡", num:"05", subs:[] },
-  { id:"contact",  label:"Contact",        icon:"â—»", num:"06", subs:[] },
+  { id:"veille",   label:"Veille",         icon:"◆",  num:"06", subs:[] },
+  { id:"contact",  label:"Contact",        icon:"â—»", num:"07", subs:[] },
 ];
 
 // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
@@ -1632,6 +1678,68 @@ function Projects() {
 }
 
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// VEILLE TECHNOLOGIQUE
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function VeilleCard({ item }) {
+  const { C } = useTheme();
+  const [hov, setHov] = useState(false);
+  return (
+    <div
+      className="card-hover"
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{ border:`1px solid ${hov?C.borderHigh:C.border}`, borderRadius:T.radius.lg,
+        background:C.surface, overflow:"hidden", position:"relative" }}
+    >
+      <div style={{ height:2, background:`linear-gradient(90deg,${C.accent},${C.accentSoft})`,
+        opacity:hov?1:0, transition:"opacity .3s" }} />
+      <div style={{ padding:"24px 26px" }}>
+        <div style={{ marginBottom:10 }}>
+          <span style={{ fontFamily:T.font.mono, fontSize:9.5, letterSpacing:".12em",
+            textTransform:"uppercase", color:C.accent, opacity:.75 }}>{item.category}</span>
+        </div>
+        <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:14 }}>
+          <div style={{ width:36, height:36, borderRadius:7, background:C.bg,
+            border:`1px solid ${C.borderHigh}`, display:"flex", alignItems:"center",
+            justifyContent:"center", fontSize:16, flexShrink:0 }}>{item.icon}</div>
+          <div style={{ fontFamily:T.font.display, fontSize:15, fontWeight:600,
+            color:hov?C.textStrong:C.text, transition:"color .2s" }}>{item.title}</div>
+        </div>
+        <p style={{ fontSize:13, color:C.textMuted, lineHeight:1.7, marginBottom:16 }}>{item.desc}</p>
+        <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
+          {item.tags.map(t => <Tag key={t}>{t}</Tag>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Veille() {
+  const { C } = useTheme();
+  const tR = useRef(), gR = useRef();
+  const iT = useInView(tR), iG = useInView(gR);
+  return (
+    <section id="veille" style={{ padding:"clamp(80px,12vw,140px) clamp(24px,10vw,180px)",
+      position:"relative", zIndex:1 }}>
+      <div ref={tR} className={`reveal ${iT?"visible":""}`}>
+        <SectionLabel>Veille technologique</SectionLabel>
+        <h2 style={{ fontFamily:T.font.display, fontSize:"clamp(30px,4vw,50px)",
+          color:C.textStrong, marginBottom:16, letterSpacing:"-.02em", fontWeight:700 }}>
+          Rester à jour, chaque jour.
+        </h2>
+        <p style={{ color:C.textMuted, marginBottom:52, maxWidth:520, fontSize:14.5, lineHeight:1.85 }}>
+          Sources, outils et communautés qui alimentent ma veille en cybersécurité au quotidien.
+        </p>
+      </div>
+      <div ref={gR} className={`stagger ${iG?"visible":""}`} style={{
+        display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))", gap:18 }}>
+        {VEILLE_ITEMS.map(item => <VeilleCard key={item.title} item={item} />)}
+      </div>
+    </section>
+  );
+}
+
 function Contact() {
   const { C } = useTheme();
   const ref    = useRef();
@@ -2121,6 +2229,8 @@ function Portfolio() {
         <Certifications />
         <Divider />
         <Projects />
+        <Divider />
+        <Veille />
         <Divider />
         <Contact />
       </main>
