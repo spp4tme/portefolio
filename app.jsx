@@ -438,28 +438,36 @@ function useScrollProgress() {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const SKILL_DOMAINS = [
   {
-    id:"offensive", label:"Sécurité offensive", accent:"220,70,70",
-    items:["Reconnaissance réseau","Port scan TCP SYN","OS Fingerprinting","Banner Grabbing","CVE Enrichissement","ARP Discovery","mDNS / Bonjour","Nmap / NSE","Wireshark"],
+    id:"networks", label:"Réseaux & Protocoles", accent:"255,165,40",
+    items:["TCP/IP","Modèle OSI","DNS / DHCP","HTTP / HTTPS","ARP","ICMP","mDNS","VPN","Wi-Fi (WPA2/3)","Routage inter-VLAN","Spanning Tree","OSPF","NAT / PAT","Analyse de trafic","Wireshark"],
+  },
+  {
+    id:"linux", label:"Systèmes Linux", accent:"60,185,155",
+    items:["Debian / Ubuntu","Administration Linux","iptables","SSH","Systemd","Gestion des droits","Logs & Monitoring","Pare-feu","Apache / Nginx","Samba / NFS","Cron","Audit de sécurité"],
+  },
+  {
+    id:"windows", label:"Windows & Active Directory", accent:"0,168,232",
+    items:["Windows Server 2019/2022","Active Directory","GPO","DHCP / DNS Windows","Remote Desktop","PowerShell","Gestion des utilisateurs","NTFS / partages","Hyper-V","VirtualBox","VMware"],
+  },
+  {
+    id:"dev", label:"Développement", accent:"40,200,120",
+    items:["Python 3.10+","Bash 5+","HTML / CSS","JavaScript","PHP","SQL","Git / GitHub","API REST","Raw Sockets","WebGL 3D","Scripts système","Terminal UI"],
+  },
+  {
+    id:"db", label:"Bases de données", accent:"255,120,60",
+    items:["SQL","MariaDB / MySQL","PostgreSQL","Merise","MCD / MLD","Requêtes complexes","Procédures stockées","Sauvegardes BDD"],
   },
   {
     id:"infra", label:"Infrastructure & DevOps", accent:"75,142,255",
-    items:["Docker","Docker Compose","Traefik","CI/CD GitHub Actions","GitOps","WSL2","GPU Passthrough","Nginx","Reverse Proxy"],
+    items:["Docker","Docker Compose","Traefik","CI/CD GitHub Actions","GitOps","WSL2","GPU Passthrough","Nginx","Reverse Proxy","Monitoring réseau"],
+  },
+  {
+    id:"offensive", label:"Sécurité offensive", accent:"220,70,70",
+    items:["Nmap / NSE","Wireshark","Reconnaissance réseau","Port scan TCP SYN","OS Fingerprinting","Banner Grabbing","CVE Enrichissement","ARP Discovery","SSL / TLS","fail2ban","IDS / IPS"],
   },
   {
     id:"ai", label:"IA & LLM", accent:"160,100,255",
     items:["LLM Self-Hosted","Ollama","CrewAI","LoRA Fine-tuning","Vision Multimodale","RAG","Mémoire long terme","Agents autonomes"],
-  },
-  {
-    id:"dev", label:"Développement", accent:"40,200,120",
-    items:["Python 3.10+","Bash 5+","Raw Sockets","WebGL 3D","Git / GitHub","API REST","Scripts système","Terminal UI"],
-  },
-  {
-    id:"networks", label:"Réseaux & Protocoles", accent:"255,165,40",
-    items:["TCP/IP","ARP","ICMP","DNS / DHCP","HTTP / HTTPS","mDNS","Routage inter-VLAN","Analyse de trafic"],
-  },
-  {
-    id:"linux", label:"Systèmes Linux", accent:"60,185,155",
-    items:["Administration Linux","iptables","NAT / PAT","Systemd","Gestion des droits","Logs & Monitoring","Pare-feu","Audit de sécurité"],
   },
 ];
 
@@ -1371,10 +1379,10 @@ function Skills() {
       </div>
       <div ref={gR} className={`skill-tree-grid reveal ${iG?"visible":""}`}>
         <div className="skill-tree-col">
-          {SKILL_DOMAINS.slice(0,3).map(d => <SkillNode key={d.id} domain={d} />)}
+          {SKILL_DOMAINS.slice(0,4).map(d => <SkillNode key={d.id} domain={d} />)}
         </div>
         <div className="skill-tree-col">
-          {SKILL_DOMAINS.slice(3).map(d => <SkillNode key={d.id} domain={d} />)}
+          {SKILL_DOMAINS.slice(4).map(d => <SkillNode key={d.id} domain={d} />)}
         </div>
       </div>
     </section>
