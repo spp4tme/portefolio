@@ -428,15 +428,15 @@ const SKILLS = [
 ];
 
 const PROJECTS = [
-  { num:"01", status:"done", title:"Fire-UX",
+  { num:"01", status:"wip", title:"Fire-UX",
     desc:"Script Bash interactif pour administrer le pare-feu Linux via iptables depuis un terminal coloré et structuré — sans connaître la syntaxe iptables par cœur.",
     detail:"Interface CLI entièrement en Bash pur. Gestion des règles iptables (INPUT, OUTPUT, FORWARD), persistance des règles, mode interactif avec menus colorés. Compatible Linux, Bash 5+, licence MIT.",
     tags:["Bash","iptables","Linux"], github:null },
-  { num:"02", status:"done", title:"NETMAP",
+  { num:"02", status:"wip", title:"NETMAP",
     desc:"Scanner réseau offensif en Python pur — zéro dépendance externe. Découverte ARP + mDNS, port scan TCP SYN, banner grabbing, fingerprinting OS, enrichissement CVE.",
     detail:"Scanner réseau écrit en Python 3.10+ sans aucune dépendance externe. Découverte d'hôtes via ARP + mDNS/Bonjour, mesure de latence ICMP, port scan TCP SYN, banner grabbing, fingerprinting OS, enrichissement CVE automatique, rapport WebGL 3D interactif. Licence MIT.",
     tags:["Python","Réseau","Sécurité"], github:null },
-  { num:"03", status:"done", title:"Jarvis — Self-Hosted AI Stack",
+  { num:"03", status:"wip", title:"Jarvis — Self-Hosted AI Stack",
     desc:"Stack IA locale complète, souveraine et extensible — tournant sur Windows 11 + Docker Desktop (WSL2) avec GPU NVIDIA RTX 5070 Ti.",
     detail:"Écosystème IA self-hosted regroupant : proxy LLM unifié, agents collaboratifs CrewAI, mémoire long terme, vision multimodale, sandbox d'exécution de code, fine-tuning LoRA, contrôle PC par gestes, assistant CLI type Claude Code, reverse proxy Traefik, CI/CD GitHub Actions, GitOps webhook — orchestré localement sans cloud obligatoire.",
     tags:["Docker","WSL2","LLM","CrewAI"], github:null },
@@ -1267,7 +1267,7 @@ function EditorialStats() {
   const LINES = [
     { n:"01", text:"1ère année de BTS SIO option SISR" },
     { n:"02", text:"6 projets réalisés en 2025" },
-    { n:"03", text:"2 certifications obtenues — Pix & SecNumAcadémie" },
+    { n:"03", text:"Certification SecNumAcadémie — ANSSI" },
     { n:"04", text:"En alternance dans la cybersécurité depuis septembre 2025" },
   ];
 
@@ -1392,14 +1392,6 @@ const CERTS = [
     org:"ANSSI",
     desc:"Formation aux fondamentaux de la cybersécurité dispensée par l'Agence Nationale de la Sécurité des Systèmes d'Information.",
     tags:["ANSSI","Cyber","Fondamentaux"],
-    year:"2025",
-  },
-  {
-    icon:"📊",
-    title:"Certification Pix",
-    org:"Pix — GIP",
-    desc:"Certification nationale des compétences numériques : traitement de l'information, communication, création de contenus, environnement numérique.",
-    tags:["Numérique","Compétences","Officiel"],
     year:"2025",
   },
 ];
