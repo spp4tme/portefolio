@@ -1590,11 +1590,19 @@ function CERTFeed() {
   const load = async () => {
     setLoading(true); setErr(false);
     try {
-      const r = await fetch("https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.cert.ssi.gouv.fr%2Ffeed%2F&count=6");
+      const proxy = "https://api.allorigins.win/get?url=" + encodeURIComponent("https://www.cert.ssi.gouv.fr/feed/");
+      const r = await fetch(proxy);
       if (!r.ok) throw new Error();
       const d = await r.json();
-      if (d.status !== "ok") throw new Error();
-      setItems(d.items || []);
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(d.contents, "text/xml");
+      const entries = Array.from(xml.querySelectorAll("item")).slice(0, 6);
+      setItems(entries.map(el => ({
+        title:   el.querySelector("title")?.textContent   || "",
+        link:    el.querySelector("link")?.textContent    || "",
+        pubDate: el.querySelector("pubDate")?.textContent || "",
+        guid:    el.querySelector("guid")?.textContent    || "",
+      })));
       setLastUp(new Date());
     } catch { setErr(true); }
     finally { setLoading(false); }
