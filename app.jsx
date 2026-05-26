@@ -1,11 +1,11 @@
-﻿
+?
 const { useState, useEffect, useRef, createContext, useContext } = React;
 
 // React available globally via CDN
 
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // THEME PALETTES
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const DARK = {
   bg:          "#090c12",
   surface:     "#0f1320",
@@ -44,9 +44,9 @@ const LIGHT = {
   topGlow:     "#2356d80d",
 };
 
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // STATIC TOKENS
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const T = {
   font: {
     display: "'Syne', sans-serif",
@@ -57,15 +57,15 @@ const T = {
   shadow: { card:"0 4px 32px rgba(0,0,0,.3)", glow:"0 0 24px rgba(75,142,255,.25)" },
 };
 
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // CONTEXT
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const ThemeCtx = createContext({ C: DARK, isDark: true, toggle: () => {} });
 const useTheme = () => useContext(ThemeCtx);
 
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // DYNAMIC CSS (regenerated on theme change)
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const makeCSS = (C, isDark) => `
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -154,7 +154,7 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;height:600px;backgrou
 .theme-ripple{position:fixed;border-radius:50%;pointer-events:none;z-index:9998;transform:scale(0);opacity:.1;transition:transform .7s cubic-bezier(.4,0,.2,1),opacity .7s ease}
 .theme-ripple.go{transform:scale(1);opacity:0}
 
-/* â”€â”€ CRT intro â”€â”€ */
+/* ── CRT intro ── */
 @keyframes crt-flicker{
   0%{opacity:0}2%{opacity:.9}4%{opacity:.1}6%{opacity:1}8%{opacity:.2}
   10%{opacity:1}13%{opacity:.5}16%{opacity:1}
@@ -173,7 +173,7 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;height:600px;backgrou
   25% {opacity:1;  filter:brightness(2) blur(2px) saturate(.5)}
   100%{opacity:1;  filter:brightness(1) blur(0)   saturate(1)}
 }
-/* Monitor entry â€” fade in with slight downward drift */
+/* Monitor entry — fade in with slight downward drift */
 @keyframes monitor-enter{
   0%  {opacity:0; transform:translateY(12px) perspective(1200px) rotateX(1.5deg)}
   100%{opacity:1; transform:translateY(0)   perspective(1200px) rotateX(1.5deg)}
@@ -237,7 +237,7 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;height:600px;backgrou
 .glitch-wrap:hover .glitch-a{opacity:1;color:${C.accentSoft};mix-blend-mode:screen}
 .glitch-wrap:hover .glitch-b{opacity:1;color:${C.accentSoft};mix-blend-mode:screen}
 
-/* hero scan line â€” fires once on load */
+/* hero scan line — fires once on load */
 @keyframes scan{0%{top:-2px;opacity:.6}100%{top:100%;opacity:0}}
 .hero-scan{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,${C.accent},transparent);animation:scan 1.4s .3s cubic-bezier(.4,0,.2,1) forwards;pointer-events:none;z-index:2}
 
@@ -264,9 +264,9 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;height:600px;backgrou
   background:linear-gradient(90deg,${C.accent},${C.accentSoft},transparent);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   HOLOGRAPHIC CYLINDER â€” extraordinary effect
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ════════════════════════════════════════════
+   HOLOGRAPHIC CYLINDER — extraordinary effect
+   ════════════════════════════════════════════ */
 
 /* scene container */
 .proj-scene{
@@ -315,7 +315,7 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;height:600px;backgrou
   pointer-events:none;z-index:1;
 }
 
-/* ambient scan sweep â€” moves through cone */
+/* ambient scan sweep — moves through cone */
 @keyframes cone-sweep{
   0%  {opacity:0;transform:translateX(-50%) scaleX(.3)}
   20% {opacity:1}
@@ -438,9 +438,9 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;height:600px;backgrou
 @keyframes modal-up{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 `;
 
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // HOOKS
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function useInView(ref, options = {}) {
   const [inView, setInView] = useState(false);
   useEffect(() => {
@@ -470,104 +470,104 @@ function useScrollProgress() {
   return p;
 }
 
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // DATA
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const SKILLS = [
-  { icon:"ðŸ”Œ", title:"RÃ©seaux",                desc:"Protocoles TCP/IP, routage inter-VLAN, DNS, DHCP et architecture LAN/WAN.", level:62, tags:["TCP/IP","Cisco","VLAN"],               accent:[0,2] },
-  { icon:"ðŸ–¥ï¸", title:"Administration systÃ¨me", desc:"DÃ©ploiement et administration sous Linux et Windows Server, virtualisation avec VirtualBox.",  level:55, tags:["Linux","Windows Server","VirtualBox"], accent:[0]   },
-  { icon:"ðŸ›¡ï¸", title:"SÃ©curitÃ© rÃ©seau",       desc:"Mise en place de pare-feu, dÃ©tection d'intrusion et analyse de vulnÃ©rabilitÃ©s.", level:48, tags:["Wireshark","Nmap","pfSense"],         accent:[0,1] },
-  { icon:"ðŸ’»", title:"Scripting & Code",       desc:"Automatisation de tÃ¢ches, scripts Bash et initiation Python pour la surveillance systÃ¨me.", level:38, tags:["Python","Bash","PowerShell"],          accent:[0,1] },
-  { icon:"ðŸ”", title:"Bases de cryptographie", desc:"Fondamentaux du chiffrement symÃ©trique/asymÃ©trique, PKI, certificats SSL/TLS.", level:30, tags:["RSA","SSL/TLS","GPG"],                 accent:[]    },
-  { icon:"âš”ï¸", title:"CTF & SÃ©curitÃ© off.",   desc:"DÃ©couverte des environnements offensifs, challenges en ligne et outils d'audit.", level:42, tags:["HackTheBox","Metasploit","Burp Suite"], accent:[0]   },
+  { icon:"🔌", title:"Réseaux",                desc:"Protocoles TCP/IP, routage inter-VLAN, DNS, DHCP et architecture LAN/WAN.", level:62, tags:["TCP/IP","Cisco","VLAN"],               accent:[0,2] },
+  { icon:"🖥️", title:"Administration système", desc:"Déploiement et administration sous Linux et Windows Server, virtualisation avec VirtualBox.",  level:55, tags:["Linux","Windows Server","VirtualBox"], accent:[0]   },
+  { icon:"🛡️", title:"Sécurité réseau",       desc:"Mise en place de pare-feu, détection d'intrusion et analyse de vulnérabilités.", level:48, tags:["Wireshark","Nmap","pfSense"],         accent:[0,1] },
+  { icon:"💻", title:"Scripting & Code",       desc:"Automatisation de tâches, scripts Bash et initiation Python pour la surveillance système.", level:38, tags:["Python","Bash","PowerShell"],          accent:[0,1] },
+  { icon:"🔐", title:"Bases de cryptographie", desc:"Fondamentaux du chiffrement symétrique/asymétrique, PKI, certificats SSL/TLS.", level:30, tags:["RSA","SSL/TLS","GPG"],                 accent:[]    },
+  { icon:"⚔️", title:"CTF & Sécurité off.",   desc:"Découverte des environnements offensifs, challenges en ligne et outils d'audit.", level:42, tags:["HackTheBox","Metasploit","Burp Suite"], accent:[0]   },
 ];
 
 const PROJECTS = [
-  { num:"01", status:"done", title:"Infrastructure rÃ©seau virtualisÃ©e",
-    desc:"Conception d'une architecture LAN complÃ¨te sous VirtualBox avec routage inter-VLAN via pfSense 2.7.",
-    detail:"3 VLANs configurÃ©s (LAN, DMZ, MGMT), rÃ¨gles de filtrage par interface, tests de connectivitÃ© validÃ©s avec ping et traceroute. Toute la topologie est documentÃ©e avec un schÃ©ma rÃ©seau.",
+  { num:"01", status:"done", title:"Infrastructure réseau virtualisée",
+    desc:"Conception d'une architecture LAN complète sous VirtualBox avec routage inter-VLAN via pfSense 2.7.",
+    detail:"3 VLANs configurés (LAN, DMZ, MGMT), règles de filtrage par interface, tests de connectivité validés avec ping et traceroute. Toute la topologie est documentée avec un schéma réseau.",
     tags:["pfSense 2.7","VirtualBox","VLAN"], github:null },
-  { num:"02", status:"done", title:"SÃ©curisation Active Directory",
-    desc:"DÃ©ploiement d'un Active Directory sous Windows Server 2019 avec GPO de sÃ©curitÃ© et journalisation.",
-    detail:"CrÃ©ation d'une forÃªt AD, OU hiÃ©rarchisÃ©es, politique de mots de passe renforcÃ©e (longueur min. 12, complexitÃ© obligatoire), GPO de verrouillage de session, audit des connexions et des changements de droits.",
+  { num:"02", status:"done", title:"Sécurisation Active Directory",
+    desc:"Déploiement d'un Active Directory sous Windows Server 2019 avec GPO de sécurité et journalisation.",
+    detail:"Création d'une forêt AD, OU hiérarchisées, politique de mots de passe renforcée (longueur min. 12, complexité obligatoire), GPO de verrouillage de session, audit des connexions et des changements de droits.",
     tags:["Windows Server 2019","GPO","AD"], github:null },
-  { num:"03", status:"done", title:"Analyse de trafic rÃ©seau",
-    desc:"Capture et analyse de trames avec Wireshark sur un rÃ©seau simulÃ© : protocoles, anomalies, rapport.",
-    detail:"Analyse de captures ARP, DHCP, DNS et HTTP. Identification d'une attaque ARP spoofing simulÃ©e. Rapport structurÃ© avec captures commentÃ©es, indicateurs de compromission et recommandations.",
+  { num:"03", status:"done", title:"Analyse de trafic réseau",
+    desc:"Capture et analyse de trames avec Wireshark sur un réseau simulé : protocoles, anomalies, rapport.",
+    detail:"Analyse de captures ARP, DHCP, DNS et HTTP. Identification d'une attaque ARP spoofing simulée. Rapport structuré avec captures commentées, indicateurs de compromission et recommandations.",
     tags:["Wireshark","TCP/IP","Rapport"], github:null },
   { num:"04", status:"done", title:"Mise en place d'une DMZ",
-    desc:"Zone dÃ©militarisÃ©e avec serveur Apache exposÃ©, rÃ¨gles pfSense strictes et cloisonnement rÃ©seau.",
-    detail:"Serveur Apache 2.4 en DMZ, rÃ¨gles NAT/PAT pour l'exposition HTTP/HTTPS, isolation complÃ¨te du LAN interne. Tests de pÃ©nÃ©tration basiques depuis la zone WAN pour vÃ©rifier l'Ã©tanchÃ©itÃ©.",
+    desc:"Zone démilitarisée avec serveur Apache exposé, règles pfSense strictes et cloisonnement réseau.",
+    detail:"Serveur Apache 2.4 en DMZ, règles NAT/PAT pour l'exposition HTTP/HTTPS, isolation complète du LAN interne. Tests de pénétration basiques depuis la zone WAN pour vérifier l'étanchéité.",
     tags:["pfSense","Apache 2.4","DMZ"], github:null },
-  { num:"05", status:"done", title:"Audit de vulnÃ©rabilitÃ©s",
-    desc:"Scan d'une infrastructure de test avec Nmap et OpenVAS : failles recensÃ©es, rapport de remÃ©diation.",
-    detail:"DÃ©couverte de services exposÃ©s sur 3 machines virtuelles, scan Nmap avec scripts NSE, analyse OpenVAS avec scoring CVSS. Rapport final incluant prioritÃ©s de correction et plan d'action.",
+  { num:"05", status:"done", title:"Audit de vulnérabilités",
+    desc:"Scan d'une infrastructure de test avec Nmap et OpenVAS : failles recensées, rapport de remédiation.",
+    detail:"Découverte de services exposés sur 3 machines virtuelles, scan Nmap avec scripts NSE, analyse OpenVAS avec scoring CVSS. Rapport final incluant priorités de correction et plan d'action.",
     tags:["Nmap","OpenVAS","CVSS"], github:null },
   { num:"06", status:"wip",  title:"Script de surveillance Python",
-    desc:"Outil de monitoring systÃ¨me : supervision CPU, RAM, rÃ©seau et alertes automatiques par mail.",
-    detail:"Script Python utilisant psutil pour superviser CPU, RAM et connexions rÃ©seau. Seuils configurables, envoi d'alertes via smtplib en cas d'anomalie. Logs horodatÃ©s dans un fichier dÃ©diÃ©.",
+    desc:"Outil de monitoring système : supervision CPU, RAM, réseau et alertes automatiques par mail.",
+    detail:"Script Python utilisant psutil pour superviser CPU, RAM et connexions réseau. Seuils configurables, envoi d'alertes via smtplib en cas d'anomalie. Logs horodatés dans un fichier dédié.",
     tags:["Python","psutil","Monitoring"], github:null },
 ];
 
 const VEILLE_ITEMS = [
   {
-    icon:"📡",
+    icon:"??",
     category:"Veille institutionnelle",
     title:"ANSSI / CERT-FR",
-    desc:"Alertes et avis de sécurité publiés par l'ANSSI. Suivi des bulletins hebdomadaires, recommandations et signalements officiels.",
+    desc:"Alertes et avis de s�curit� publi�s par l'ANSSI. Suivi des bulletins hebdomadaires, recommandations et signalements officiels.",
     tags:["CERT-FR","Alertes","Officiel"],
   },
   {
-    icon:"🔍",
-    category:"Base de vulnérabilités",
+    icon:"??",
+    category:"Base de vuln�rabilit�s",
     title:"CVE / NVD",
-    desc:"Consultation régulière de la base nationale des vulnérabilités pour suivre les CVE critiques affectant les systèmes courants.",
+    desc:"Consultation r�guli�re de la base nationale des vuln�rabilit�s pour suivre les CVE critiques affectant les syst�mes courants.",
     tags:["CVE","CVSS","Patch"],
   },
   {
-    icon:"📰",
-    category:"Actualité sécurité",
+    icon:"??",
+    category:"Actualit� s�curit�",
     title:"The Hacker News",
-    desc:"Suivi quotidien de l'actualité cybersécurité mondiale : incidents, nouvelles techniques d'attaque, correctifs et outils défensifs.",
+    desc:"Suivi quotidien de l'actualit� cybers�curit� mondiale : incidents, nouvelles techniques d'attaque, correctifs et outils d�fensifs.",
     tags:["News","Incidents","Threat Intel"],
   },
   {
-    icon:"🧪",
+    icon:"??",
     category:"Pratique offensive",
     title:"HackTheBox / TryHackMe",
-    desc:"Entraînement sur des environnements réalistes : machines vulnérables, challenges guidés, apprentissage des techniques red team.",
+    desc:"Entra�nement sur des environnements r�alistes : machines vuln�rables, challenges guid�s, apprentissage des techniques red team.",
     tags:["CTF","Pentest","Labs"],
   },
   {
-    icon:"🛡️",
+    icon:"???",
     category:"Threat Intelligence",
     title:"MITRE ATT&CK",
-    desc:"Référentiel des tactiques et techniques adversariales. Utilisé pour comprendre les modes opératoires des groupes APT et structurer la défense.",
+    desc:"R�f�rentiel des tactiques et techniques adversariales. Utilis� pour comprendre les modes op�ratoires des groupes APT et structurer la d�fense.",
     tags:["ATT&CK","TTPs","APT"],
   },
   {
-    icon:"🌐",
-    category:"Communauté & Forums",
+    icon:"??",
+    category:"Communaut� & Forums",
     title:"Reddit r/netsec & Discord",
-    desc:"Échanges avec la communauté sécurité francophone et internationale. Partage de writeups, d'outils et de retours d'expérience.",
+    desc:"�changes avec la communaut� s�curit� francophone et internationale. Partage de writeups, d'outils et de retours d'exp�rience.",
     tags:["Community","Writeups","Open Source"],
   },
 ];
 
 const NAV_MENU = [
-  { id:"hero",     label:"Accueil",        icon:"â—Ž", num:"00", subs:[] },
-  { id:"about",    label:"Ã€ propos",       icon:"â—ˆ", num:"01", subs:[] },
-  { id:"timeline", label:"Parcours",       icon:"â—Œ", num:"02", subs:[] },
-  { id:"skills",   label:"CompÃ©tences",    icon:"â—‰", num:"03", subs:[] },
-  { id:"certs",    label:"Certifications", icon:"â—‘", num:"04", subs:[] },
-  { id:"projects", label:"Projets",        icon:"â—‡", num:"05", subs:[] },
-  { id:"veille",   label:"Veille",         icon:"◆",  num:"06", subs:[] },
-  { id:"contact",  label:"Contact",        icon:"â—»", num:"07", subs:[] },
+  { id:"hero",     label:"Accueil",        icon:"◎", num:"00", subs:[] },
+  { id:"about",    label:"À propos",       icon:"◈", num:"01", subs:[] },
+  { id:"timeline", label:"Parcours",       icon:"◌", num:"02", subs:[] },
+  { id:"skills",   label:"Compétences",    icon:"◉", num:"03", subs:[] },
+  { id:"certs",    label:"Certifications", icon:"◑", num:"04", subs:[] },
+  { id:"projects", label:"Projets",        icon:"◇", num:"05", subs:[] },
+  { id:"veille",   label:"Veille",         icon:"?",  num:"06", subs:[] },
+  { id:"contact",  label:"Contact",        icon:"◻", num:"07", subs:[] },
 ];
 
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
-// THEME TOGGLE â€” custom moon/sun switch
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// THEME TOGGLE — custom moon/sun switch
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function ThemeToggle() {
   const { isDark, toggle } = useTheme();
   const [ripple, setRipple] = useState(null);
@@ -603,9 +603,9 @@ function ThemeToggle() {
   );
 }
 
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // ATOMIC COMPONENTS
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function SectionLabel({ children }) {
   const { C } = useTheme();
   return (
@@ -639,9 +639,9 @@ function Divider() {
   return <div style={{ height:1, background:`linear-gradient(90deg,transparent,${C.borderHigh},transparent)`, margin:"0 clamp(24px,10vw,180px)" }} />;
 }
 
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // SKILL CARD
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function SkillCard({ skill, delay = 0 }) {
   const { C, isDark } = useTheme();
   const ref    = useRef();
@@ -696,7 +696,7 @@ function SkillCard({ skill, delay = 0 }) {
 }
 
 // project card with accordion
-// colour palette per project index â€” cybersecurity blues/greens
+// colour palette per project index — cybersecurity blues/greens
 const PROJ_COLORS = [
   "75,142,255",   // accent
   "100,160,255",
@@ -758,14 +758,14 @@ function ProjectModal({ project, onClose, C }) {
               }}
               onMouseEnter={e=>{e.currentTarget.style.color=C.textStrong;e.currentTarget.style.borderColor=C.borderHigh;e.currentTarget.style.background=C.surfaceHigh}}
               onMouseLeave={e=>{e.currentTarget.style.color=C.textMuted;e.currentTarget.style.borderColor=C.border;e.currentTarget.style.background="none"}}>
-                âœ•
+                ✕
               </button>
               <span style={{ fontFamily:T.font.mono, fontSize:9.5, letterSpacing:".08em",
                 textTransform:"uppercase", padding:"3px 9px", borderRadius:T.radius.sm,
                 color:done?C.success:C.warn,
                 border:`1px solid ${done?C.success+"44":C.warn+"44"}`,
                 background:done?C.success+"08":C.warn+"08" }}>
-                {done ? "TerminÃ©" : "En cours"}
+                {done ? "Terminé" : "En cours"}
               </span>
             </div>
           </div>
@@ -780,7 +780,7 @@ function ProjectModal({ project, onClose, C }) {
           background:C.bg, border:`1px solid ${C.border}`, marginBottom:22 }}>
           <div style={{ fontFamily:T.font.mono, fontSize:9.5, color:`rgba(${color},.8)`,
             letterSpacing:".14em", textTransform:"uppercase", marginBottom:10 }}>
-            DÃ©tails techniques
+            Détails techniques
           </div>
           <p style={{ fontSize:13, color:C.textMuted, lineHeight:1.85 }}>
             {project.detail}
@@ -811,9 +811,9 @@ function ProjectModal({ project, onClose, C }) {
   );
 }
 
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // CHEVRON
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function Chevron({ open }) {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
@@ -823,9 +823,9 @@ function Chevron({ open }) {
   );
 }
 
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
-// NAVBAR â€” side drawer
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// NAVBAR — side drawer
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function Navbar() {
   const { C } = useTheme();
   const [open, setOpen]   = useState(false);
@@ -916,7 +916,7 @@ function Navbar() {
               fontSize:16, transition:"color .2s,border-color .2s,background .2s" }}
             onMouseEnter={e => { e.currentTarget.style.color=C.accent; e.currentTarget.style.borderColor=C.accent; e.currentTarget.style.background=C.accentGlow; }}
             onMouseLeave={e => { e.currentTarget.style.color=C.textMuted; e.currentTarget.style.borderColor=C.border; e.currentTarget.style.background="none"; }}
-          >âœ•</button>
+          >✕</button>
         </div>
 
         {/* Accent line */}
@@ -983,9 +983,9 @@ function Navbar() {
 }
 
 
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // TYPEWRITER
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function Typewriter({ text, style }) {
   const [displayed, setDisplayed] = useState("");
   const [done, setDone] = useState(false);
@@ -1018,7 +1018,7 @@ function GlitchName({ children, style }) {
   );
 }
 
-// ASCII art â€” 5-line banner
+// ASCII art — 5-line banner
 
 
 
@@ -1038,7 +1038,7 @@ function Hero() {
 
   const META = [
     { label:"Nexa Digital School, Paris" },
-    { label:"BTS SIO Â· SISR" },
+    { label:"BTS SIO · SISR" },
     { label:"En alternance" },
   ];
 
@@ -1050,7 +1050,7 @@ function Hero() {
       {/* one-time scan line on load */}
       {loaded && <div className="hero-scan" />}
 
-      {/* large ghost monogram â€” decorative */}
+      {/* large ghost monogram — decorative */}
       <div aria-hidden style={{
         position:"absolute", right:"-5%", top:"50%",
         transform:"translateY(-50%)",
@@ -1069,7 +1069,7 @@ function Hero() {
             <span style={{ width:32, height:1, background:C.accent, flexShrink:0 }} />
             <span style={{ fontFamily:T.font.mono, fontSize:10.5, letterSpacing:".2em",
               textTransform:"uppercase", color:C.accent, opacity:.9 }}>
-              CybersÃ©curitÃ© & RÃ©seaux
+              Cybersécurité & Réseaux
             </span>
           </div>
 
@@ -1081,17 +1081,17 @@ function Hero() {
             <GlitchName style={{ color:C.accent }}>Cernon</GlitchName>
             <span className="cursor-blink" style={{
               color:C.accent, fontWeight:300, fontSize:".7em", verticalAlign:"middle",
-              marginLeft:4, transition:"color .5s" }}>â–ˆ</span>
+              marginLeft:4, transition:"color .5s" }}>█</span>
           </h1>
 
-          {/* single clean line â€” replaces paragraph */}
+          {/* single clean line — replaces paragraph */}
           <p style={{ ...tr(.22), fontSize:15, color:C.textMuted, lineHeight:1.8,
             marginBottom:52, maxWidth:420, fontStyle:"italic" }}>
-            "Comprendre comment les systÃ¨mes fonctionnent
-            â€” et surtout comment les protÃ©ger."
+            "Comprendre comment les systèmes fonctionnent
+            — et surtout comment les protéger."
           </p>
 
-          {/* 2 CTAs only â€” clean, no third button cluttering */}
+          {/* 2 CTAs only — clean, no third button cluttering */}
           <div style={{ ...tr(.3), display:"flex", gap:14, flexWrap:"wrap", alignItems:"center",
             marginBottom:52 }}>
             <button
@@ -1104,7 +1104,7 @@ function Hero() {
               onMouseLeave={e => { e.target.style.background=C.accent; e.target.style.boxShadow="none"; }}>
               Mes projets
             </button>
-            <a href="#" onClick={e => { e.preventDefault(); alert("CV bientÃ´t disponible !"); }}
+            <a href="#" onClick={e => { e.preventDefault(); alert("CV bientôt disponible !"); }}
               style={{ display:"inline-flex", alignItems:"center", gap:8,
                 fontFamily:T.font.mono, fontSize:11, letterSpacing:".1em",
                 textTransform:"uppercase", color:C.textMuted, textDecoration:"none",
@@ -1115,11 +1115,11 @@ function Hero() {
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                 <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
               </svg>
-              TÃ©lÃ©charger le CV
+              Télécharger le CV
             </a>
           </div>
 
-          {/* meta strip â€” minimal, separated by thin lines */}
+          {/* meta strip — minimal, separated by thin lines */}
           <div style={{ ...tr(.38) }}>
             <div className="hero-meta">
               {META.map((m, i) => (
@@ -1145,37 +1145,37 @@ function Hero() {
 const TIMELINE = [
   {
     year:"Juin 2025",
-    label:"BaccalaurÃ©at",
-    sub:"Maths Â· Physique-Chimie",
-    detail:"Bac obtenu, spÃ©cialitÃ©s Maths et Physique-Chimie. Une formation qui a forgÃ© la rigueur et la logique que j'applique aujourd'hui en informatique.",
+    label:"Baccalauréat",
+    sub:"Maths · Physique-Chimie",
+    detail:"Bac obtenu, spécialités Maths et Physique-Chimie. Une formation qui a forgé la rigueur et la logique que j'applique aujourd'hui en informatique.",
     done:true, now:false,
   },
   {
     year:"Sept. 2025",
-    label:"BTS SIO â€” 1Ã¨re annÃ©e",
-    sub:"Option SISR Â· Nexa Digital School, Paris",
-    detail:"Fondamentaux rÃ©seaux TCP/IP, administration Linux et Windows Server, virtualisation avec VirtualBox, premiers projets de sÃ©curitÃ©.",
+    label:"BTS SIO — 1ère année",
+    sub:"Option SISR · Nexa Digital School, Paris",
+    detail:"Fondamentaux réseaux TCP/IP, administration Linux et Windows Server, virtualisation avec VirtualBox, premiers projets de sécurité.",
     done:true, now:true,
   },
   {
     year:"Sept. 2025",
     label:"Alternance",
-    sub:"CybersÃ©curitÃ© & RÃ©seaux",
-    detail:"En entreprise depuis le dÃ©but du BTS â€” administration des systÃ¨mes, sÃ©curitÃ© des infrastructures et gestion des incidents en conditions rÃ©elles.",
+    sub:"Cybersécurité & Réseaux",
+    detail:"En entreprise depuis le début du BTS — administration des systèmes, sécurité des infrastructures et gestion des incidents en conditions réelles.",
     done:true, now:true,
   },
   {
     year:"Sept. 2026",
-    label:"2Ã¨me annÃ©e BTS SIO",
-    sub:"Approfondissement & Ã©preuves E4/E5",
-    detail:"MontÃ©e en compÃ©tences sur la sÃ©curitÃ© offensive, les audits d'infrastructure, prÃ©paration aux Ã©preuves professionnelles E4 et E5.",
+    label:"2ème année BTS SIO",
+    sub:"Approfondissement & épreuves E4/E5",
+    detail:"Montée en compétences sur la sécurité offensive, les audits d'infrastructure, préparation aux épreuves professionnelles E4 et E5.",
     done:false, now:false,
   },
   {
     year:"2027",
-    label:"DiplÃ´me BTS SIO",
+    label:"Diplôme BTS SIO",
     sub:"Et la suite",
-    detail:"Obtention du diplÃ´me, puis poursuite vers un Bachelor cybersÃ©curitÃ© ou une alternance dans la sÃ©curitÃ© des systÃ¨mes d'information.",
+    detail:"Obtention du diplôme, puis poursuite vers un Bachelor cybersécurité ou une alternance dans la sécurité des systèmes d'information.",
     done:false, now:false,
   },
 ];
@@ -1332,10 +1332,10 @@ function EditorialStats() {
   const inView = useInView(ref);
 
   const LINES = [
-    { n:"01", text:"1Ã¨re annÃ©e de BTS SIO option SISR" },
-    { n:"02", text:"6 projets rÃ©alisÃ©s en 2025" },
-    { n:"03", text:"2 certifications obtenues â€” Pix & SecNumAcadÃ©mie" },
-    { n:"04", text:"En alternance dans la cybersÃ©curitÃ© depuis septembre 2025" },
+    { n:"01", text:"1ère année de BTS SIO option SISR" },
+    { n:"02", text:"6 projets réalisés en 2025" },
+    { n:"03", text:"2 certifications obtenues — Pix & SecNumAcadémie" },
+    { n:"04", text:"En alternance dans la cybersécurité depuis septembre 2025" },
   ];
 
   return (
@@ -1394,22 +1394,22 @@ function About() {
       {/* text */}
       <div ref={ref} className={`reveal ${inView?"visible":""}`}
         style={{ maxWidth:620, marginBottom:64 }}>
-        <SectionLabel>Ã€ propos</SectionLabel>
+        <SectionLabel>À propos</SectionLabel>
         <h2 style={{ fontFamily:T.font.display, fontSize:"clamp(30px,4vw,48px)",
           color:C.textStrong, marginBottom:28, letterSpacing:"-.02em", fontWeight:700,
           lineHeight:1.1 }}>
           Curieux par nature,<br />rigoureux par choix.
         </h2>
         <p style={{ color:C.textMuted, marginBottom:16, fontSize:14.5, lineHeight:1.85 }}>
-          En BTS SIO option SISR Ã  la Nexa Digital School, Paris, et en alternance
-          dans la cybersÃ©curitÃ© depuis septembre 2025. Ce qui m'a amenÃ© lÃ  ? Une obsession
+          En BTS SIO option SISR à la Nexa Digital School, Paris, et en alternance
+          dans la cybersécurité depuis septembre 2025. Ce qui m'a amené là ? Une obsession
           assez simple : comprendre comment les choses fonctionnent, et trouver
-          lÃ  oÃ¹ elles peuvent casser.
+          là où elles peuvent casser.
         </p>
         <p style={{ color:C.textMuted, fontSize:14.5, lineHeight:1.85 }}>
-          Je construis aujourd'hui mes bases en administration rÃ©seau et sÃ©curitÃ©
-          des infrastructures, avec un Å“il aussi sur la partie offensive, parce
-          qu'on dÃ©fend mieux ce qu'on a appris Ã  attaquer.
+          Je construis aujourd'hui mes bases en administration réseau et sécurité
+          des infrastructures, avec un œil aussi sur la partie offensive, parce
+          qu'on défend mieux ce qu'on a appris à attaquer.
         </p>
       </div>
 
@@ -1421,9 +1421,9 @@ function About() {
   );
 }
 
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // SKILLS
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function Skills() {
   const { C } = useTheme();
   const tR = useRef(), gR = useRef();
@@ -1433,10 +1433,10 @@ function Skills() {
     <section id="skills" style={{ padding:"clamp(80px,12vw,140px) clamp(24px,10vw,180px)",
       background:C.surface, position:"relative", zIndex:1, transition:"background .55s" }}>
       <div ref={tR} className={`reveal ${iT?"visible":""}`}>
-        <SectionLabel>CompÃ©tences</SectionLabel>
+        <SectionLabel>Compétences</SectionLabel>
         <h2 style={{ fontFamily:T.font.display, fontSize:"clamp(30px,4vw,50px)",
           color:C.textStrong, marginBottom:52, letterSpacing:"-.02em", fontWeight:700 }}>
-          Ce que je maÃ®trise
+          Ce que je maîtrise
         </h2>
       </div>
       <div ref={gR} className={`stagger ${iG?"visible":""}`} style={{
@@ -1449,24 +1449,24 @@ function Skills() {
   );
 }
 
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // CERTIFICATIONS
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const CERTS = [
   {
-    icon:"ðŸŽ“",
-    title:"SecNumAcadÃ©mie",
+    icon:"🎓",
+    title:"SecNumAcadémie",
     org:"ANSSI",
-    desc:"Formation aux fondamentaux de la cybersÃ©curitÃ© dispensÃ©e par l'Agence Nationale de la SÃ©curitÃ© des SystÃ¨mes d'Information.",
+    desc:"Formation aux fondamentaux de la cybersécurité dispensée par l'Agence Nationale de la Sécurité des Systèmes d'Information.",
     tags:["ANSSI","Cyber","Fondamentaux"],
     year:"2025",
   },
   {
-    icon:"ðŸ“Š",
+    icon:"📊",
     title:"Certification Pix",
-    org:"Pix â€” GIP",
-    desc:"Certification nationale des compÃ©tences numÃ©riques : traitement de l'information, communication, crÃ©ation de contenus, environnement numÃ©rique.",
-    tags:["NumÃ©rique","CompÃ©tences","Officiel"],
+    org:"Pix — GIP",
+    desc:"Certification nationale des compétences numériques : traitement de l'information, communication, création de contenus, environnement numérique.",
+    tags:["Numérique","Compétences","Officiel"],
     year:"2025",
   },
 ];
@@ -1532,9 +1532,9 @@ function Certifications() {
   );
 }
 
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // PROJECTS
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function Projects() {
   const { C, isDark } = useTheme();
   const tR       = useRef();
@@ -1546,7 +1546,7 @@ function Projects() {
   // Lamppost: track angle via timestamp (reliable, no matrix parsing)
   useEffect(() => {
     const N        = PROJECTS.length;
-    const DURATION = 40000; // ms â€” matches CSS animation
+    const DURATION = 40000; // ms — matches CSS animation
     const paused   = { val: false };
     let raf;
     let startTime  = null;
@@ -1576,7 +1576,7 @@ function Projects() {
         if (!face) return;
         // angle of this card on the cylinder
         const cardAngle = (2 * Math.PI / N) * i;
-        // dot product: how much this card faces the viewer (front = cosâ†’1)
+        // dot product: how much this card faces the viewer (front = cos→1)
         const cos = Math.cos(cylAngle + cardAngle);
 
         // smooth mapping: use a power curve to make the peak sharper
@@ -1584,9 +1584,9 @@ function Projects() {
         const raw = (cos + 1) / 2;              // 0..1 linear
         const t   = Math.pow(raw, 2.2);         // sharpen the peak
 
-        const bright = 0.18 + t * 0.92;         // 0.18 â†’ 1.10
-        const opac   = 0.28 + t * 0.72;         // 0.28 â†’ 1.00
-        const sat    = 0.45 + t * 0.55;         // 0.45 â†’ 1.00
+        const bright = 0.18 + t * 0.92;         // 0.18 → 1.10
+        const opac   = 0.28 + t * 0.72;         // 0.28 → 1.00
+        const sat    = 0.45 + t * 0.55;         // 0.45 → 1.00
 
         // apply lamppost: bright front, dim back
         face.style.filter = `brightness(${bright.toFixed(2)}) saturate(${sat.toFixed(2)}) opacity(${opac.toFixed(2)})`;
@@ -1626,7 +1626,7 @@ function Projects() {
         <div style={{ display:"flex", alignItems:"flex-end", justifyContent:"space-between", flexWrap:"wrap", gap:16 }}>
           <h2 style={{ fontFamily:T.font.display, fontSize:"clamp(30px,4vw,50px)",
             color:C.textStrong, letterSpacing:"-.02em", fontWeight:700 }}>
-            RÃ©alisations
+            Réalisations
           </h2>
 
         </div>
@@ -1680,9 +1680,9 @@ function Projects() {
 }
 
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ????????????????????????????????????????????????
 // VEILLE TECHNOLOGIQUE
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ????????????????????????????????????????????????
 function VeilleCard({ item }) {
   const { C } = useTheme();
   const [hov, setHov] = useState(false);
@@ -1728,10 +1728,10 @@ function Veille() {
         <SectionLabel>Veille technologique</SectionLabel>
         <h2 style={{ fontFamily:T.font.display, fontSize:"clamp(30px,4vw,50px)",
           color:C.textStrong, marginBottom:16, letterSpacing:"-.02em", fontWeight:700 }}>
-          Rester à jour, chaque jour.
+          Rester � jour, chaque jour.
         </h2>
         <p style={{ color:C.textMuted, marginBottom:52, maxWidth:520, fontSize:14.5, lineHeight:1.85 }}>
-          Sources, outils et communautés qui alimentent ma veille en cybersécurité au quotidien.
+          Sources, outils et communaut�s qui alimentent ma veille en cybers�curit� au quotidien.
         </p>
       </div>
       <div ref={gR} className={`stagger ${iG?"visible":""}`} style={{
@@ -1781,7 +1781,7 @@ function Contact() {
           Travaillons ensemble
         </h2>
         <p style={{ color:C.textMuted, marginBottom:52, maxWidth:480 }}>
-          Pour un stage, une alternance ou simplement pour Ã©changer autour de la cybersÃ©curitÃ©.
+          Pour un stage, une alternance ou simplement pour échanger autour de la cybersécurité.
         </p>
       </div>
 
@@ -1819,11 +1819,11 @@ function Contact() {
                 opacity: status==="sending" ? .6 : 1 }}
               onMouseEnter={e => { if(status!=="sending") e.currentTarget.style.boxShadow="0 0 24px rgba(75,142,255,.35)"; }}
               onMouseLeave={e => { e.currentTarget.style.boxShadow="none"; }}>
-              {status==="sending" ? "Envoi..." : status==="ok" ? "âœ“ Message envoyÃ©" : "Envoyer"}
+              {status==="sending" ? "Envoi..." : status==="ok" ? "✓ Message envoyé" : "Envoyer"}
             </button>
             {status==="error" && (
               <p style={{ fontFamily:T.font.mono, fontSize:11, color:C.warn }}>
-                Erreur â€” rÃ©essayez ou contactez directement par mail.
+                Erreur — réessayez ou contactez directement par mail.
               </p>
             )}
           </div>
@@ -1834,8 +1834,8 @@ function Contact() {
           style={{ display:"flex", flexDirection:"column", gap:14 }}>
           {[
             { icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>, label:"anthonycernon@gmail.com", href:"mailto:anthonycernon@gmail.com" },
-            { icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>, label:"LinkedIn (bientÃ´t)", href:"#" },
-            { icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>, label:"GitHub (bientÃ´t)", href:"#" },
+            { icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>, label:"LinkedIn (bientôt)", href:"#" },
+            { icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>, label:"GitHub (bientôt)", href:"#" },
           ].map(l => (
             <a key={l.label} href={l.href}
               style={{ display:"flex", alignItems:"center", gap:12,
@@ -1858,9 +1858,9 @@ function Contact() {
   );
 }
 
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // FOOTER
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function Footer() {
   const { C } = useTheme();
   return (
@@ -1868,7 +1868,7 @@ function Footer() {
       display:"flex", justifyContent:"space-between", alignItems:"center",
       position:"relative", zIndex:1, flexWrap:"wrap", gap:12, transition:"border-color .55s" }}>
       <span style={{ fontFamily:T.font.mono, fontSize:11, color:C.textDim, letterSpacing:".06em" }}>
-        Â© 2026 Â· Anthony Cernon Â· BTS SIO SISR
+        © 2026 · Anthony Cernon · BTS SIO SISR
       </span>
       <div style={{ display:"flex", alignItems:"center", gap:20 }}>
         <a href="mailto:anthonycernon@gmail.com"
@@ -1886,10 +1886,10 @@ function Footer() {
   );
 }
 
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // ROOT
-// â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
-// FlipOverlay â€” FLIP technique: screen rect â†’ fullscreen â†’ white flash â†’ done
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// FlipOverlay — FLIP technique: screen rect → fullscreen → white flash → done
 function FlipOverlay({ rect, fading }) {
   const [expanded, setExpanded] = useState(false);
   const [flash,    setFlash   ] = useState(false);
@@ -1936,9 +1936,9 @@ function FlipOverlay({ rect, fading }) {
   );
 }
 
-// â”€â”€ CRT INTRO â”€â”€
+// ── CRT INTRO ──
 function CRTIntro({ onDone }) {
-  const [phase, setPhase]     = useState("off");    // offâ†’poweronâ†’contentâ†’zoomâ†’done
+  const [phase, setPhase]     = useState("off");    // off→poweron→content→zoom→done
   const [showContent, setContent] = useState(false);
   const [zooming, setZooming] = useState(false);
   const [fading,  setFading]  = useState(false);
@@ -2000,7 +2000,7 @@ function CRTIntro({ onDone }) {
         </defs>
       </svg>
 
-      {/* â”€â”€ Full-screen backdrop â”€â”€ */}
+      {/* ── Full-screen backdrop ── */}
       <div style={{
         position:"fixed", inset:0, zIndex:10000,
         background:"#04060a",
@@ -2082,7 +2082,7 @@ function CRTIntro({ onDone }) {
                   }}>
                     <div style={{ fontSize:"min(1.2vw,11px)", color:"#4b8eff",
                       letterSpacing:".15em", textTransform:"uppercase", marginBottom:"3%", opacity:.8 }}>
-                      â€” CybersÃ©curitÃ© & RÃ©seaux
+                      — Cybersécurité & Réseaux
                     </div>
                     <div style={{
                       fontFamily:"'Syne',sans-serif", fontWeight:800,
@@ -2091,13 +2091,13 @@ function CRTIntro({ onDone }) {
                     }}>
                       Anthony<br/>
                       <span style={{ color:"#4b8eff" }}>Cernon</span>
-                      <span style={{ color:"#3a4258", fontWeight:300 }}>â–ˆ</span>
+                      <span style={{ color:"#3a4258", fontWeight:300 }}>█</span>
                     </div>
                     <div style={{
                       fontFamily:"'DM Sans',sans-serif", fontSize:"min(1.4vw,13px)",
                       color:"#5e6a88", fontStyle:"italic", maxWidth:"55%", lineHeight:1.7, marginBottom:"6%",
                     }}>
-                      "Comprendre comment les systÃ¨mes fonctionnent, et surtout comment les protÃ©ger."
+                      "Comprendre comment les systèmes fonctionnent, et surtout comment les protéger."
                     </div>
                     <div style={{ display:"flex", gap:"2%", alignItems:"center" }}>
                       <div style={{
@@ -2109,7 +2109,7 @@ function CRTIntro({ onDone }) {
                         fontFamily:"'JetBrains Mono',monospace", fontSize:"min(1vw,9px)",
                         letterSpacing:".1em", textTransform:"uppercase",
                         color:"#5e6a88", borderBottom:"1px solid #252c42", paddingBottom:2,
-                      }}>TÃ©lÃ©charger le CV</div>
+                      }}>Télécharger le CV</div>
                     </div>
                     <div style={{
                       position:"absolute", inset:0, pointerEvents:"none",
@@ -2132,7 +2132,7 @@ function CRTIntro({ onDone }) {
               fontFamily:"'JetBrains Mono',monospace", fontSize:9,
               letterSpacing:".2em", textTransform:"uppercase",
               color:"#2a2e3a", userSelect:"none",
-            }}>CERNON Â· SYS-1</div>
+            }}>CERNON · SYS-1</div>
 
             <div style={{
               position:"absolute", bottom:20, right:36,
@@ -2163,12 +2163,12 @@ function CRTIntro({ onDone }) {
           }}
           onMouseEnter={e => e.target.style.color="#4b8eff"}
           onMouseLeave={e => e.target.style.color="#3a4258"}>
-            passer â†’
+            passer →
           </button>
         )}
       </div>
 
-      {/* â”€â”€ FLIP zoom overlay â”€â”€ */}
+      {/* ── FLIP zoom overlay ── */}
       {zooming && screenRect && (
         <FlipOverlay rect={screenRect} fading={fading} />
       )}
@@ -2184,11 +2184,11 @@ function Portfolio() {
   const progress = useScrollProgress();
 
   useEffect(() => {
-    document.title = "Anthony Cernon â€” Portfolio CybersÃ©curitÃ©";
+    document.title = "Anthony Cernon — Portfolio Cybersécurité";
     const metas = [
-      { name:"description", content:"Portfolio d'Anthony Cernon, Ã©tudiant BTS SIO SISR Ã  la Nexa Digital School, Paris. CybersÃ©curitÃ©, rÃ©seaux, administration systÃ¨me." },
-      { property:"og:title", content:"Anthony Cernon â€” CybersÃ©curitÃ© & RÃ©seaux" },
-      { property:"og:description", content:"BTS SIO SISR Â· Nexa Digital School, Paris Â· En alternance" },
+      { name:"description", content:"Portfolio d'Anthony Cernon, étudiant BTS SIO SISR à la Nexa Digital School, Paris. Cybersécurité, réseaux, administration système." },
+      { property:"og:title", content:"Anthony Cernon — Cybersécurité & Réseaux" },
+      { property:"og:description", content:"BTS SIO SISR · Nexa Digital School, Paris · En alternance" },
       { name:"author", content:"Anthony Cernon" },
     ];
     metas.forEach(m => {
