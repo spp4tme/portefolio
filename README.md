@@ -17,16 +17,9 @@ portefolio/
 - **Babel standalone** — transpile le JSX dans le navigateur
 - Pas de bundler, pas de dépendances npm
 
-## Lancer le projet
+## Démo
 
-Ouvrir `index.html` dans un navigateur.
-
-> Certains navigateurs bloquent les requêtes de fichiers locaux (`file://`). Si `app.jsx` ne se charge pas, utilise un serveur local :
-> ```bash
-> npx serve .
-> # ou
-> python -m http.server 8080
-> ```
+[https://spp4tme.github.io/portefolio/](https://spp4tme.github.io/portefolio/)
 
 ## Sections
 
