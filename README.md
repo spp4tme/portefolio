@@ -17,7 +17,7 @@ portefolio/
 - **Babel standalone** — transpile le JSX dans le navigateur
 - Pas de bundler, pas de dépendances npm
 
-## Démo
+## Lien portefolio
 
 [https://spp4tme.github.io/portefolio/](https://spp4tme.github.io/portefolio/)
 
