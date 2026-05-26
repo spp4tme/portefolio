@@ -13,7 +13,15 @@
 </head>
 <body>
   <div id="root"></div>
-
-  <script type="text/babel" src="app.jsx"></script>
+  <script>
+    fetch('app.jsx')
+      .then(function(r) { return r.text(); })
+      .then(function(src) {
+        var code = Babel.transform(src, { presets: ['react'] }).code;
+        var s = document.createElement('script');
+        s.textContent = code;
+        document.body.appendChild(s);
+      });
+  </script>
 </body>
 </html>
