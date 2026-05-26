@@ -452,6 +452,14 @@ const PROJECTS = [
     desc:"Outil de monitoring système : supervision CPU, RAM, réseau et alertes automatiques par mail.",
     detail:"Script Python utilisant psutil pour superviser CPU, RAM et connexions réseau. Seuils configurables, envoi d'alertes via smtplib en cas d'anomalie. Logs horodatés dans un fichier dédié.",
     tags:["Python","psutil","Monitoring"], github:null },
+  { num:"07", status:"done", title:"Fire-UX",
+    desc:"Script Bash interactif pour administrer le pare-feu Linux via iptables depuis un terminal coloré et structuré — sans connaître la syntaxe iptables par cœur.",
+    detail:"Interface CLI entièrement en Bash pur. Gestion des règles iptables (INPUT, OUTPUT, FORWARD), persistance des règles, mode interactif avec menus colorés. Compatible Linux, Bash 5+, licence MIT.",
+    tags:["Bash","iptables","Linux"], github:null },
+  { num:"08", status:"done", title:"NETMAP",
+    desc:"Scanner réseau offensif en Python pur — zéro dépendance externe. Découverte ARP + mDNS, port scan TCP SYN, banner grabbing, fingerprinting OS, enrichissement CVE.",
+    detail:"Scanner réseau écrit en Python 3.10+ sans aucune dépendance externe. Découverte d'hôtes via ARP + mDNS/Bonjour, mesure de latence ICMP, port scan TCP SYN, banner grabbing, fingerprinting OS, enrichissement CVE automatique, rapport WebGL 3D interactif. Licence MIT.",
+    tags:["Python","Réseau","Sécurité"], github:null },
 ];
 
 const VEILLE_ITEMS = [
