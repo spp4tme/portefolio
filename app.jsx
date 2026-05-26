@@ -419,6 +419,10 @@ const PROJECTS = [
     desc:"Scanner réseau offensif en Python pur — zéro dépendance externe. Découverte ARP + mDNS, port scan TCP SYN, banner grabbing, fingerprinting OS, enrichissement CVE.",
     detail:"Scanner réseau écrit en Python 3.10+ sans aucune dépendance externe. Découverte d'hôtes via ARP + mDNS/Bonjour, mesure de latence ICMP, port scan TCP SYN, banner grabbing, fingerprinting OS, enrichissement CVE automatique, rapport WebGL 3D interactif. Licence MIT.",
     tags:["Python","Réseau","Sécurité"], github:null },
+  { num:"03", status:"done", title:"Jarvis — Self-Hosted AI Stack",
+    desc:"Stack IA locale complète, souveraine et extensible — tournant sur Windows 11 + Docker Desktop (WSL2) avec GPU NVIDIA RTX 5070 Ti.",
+    detail:"Écosystème IA self-hosted regroupant : proxy LLM unifié, agents collaboratifs CrewAI, mémoire long terme, vision multimodale, sandbox d'exécution de code, fine-tuning LoRA, contrôle PC par gestes, assistant CLI type Claude Code, reverse proxy Traefik, CI/CD GitHub Actions, GitOps webhook — orchestré localement sans cloud obligatoire.",
+    tags:["Docker","WSL2","LLM","CrewAI"], github:null },
 ];
 
 const VEILLE_ITEMS = [
