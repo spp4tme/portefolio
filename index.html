@@ -498,8 +498,8 @@ const PROJECTS = [
     detail:"Scanner réseau écrit en Python 3.10+ sans aucune dépendance externe. Découverte d'hôtes via ARP + mDNS/Bonjour, mesure de latence ICMP, port scan TCP SYN, banner grabbing, fingerprinting OS, enrichissement CVE automatique, rapport WebGL 3D interactif. Licence MIT.",
     tags:["Python","Réseau","Sécurité"], github:"https://github.com/spp4tme/NETMAP" },
   { num:"03", status:"wip", title:"Jarvis — Self-Hosted AI Stack",
-    desc:"Stack IA locale complète, souveraine et extensible — tournant sur Windows 11 + Docker Desktop (WSL2) avec GPU NVIDIA RTX 5070 Ti.",
-    detail:"Écosystème IA self-hosted regroupant : proxy LLM unifié, agents collaboratifs CrewAI, mémoire long terme, vision multimodale, sandbox d'exécution de code, fine-tuning LoRA, contrôle PC par gestes, assistant CLI type Claude Code, reverse proxy Traefik, CI/CD GitHub Actions, GitOps webhook — orchestré localement sans cloud obligatoire.",
+    desc:"16 services Docker orchestrés localement — LLM self-hosted, agents IA, mémoire long terme, vision, sandbox, fine-tuning, contrôle PC par gestes. Zéro cloud obligatoire.",
+    detail:"Stack complète : Ollama (6 modèles dont deepseek-r1:14b, qwen2.5-coder, llava), LiteLLM proxy, Open WebUI, 5 agents CrewAI spécialisés (research/code/rag/devops/security), IA constitutionnelle, vote multi-modèles, mémoire Mem0+Qdrant, vision LLaVA+Moondream, sandbox Docker isolée, fine-tuning LoRA Unsloth, CLI assistant (9 outils), contrôle PC par gestes MediaPipe, code reviewer webhook GitHub, infrastructure auto-réparatrice, CI/CD GitHub Actions + scan Trivy quotidien, GitOps webhook, reverse proxy Traefik TLS, accès distant Tailscale. 27 tests pytest.",
     tags:["Docker","WSL2","LLM","CrewAI"], github:null, restricted:true },
 ];
 
@@ -1539,7 +1539,7 @@ function Lab() {
 
   const VMS = [
     { name:"NETMAP + Fire-UX", desc:"VM partagée — développement et tests du scanner réseau et du gestionnaire pare-feu", color:"255,165,40" },
-    { name:"Jarvis Stack",     desc:"LLM self-hosted + agents CrewAI, GPU passthrough RTX 5070 Ti",                       color:"160,100,255"},
+    { name:"Jarvis Stack",     desc:"16 services Docker — Ollama, LiteLLM, Open WebUI, 5 agents CrewAI, mémoire Mem0+Qdrant, vision LLaVA, sandbox isolée, fine-tuning LoRA, CLI assistant, contrôle PC par gestes, CI/CD + scan sécurité quotidien, GitOps webhook. GPU passthrough RTX 5070 Ti.", color:"160,100,255"},
   ];
 
   return (
