@@ -492,15 +492,15 @@ const PROJECTS = [
   { num:"01", status:"wip", title:"Fire-UX",
     desc:"Script Bash interactif pour administrer le pare-feu Linux via iptables depuis un terminal coloré et structuré — sans connaître la syntaxe iptables par cœur.",
     detail:"Interface CLI entièrement en Bash pur. Gestion des règles iptables (INPUT, OUTPUT, FORWARD), persistance des règles, mode interactif avec menus colorés. Compatible Linux, Bash 5+, licence MIT.",
-    tags:["Bash","iptables","Linux"], github:null },
+    tags:["Bash","iptables","Linux"], github:"https://github.com/spp4tme/fire-ux" },
   { num:"02", status:"wip", title:"NETMAP",
     desc:"Scanner réseau offensif en Python pur — zéro dépendance externe. Découverte ARP + mDNS, port scan TCP SYN, banner grabbing, fingerprinting OS, enrichissement CVE.",
     detail:"Scanner réseau écrit en Python 3.10+ sans aucune dépendance externe. Découverte d'hôtes via ARP + mDNS/Bonjour, mesure de latence ICMP, port scan TCP SYN, banner grabbing, fingerprinting OS, enrichissement CVE automatique, rapport WebGL 3D interactif. Licence MIT.",
-    tags:["Python","Réseau","Sécurité"], github:null },
+    tags:["Python","Réseau","Sécurité"], github:"https://github.com/spp4tme/NETMAP" },
   { num:"03", status:"wip", title:"Jarvis — Self-Hosted AI Stack",
     desc:"Stack IA locale complète, souveraine et extensible — tournant sur Windows 11 + Docker Desktop (WSL2) avec GPU NVIDIA RTX 5070 Ti.",
     detail:"Écosystème IA self-hosted regroupant : proxy LLM unifié, agents collaboratifs CrewAI, mémoire long terme, vision multimodale, sandbox d'exécution de code, fine-tuning LoRA, contrôle PC par gestes, assistant CLI type Claude Code, reverse proxy Traefik, CI/CD GitHub Actions, GitOps webhook — orchestré localement sans cloud obligatoire.",
-    tags:["Docker","WSL2","LLM","CrewAI"], github:null },
+    tags:["Docker","WSL2","LLM","CrewAI"], github:null, restricted:true },
 ];
 
 
@@ -701,6 +701,27 @@ function ProjectModal({ project, onClose, C }) {
         <div style={{ display:"flex", flexWrap:"wrap", gap:7 }}>
           {project.tags.map((t,i) => <Tag key={t} accent={i===0}>{t}</Tag>)}
         </div>
+
+        {project.restricted && (
+          <div style={{ marginTop:18, padding:"14px 18px", borderRadius:T.radius.sm,
+            border:`1px solid ${C.warn}55`, background:`${C.warn}0a`,
+            display:"flex", alignItems:"flex-start", gap:12 }}>
+            <span style={{ fontSize:16, flexShrink:0, marginTop:1 }}>⚠</span>
+            <div>
+              <div style={{ fontFamily:T.font.mono, fontSize:9.5, color:C.warn,
+                letterSpacing:".14em", textTransform:"uppercase", marginBottom:8, fontWeight:700 }}>
+                Accès restreint — Diffusion non autorisée
+              </div>
+              <p style={{ fontFamily:T.font.mono, fontSize:11.5, color:C.textMuted, lineHeight:1.75 }}>
+                Le code source de ce projet n'est pas mis à disposition publiquement. Certains composants
+                de cette infrastructure impliquent des capacités techniques sensibles — intégration de
+                modèles LLM auto-hébergés, agents autonomes, accès système bas niveau — dont la diffusion
+                ouverte serait incompatible avec les exigences de sécurité opérationnelle (OPSEC) en vigueur.
+                Toute demande d'accès doit faire l'objet d'une prise de contact préalable.
+              </p>
+            </div>
+          </div>
+        )}
 
         {project.github && (
           <a href={project.github} target="_blank" rel="noreferrer"
@@ -1837,8 +1858,8 @@ function Contact() {
           style={{ display:"flex", flexDirection:"column", gap:14 }}>
           {[
             { icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>, label:"anthonycernon@gmail.com", href:"mailto:anthonycernon@gmail.com" },
-            { icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>, label:"LinkedIn (bientôt)", href:"#" },
-            { icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>, label:"GitHub (bientôt)", href:"#" },
+            { icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>, label:"linkedin.com/in/anthony-cernon", href:"https://www.linkedin.com/in/anthony-cernon-178973367/" },
+            { icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>, label:"github.com/spp4tme", href:"https://github.com/spp4tme" },
           ].map(l => (
             <a key={l.label} href={l.href}
               style={{ display:"flex", alignItems:"center", gap:12,
