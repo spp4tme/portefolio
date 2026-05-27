@@ -1898,9 +1898,11 @@ function Contact() {
         headers:{ "Content-Type":"application/json", "Accept":"application/json" },
         body: JSON.stringify({ name:form.name, email:form.email, message:form.message }),
       });
+      const data = await res.json();
+      console.log("Formspree status:", res.status, data);
       setStatus(res.ok ? "ok" : "error");
       if (res.ok) setForm({ name:"", email:"", message:"" });
-    } catch { setStatus("error"); }
+    } catch (err) { console.error("Formspree error:", err); setStatus("error"); }
   };
 
   const inputStyle = {
