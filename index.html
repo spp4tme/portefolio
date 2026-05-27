@@ -1743,13 +1743,28 @@ function CERTFeed() {
 
   const load = async () => {
     setLoading(true); setErr(false);
+    const CERT_URL = "https://www.cert.ssi.gouv.fr/feed/";
+    const proxies = [
+      async () => {
+        const r = await fetch("https://corsproxy.io/?" + encodeURIComponent(CERT_URL));
+        if (!r.ok) throw new Error();
+        return await r.text();
+      },
+      async () => {
+        const r = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(CERT_URL));
+        if (!r.ok) throw new Error();
+        const d = await r.json();
+        return d.contents;
+      },
+    ];
     try {
-      const proxy = "https://api.allorigins.win/get?url=" + encodeURIComponent("https://www.cert.ssi.gouv.fr/feed/");
-      const r = await fetch(proxy);
-      if (!r.ok) throw new Error();
-      const d = await r.json();
+      let xmlText = null;
+      for (const proxy of proxies) {
+        try { xmlText = await proxy(); if (xmlText) break; } catch {}
+      }
+      if (!xmlText) throw new Error();
       const parser = new DOMParser();
-      const xml = parser.parseFromString(d.contents, "text/xml");
+      const xml = parser.parseFromString(xmlText, "text/xml");
       const entries = Array.from(xml.querySelectorAll("item")).slice(0, 6);
       setItems(entries.map(el => ({
         title:   el.querySelector("title")?.textContent   || "",
