@@ -511,8 +511,9 @@ const NAV_MENU = [
   { id:"skills",   label:"Compétences",    icon:"◉", num:"03", subs:[] },
   { id:"certs",    label:"Certifications", icon:"◑", num:"04", subs:[] },
   { id:"projects", label:"Projets",        icon:"◇", num:"05", subs:[] },
-  { id:"veille",   label:"Veille",         icon:"?",  num:"06", subs:[] },
-  { id:"contact",  label:"Contact",        icon:"◻", num:"07", subs:[] },
+  { id:"lab",      label:"Lab",            icon:"◈", num:"06", subs:[] },
+  { id:"veille",   label:"Veille",         icon:"?",  num:"07", subs:[] },
+  { id:"contact",  label:"Contact",        icon:"◻", num:"08", subs:[] },
 ];
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1518,6 +1519,126 @@ function Projects() {
 
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// LAB
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function Lab() {
+  const { C } = useTheme();
+  const tR = useRef(), cR = useRef();
+  const iT = useInView(tR), iC = useInView(cR);
+
+  const SPECS = [
+    { label:"Machine",  value:"MSI Vector 16 HX" },
+    { label:"CPU",      value:"Intel Core Ultra 7" },
+    { label:"RAM",      value:"32 Go DDR5" },
+    { label:"GPU",      value:"NVIDIA RTX 5070 Ti" },
+    { label:"Stockage", value:"1 To NVMe SSD" },
+    { label:"OS",       value:"Windows 11 Pro" },
+  ];
+
+  const STACK = ["WSL2 (Debian)", "Docker Desktop", "VirtualBox", "GitHub Actions", "Traefik", "Git"];
+
+  const VMS = [
+    { name:"NETMAP-dev",  desc:"Env. Python isolé — scanner réseau offensif",               color:"220,70,70"  },
+    { name:"Fire-UX-dev", desc:"Sandbox Linux — tests iptables & règles pare-feu",          color:"255,165,40" },
+    { name:"Jarvis Stack",desc:"LLM self-hosted + agents CrewAI, GPU passthrough RTX 5070 Ti", color:"160,100,255"},
+  ];
+
+  return (
+    <section id="lab" style={{ padding:"clamp(80px,12vw,140px) clamp(24px,10vw,180px)",
+      background:C.surface, position:"relative", zIndex:1, transition:"background .55s" }}>
+
+      <div ref={tR} className={`reveal ${iT?"visible":""}`} style={{ marginBottom:52 }}>
+        <SectionLabel>Lab</SectionLabel>
+        <h2 style={{ fontFamily:T.font.display, fontSize:"clamp(30px,4vw,50px)",
+          color:C.textStrong, letterSpacing:"-.02em", fontWeight:700 }}>
+          Infrastructure perso.
+        </h2>
+        <p style={{ color:C.textMuted, marginTop:16, maxWidth:480, fontSize:14.5, lineHeight:1.85 }}>
+          Setup maison — machine principale, VMs de développement, stack logicielle,
+          et un serveur dédié en cours d'installation.
+        </p>
+      </div>
+
+      <div ref={cR} className={`reveal ${iC?"visible":""}`} style={{
+        display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:20 }}>
+
+        {/* Machine principale */}
+        <div className="card-hover term-card" style={{ padding:"22px 24px" }}>
+          <div className="term-card-accent" />
+          <div style={{ fontFamily:T.font.mono, fontSize:10, color:C.accent,
+            letterSpacing:".14em", textTransform:"uppercase", marginBottom:18 }}>// machine principale</div>
+          {SPECS.map((s,i) => (
+            <div key={s.label} style={{ display:"flex", justifyContent:"space-between",
+              alignItems:"baseline", padding:"8px 0",
+              borderBottom: i < SPECS.length-1 ? `1px solid ${C.border}` : "none" }}>
+              <span style={{ fontFamily:T.font.mono, fontSize:11, color:C.textMuted,
+                letterSpacing:".06em" }}>{s.label}</span>
+              <span style={{ fontFamily:T.font.mono, fontSize:11.5, color:C.text,
+                fontWeight:500 }}>{s.value}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* VMs actives */}
+        <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+          <div style={{ fontFamily:T.font.mono, fontSize:10, color:C.accent,
+            letterSpacing:".14em", textTransform:"uppercase", marginBottom:4 }}>// machines virtuelles</div>
+          {VMS.map(vm => (
+            <div key={vm.name} className="card-hover" style={{
+              padding:"14px 18px", border:`1px solid ${C.border}`, borderRadius:T.radius.md,
+              background:C.bg, position:"relative", overflow:"hidden" }}>
+              <div style={{ position:"absolute", left:0, top:0, bottom:0, width:2,
+                background:`rgb(${vm.color})`, borderRadius:"2px 0 0 2px" }} />
+              <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:7 }}>
+                <span style={{ width:6, height:6, borderRadius:"50%",
+                  background:`rgb(${vm.color})`, flexShrink:0,
+                  boxShadow:`0 0 6px rgba(${vm.color},.5)` }} />
+                <span style={{ fontFamily:T.font.mono, fontSize:12, color:C.textStrong,
+                  fontWeight:600, flex:1 }}>{vm.name}</span>
+                <span style={{ fontFamily:T.font.mono, fontSize:8.5, color:`rgb(${vm.color})`,
+                  background:`rgba(${vm.color},.1)`, padding:"2px 7px", borderRadius:3,
+                  letterSpacing:".1em", border:`1px solid rgba(${vm.color},.2)` }}>RUNNING</span>
+              </div>
+              <p style={{ fontFamily:T.font.mono, fontSize:11, color:C.textMuted,
+                lineHeight:1.65, paddingLeft:14 }}>{vm.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Stack + Serveur */}
+        <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
+          <div className="term-card" style={{ padding:"22px 24px" }}>
+            <div className="term-card-accent" />
+            <div style={{ fontFamily:T.font.mono, fontSize:10, color:C.accent,
+              letterSpacing:".14em", textTransform:"uppercase", marginBottom:16 }}>// stack logicielle</div>
+            <div style={{ display:"flex", flexWrap:"wrap", gap:7 }}>
+              {STACK.map(s => <Tag key={s}>{s}</Tag>)}
+            </div>
+          </div>
+
+          <div style={{ padding:"18px 20px", border:`1px dashed ${C.borderHigh}`,
+            borderRadius:T.radius.md, background:C.bg }}>
+            <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:10 }}>
+              <span style={{ fontFamily:T.font.display, fontSize:13, color:C.textMuted,
+                fontWeight:600 }}>Serveur dédié H24</span>
+              <span style={{ fontFamily:T.font.mono, fontSize:8.5, color:C.warn,
+                background:`${C.warn}10`, padding:"2px 8px", borderRadius:3,
+                letterSpacing:".1em", border:`1px solid ${C.warn}33`,
+                marginLeft:"auto" }}>BIENTÔT</span>
+            </div>
+            <p style={{ fontFamily:T.font.mono, fontSize:11, color:C.textMuted, lineHeight:1.7 }}>
+              Serveur d'entreprise récupéré — services permanents, monitoring réseau,
+              reverse proxy Traefik, déploiements CI/CD automatisés.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // VEILLE TECHNOLOGIQUE
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function LiveDot() {
@@ -2254,6 +2375,8 @@ function Portfolio() {
         <Certifications />
         <Divider />
         <Projects />
+        <Divider />
+        <Lab />
         <Divider />
         <Veille />
         <Divider />
