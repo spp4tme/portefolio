@@ -1535,12 +1535,11 @@ function Lab() {
     { label:"OS",       value:"Windows 11 Pro" },
   ];
 
-  const STACK = ["WSL2 (Debian)", "Docker Desktop", "VMware", "GitHub Actions", "Traefik", "Git"];
+  const STACK = ["WSL2 (Ubuntu)", "Docker Desktop", "VMware", "GitHub Actions", "Traefik", "Git"];
 
   const VMS = [
-    { name:"NETMAP-dev",  desc:"Env. Python isolé — scanner réseau offensif",               color:"220,70,70"  },
-    { name:"Fire-UX-dev", desc:"Sandbox Linux — tests iptables & règles pare-feu",          color:"255,165,40" },
-    { name:"Jarvis Stack",desc:"LLM self-hosted + agents CrewAI, GPU passthrough RTX 5070 Ti", color:"160,100,255"},
+    { name:"NETMAP + Fire-UX", desc:"VM partagée — développement et tests du scanner réseau et du gestionnaire pare-feu", color:"255,165,40" },
+    { name:"Jarvis Stack",     desc:"LLM self-hosted + agents CrewAI, GPU passthrough RTX 5070 Ti",                       color:"160,100,255"},
   ];
 
   return (
@@ -1594,10 +1593,7 @@ function Lab() {
                   background:`rgb(${vm.color})`, flexShrink:0,
                   boxShadow:`0 0 6px rgba(${vm.color},.5)` }} />
                 <span style={{ fontFamily:T.font.mono, fontSize:12, color:C.textStrong,
-                  fontWeight:600, flex:1 }}>{vm.name}</span>
-                <span style={{ fontFamily:T.font.mono, fontSize:8.5, color:`rgb(${vm.color})`,
-                  background:`rgba(${vm.color},.1)`, padding:"2px 7px", borderRadius:3,
-                  letterSpacing:".1em", border:`1px solid rgba(${vm.color},.2)` }}>RUNNING</span>
+                  fontWeight:600 }}>{vm.name}</span>
               </div>
               <p style={{ fontFamily:T.font.mono, fontSize:11, color:C.textMuted,
                 lineHeight:1.65, paddingLeft:14 }}>{vm.desc}</p>
