@@ -611,7 +611,12 @@ function ProjectModal({ project, onClose, C }) {
     return () => window.removeEventListener("keydown", fn);
   }, []);
 
-  return (
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  return ReactDOM.createPortal(
     <div className="proj-modal-bg" onClick={onClose}>
       <div className="proj-modal" onClick={e => e.stopPropagation()}
         style={{ "--mc": color }}>
@@ -701,7 +706,8 @@ function ProjectModal({ project, onClose, C }) {
           </a>
         )}
       </div>
-    </div>
+    </div>,
+  document.body
   );
 }
 
