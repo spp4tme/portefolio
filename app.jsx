@@ -1354,12 +1354,12 @@ function Skills() {
 // TABLEAU E5
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const E5_COLS = [
-  "Gérer le patrimoine informatique",
-  "Répondre aux incidents et aux demandes d'assistance et d'évolution",
-  "Développer la présence en ligne de l'organisation",
-  "Travailler en mode projet",
-  "Mettre à disposition des utilisateurs un service informatique",
-  "Organiser son développement professionnel",
+  ["Gérer le patrimoine", "informatique"],
+  ["Répondre aux incidents et aux demandes", "d'assistance et d'évolution"],
+  ["Développer la présence", "en ligne de l'organisation"],
+  ["Travailler", "en mode projet"],
+  ["Mettre à disposition des utilisateurs", "un service informatique"],
+  ["Organiser son", "développement professionnel"],
 ];
 
 // checked: tableau d'indices (0-5) des compétences mobilisées
@@ -1458,13 +1458,17 @@ function TableauE5() {
               {E5_COLS.map((col, i) => (
                 <th key={i} style={{ border:bd, borderTop:"none",
                   borderRight: i===5?"none":undefined,
-                  background:`${C.accent}0a`, width:54, padding:"14px 4px",
+                  background:`${C.accent}0a`, width:72, padding:"12px 4px",
                   verticalAlign:"bottom" }}>
-                  <div style={{
-                    writingMode:"vertical-rl", transform:"rotate(180deg)",
-                    fontFamily:T.font.mono, fontSize:9, letterSpacing:".06em",
-                    textTransform:"uppercase", color:C.accent, whiteSpace:"nowrap",
-                  }}>{col}</div>
+                  <div style={{ display:"flex", gap:3, justifyContent:"center" }}>
+                    {col.map((part, pi) => (
+                      <div key={pi} style={{
+                        writingMode:"vertical-rl", transform:"rotate(180deg)",
+                        fontFamily:T.font.mono, fontSize:9, letterSpacing:".06em",
+                        textTransform:"uppercase", color:C.accent, whiteSpace:"nowrap",
+                      }}>{part}</div>
+                    ))}
+                  </div>
                 </th>
               ))}
             </tr>
