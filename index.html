@@ -1398,50 +1398,76 @@ function Skills() {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // TABLEAU E5
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const E5_B1 = [
-  { code:"B1.1", desc:"Gérer le patrimoine informatique" },
-  { code:"B1.2", desc:"Répondre aux incidents et demandes d'assistance et d'évolution" },
-  { code:"B1.3", desc:"Développer la présence en ligne de l'organisation" },
-  { code:"B1.4", desc:"Travailler en mode projet" },
-  { code:"B1.5", desc:"Mettre à disposition des utilisateurs un service informatique" },
-  { code:"B1.6", desc:"Organiser son développement professionnel" },
+const E5_COLS = [
+  "Gérer le patrimoine informatique",
+  "Répondre aux incidents et aux demandes d'assistance et d'évolution",
+  "Développer la présence en ligne de l'organisation",
+  "Travailler en mode projet",
+  "Mettre à disposition des utilisateurs un service informatique",
+  "Organiser son développement professionnel",
 ];
-const E5_B2 = [
-  { code:"B2.1", desc:"Installer et configurer un poste de travail" },
-  { code:"B2.2", desc:"Maintenir l'infrastructure et garantir la disponibilité des équipements" },
-  { code:"B2.3", desc:"Sécuriser les équipements et les usages des utilisateurs" },
-  { code:"B2.4", desc:"Garantir disponibilité, intégrité et confidentialité des données" },
-  { code:"B2.5", desc:"Assurer la cybersécurité d'une infrastructure réseau, système, application" },
-];
-const E5_ALL = [...E5_B1, ...E5_B2];
 
-const E5_SP = [
-  { num:"SP 01", title:"—", periode:"—", checked:[] },
-  { num:"SP 02", title:"—", periode:"—", checked:[] },
-  { num:"SP 03", title:"—", periode:"—", checked:[] },
-  { num:"SP 04", title:"—", periode:"—", checked:[] },
-  { num:"SP 05", title:"—", periode:"—", checked:[] },
-  { num:"SP 06", title:"—", periode:"—", checked:[] },
-  { num:"SP 07", title:"—", periode:"—", checked:[] },
-  { num:"SP 08", title:"—", periode:"—", checked:[] },
-];
+// checked: tableau d'indices (0-5) des compétences mobilisées
+const E5_DATA = {
+  formation: [
+    { title:"—", periode:"—", checked:[] },
+    { title:"—", periode:"—", checked:[] },
+    { title:"—", periode:"—", checked:[] },
+    { title:"—", periode:"—", checked:[] },
+  ],
+  pro1: [
+    { title:"—", periode:"—", checked:[] },
+    { title:"—", periode:"—", checked:[] },
+    { title:"—", periode:"—", checked:[] },
+  ],
+  pro2: [
+    { title:"—", periode:"—", checked:[] },
+    { title:"—", periode:"—", checked:[] },
+    { title:"—", periode:"—", checked:[] },
+  ],
+};
 
 function TableauE5() {
   const { C } = useTheme();
   const tR = useRef();
   const iT = useInView(tR);
 
-  const thBase = {
-    fontFamily:T.font.mono, fontSize:10, letterSpacing:".1em",
-    textTransform:"uppercase", padding:"10px 12px",
-    border:`1px solid ${C.border}`, textAlign:"center",
-    whiteSpace:"nowrap", background:C.surfaceHigh,
-  };
-  const tdBase = {
-    padding:"12px 14px", border:`1px solid ${C.border}`,
-    fontSize:12.5, color:C.text, verticalAlign:"middle",
-  };
-  const tdCheck = { ...tdBase, textAlign:"center", padding:"10px 6px", width:40 };
+  const bd = `1px solid ${C.border}`;
+  const tdBase = { border:bd, padding:"11px 14px", fontSize:13, color:C.text, verticalAlign:"middle" };
+  const tdChk  = { border:bd, textAlign:"center", width:54, padding:"8px 2px", verticalAlign:"middle" };
+
+  const renderSection = (label) => (
+    <tr key={label}>
+      <td colSpan={8} style={{ border:bd, borderLeft:"none", borderRight:"none",
+        background:`${C.accent}09`, fontFamily:T.font.mono, fontSize:9.5,
+        letterSpacing:".14em", textTransform:"uppercase", color:C.accent, padding:"8px 16px" }}>
+        ▸ {label}
+      </td>
+    </tr>
+  );
+
+  const renderRow = (r, i) => (
+    <tr key={i} style={{ background: i%2===0?"transparent":`${C.bg}50`, transition:"background .15s" }}
+      onMouseEnter={e => e.currentTarget.style.background = `${C.accent}07`}
+      onMouseLeave={e => e.currentTarget.style.background = i%2===0?"transparent":`${C.bg}50`}>
+      <td style={{ ...tdBase, borderLeft:"none", minWidth:300,
+        color: r.title==="—" ? C.textDim : C.text, lineHeight:1.5 }}>{r.title}</td>
+      <td style={{ ...tdBase, fontFamily:T.font.mono, fontSize:11, color:C.textMuted,
+        textAlign:"center", minWidth:72, whiteSpace:"nowrap" }}>{r.periode}</td>
+      {E5_COLS.map((_, ci) => {
+        const ok = r.checked.includes(ci);
+        return (
+          <td key={ci} style={{ ...tdChk, borderRight: ci===5?"none":undefined,
+            background: ok ? `${C.accent}0e` : "transparent" }}>
+            {ok
+              ? <span style={{ color:C.accent, fontSize:16, fontWeight:800 }}>✓</span>
+              : <span style={{ color:C.textDim, fontSize:10 }}>—</span>
+            }
+          </td>
+        );
+      })}
+    </tr>
+  );
 
   return (
     <section id="e5" style={{ padding:"clamp(80px,12vw,140px) clamp(24px,10vw,180px)",
@@ -1454,86 +1480,50 @@ function TableauE5() {
         </h2>
         <p style={{ fontFamily:T.font.mono, fontSize:12, color:C.textMuted,
           marginBottom:48, letterSpacing:".05em" }}>
-          BTS SIO — Option SISR — Situations professionnelles réalisées en entreprise
+          BTS SIO — Option SISR — Réalisations professionnelles
         </p>
       </div>
 
       <div style={{ overflowX:"auto", border:`1px solid ${C.borderHigh}`, borderRadius:T.radius.lg,
         background:C.surface, boxShadow:"0 8px 32px rgba(0,0,0,.3)" }}>
-        <table style={{ width:"100%", borderCollapse:"collapse", minWidth:900, fontFamily:T.font.body }}>
+        <table style={{ width:"100%", borderCollapse:"collapse", minWidth:760, fontFamily:T.font.body }}>
           <thead>
             <tr>
-              <th colSpan={3} style={{ ...thBase, borderTop:"none", borderLeft:"none", background:"transparent" }} />
-              <th colSpan={6} style={{ ...thBase, borderTop:"none",
-                color:C.accent, background:`${C.accent}0d`, letterSpacing:".1em" }}>
-                Bloc 1 — Support et mise à disposition de services informatiques
+              <th style={{ border:bd, borderTop:"none", borderLeft:"none", minWidth:300,
+                background:C.surfaceHigh, fontFamily:T.font.mono, fontSize:9.5,
+                letterSpacing:".1em", textTransform:"uppercase", color:C.textMuted,
+                textAlign:"left", padding:"10px 14px" }}>
+                Réalisation professionnelle
               </th>
-              <th colSpan={5} style={{ ...thBase, borderTop:"none", borderRight:"none",
-                color:"rgb(160,100,255)", background:"rgba(160,100,255,.06)", letterSpacing:".1em" }}>
-                Bloc 2 — Administration des systèmes et des réseaux (SISR)
+              <th style={{ border:bd, borderTop:"none", background:C.surfaceHigh,
+                fontFamily:T.font.mono, fontSize:9.5, letterSpacing:".1em",
+                textTransform:"uppercase", color:C.textMuted, padding:"10px 8px", minWidth:72 }}>
+                Période
               </th>
-            </tr>
-            <tr>
-              <th style={{ ...thBase, borderLeft:"none", width:72, color:C.textMuted }}>N°</th>
-              <th style={{ ...thBase, textAlign:"left", minWidth:220, color:C.textMuted }}>Intitulé</th>
-              <th style={{ ...thBase, minWidth:100, color:C.textMuted }}>Période</th>
-              {E5_B1.map(c => (
-                <th key={c.code} style={{ ...thBase, color:C.accent }}>{c.code}</th>
-              ))}
-              {E5_B2.map((c,i) => (
-                <th key={c.code} style={{ ...thBase, color:"rgb(160,100,255)",
-                  borderRight: i===4 ? "none" : undefined }}>{c.code}</th>
+              {E5_COLS.map((col, i) => (
+                <th key={i} style={{ border:bd, borderTop:"none",
+                  borderRight: i===5?"none":undefined,
+                  background:`${C.accent}0a`, width:54, padding:"14px 4px",
+                  verticalAlign:"bottom" }}>
+                  <div style={{
+                    writingMode:"vertical-rl", transform:"rotate(180deg)",
+                    fontFamily:T.font.mono, fontSize:9, letterSpacing:".06em",
+                    textTransform:"uppercase", color:C.accent, whiteSpace:"nowrap",
+                    height:155, display:"flex", alignItems:"center",
+                  }}>{col}</div>
+                </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {E5_SP.map((sp, i) => (
-              <tr key={sp.num}
-                style={{ background: i%2===0 ? "transparent" : `${C.bg}60`, transition:"background .15s" }}
-                onMouseEnter={e => e.currentTarget.style.background = `${C.accent}08`}
-                onMouseLeave={e => e.currentTarget.style.background = i%2===0 ? "transparent" : `${C.bg}60`}
-              >
-                <td style={{ ...tdBase, borderLeft:"none", fontFamily:T.font.mono,
-                  fontSize:11, color:C.accent, textAlign:"center" }}>{sp.num}</td>
-                <td style={{ ...tdBase, color: sp.title==="—" ? C.textDim : C.text }}>{sp.title}</td>
-                <td style={{ ...tdBase, fontFamily:T.font.mono, fontSize:11,
-                  color:C.textMuted, textAlign:"center" }}>{sp.periode}</td>
-                {E5_ALL.map((c, ci) => {
-                  const isB2 = c.code.startsWith("B2");
-                  const ok   = sp.checked.includes(c.code);
-                  return (
-                    <td key={c.code} style={{ ...tdCheck,
-                      borderRight: ci===10 ? "none" : undefined,
-                      background: ok ? (isB2 ? "rgba(160,100,255,.08)" : `${C.accent}0d`) : "transparent" }}>
-                      {ok
-                        ? <span style={{ color: isB2?"rgb(160,100,255)":C.accent, fontSize:15, fontWeight:700 }}>✓</span>
-                        : <span style={{ color:C.textDim, fontSize:10 }}>—</span>
-                      }
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
+            {renderSection("Réalisations en cours de formation")}
+            {E5_DATA.formation.map((r, i) => renderRow(r, i))}
+            {renderSection("Réalisations en milieu professionnel — 1ère année")}
+            {E5_DATA.pro1.map((r, i) => renderRow(r, i))}
+            {renderSection("Réalisations en milieu professionnel — 2ème année")}
+            {E5_DATA.pro2.map((r, i) => renderRow(r, i))}
           </tbody>
         </table>
-      </div>
-
-      <div style={{ marginTop:24, display:"grid",
-        gridTemplateColumns:"repeat(auto-fill, minmax(280px, 1fr))", gap:8 }}>
-        {E5_ALL.map(c => {
-          const isB2 = c.code.startsWith("B2");
-          return (
-            <div key={c.code} style={{ display:"flex", gap:10, padding:"8px 12px",
-              borderRadius:T.radius.sm,
-              border:`1px solid ${isB2?"rgba(160,100,255,.15)":`${C.accent}20`}`,
-              background: isB2?"rgba(160,100,255,.04)":`${C.accent}06` }}>
-              <span style={{ fontFamily:T.font.mono, fontSize:10,
-                color: isB2?"rgb(160,100,255)":C.accent,
-                letterSpacing:".08em", flexShrink:0, paddingTop:1 }}>{c.code}</span>
-              <span style={{ fontSize:12, color:C.textMuted, lineHeight:1.5 }}>{c.desc}</span>
-            </div>
-          );
-        })}
       </div>
     </section>
   );
