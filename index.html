@@ -1398,16 +1398,44 @@ function Skills() {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // TABLEAU E5
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const E5_COLS = [
-  ["Gérer le patrimoine", "informatique"],
-  ["Répondre aux incidents et aux demandes", "d'assistance et d'évolution"],
-  ["Développer la présence", "en ligne de l'organisation"],
-  ["Travailler", "en mode projet"],
-  ["Mettre à disposition des utilisateurs", "un service informatique"],
-  ["Organiser son", "développement professionnel"],
+// Bloc 2 SISR — Administration des systèmes et des réseaux
+// Référentiel BTS SIO option SISR (session 2026)
+const E5_GROUPS = [
+  {
+    label: "Concevoir une solution d'infrastructure réseau",
+    items: [
+      ["Analyser un besoin", "exprimé et son contexte juridique"],
+      ["Étudier l'impact d'une évolution", "sur le système informatique"],
+      ["Étudier les solutions d'architectures", "pour répondre à un besoin"],
+      ["Maquetter et prototyper", "une solution d'infrastructure"],
+      ["Choisir les éléments", "garantissant qualité et disponibilité"],
+    ],
+  },
+  {
+    label: "Installer, tester, déployer une solution d'infrastructure réseau",
+    items: [
+      ["Installer et configurer", "des éléments d'infrastructure"],
+      ["Rédiger ou mettre à jour", "la documentation technique et utilisateur"],
+      ["Tester l'intégration", "et l'acceptation d'une solution"],
+      ["Déployer une solution", "d'infrastructure"],
+    ],
+  },
+  {
+    label: "Exploiter, dépanner et superviser une solution d'infrastructure réseau",
+    items: [
+      ["Administrer sur site et à distance", "des éléments d'une infrastructure"],
+      ["Automatiser", "des tâches d'administration"],
+      ["Gérer les indicateurs", "et les fichiers d'activité"],
+      ["Identifier, qualifier et réagir", "face à un incident ou à un problème"],
+      ["Évaluer, maintenir et améliorer", "la qualité d'un service"],
+    ],
+  },
 ];
 
-// checked: tableau d'indices (0-5) des compétences mobilisées
+const E5_COLS = E5_GROUPS.flatMap(g => g.items);
+const E5_TOTAL_COLS = E5_COLS.length; // 14
+
+// checked: tableau d'indices (0-13) des sous-compétences mobilisées
 const E5_DATA = {
   formation: [
     { title:"—", periode:"—", checked:[] },
@@ -1436,9 +1464,11 @@ function TableauE5() {
   const tdBase = { border:bd, padding:"11px 14px", fontSize:13, color:C.text, verticalAlign:"middle" };
   const tdChk  = { border:bd, textAlign:"center", width:54, padding:"8px 2px", verticalAlign:"middle" };
 
+  const totalCols = 2 + E5_TOTAL_COLS;
+
   const renderSection = (label) => (
     <tr key={label}>
-      <td colSpan={8} style={{ border:bd, borderLeft:"none", borderRight:"none",
+      <td colSpan={totalCols} style={{ border:bd, borderLeft:"none", borderRight:"none",
         background:`${C.accent}09`, fontFamily:T.font.mono, fontSize:9.5,
         letterSpacing:".14em", textTransform:"uppercase", color:C.accent, padding:"8px 16px" }}>
         ▸ {label}
@@ -1456,8 +1486,9 @@ function TableauE5() {
         textAlign:"center", minWidth:72, whiteSpace:"nowrap" }}>{r.periode}</td>
       {E5_COLS.map((_, ci) => {
         const ok = r.checked.includes(ci);
+        const isLast = ci === E5_TOTAL_COLS - 1;
         return (
-          <td key={ci} style={{ ...tdChk, borderRight: ci===5?"none":undefined,
+          <td key={ci} style={{ ...tdChk, borderRight: isLast?"none":undefined,
             background: ok ? `${C.accent}0e` : "transparent" }}>
             {ok
               ? <span style={{ color:C.accent, fontSize:16, fontWeight:800 }}>✓</span>
@@ -1486,25 +1517,38 @@ function TableauE5() {
 
       <div style={{ overflowX:"auto", border:`1px solid ${C.borderHigh}`, borderRadius:T.radius.lg,
         background:C.surface, boxShadow:"0 8px 32px rgba(0,0,0,.3)" }}>
-        <table style={{ width:"100%", borderCollapse:"collapse", minWidth:760, fontFamily:T.font.body }}>
+        <table style={{ width:"100%", borderCollapse:"collapse", minWidth:1200, fontFamily:T.font.body }}>
           <thead>
             <tr>
-              <th style={{ border:bd, borderTop:"none", borderLeft:"none", minWidth:300,
+              <th rowSpan={2} style={{ border:bd, borderTop:"none", borderLeft:"none", minWidth:280,
                 background:C.surfaceHigh, fontFamily:T.font.mono, fontSize:9.5,
                 letterSpacing:".1em", textTransform:"uppercase", color:C.textMuted,
-                textAlign:"left", padding:"10px 14px" }}>
+                textAlign:"left", padding:"10px 14px", verticalAlign:"bottom" }}>
                 Réalisation professionnelle
               </th>
-              <th style={{ border:bd, borderTop:"none", background:C.surfaceHigh,
+              <th rowSpan={2} style={{ border:bd, borderTop:"none", background:C.surfaceHigh,
                 fontFamily:T.font.mono, fontSize:9.5, letterSpacing:".1em",
-                textTransform:"uppercase", color:C.textMuted, padding:"10px 8px", minWidth:72 }}>
+                textTransform:"uppercase", color:C.textMuted, padding:"10px 8px", minWidth:72,
+                verticalAlign:"bottom" }}>
                 Période
               </th>
+              {E5_GROUPS.map((g, gi) => (
+                <th key={gi} colSpan={g.items.length} style={{
+                  border:bd, borderTop:"none",
+                  borderRight: gi===E5_GROUPS.length-1?"none":undefined,
+                  background:`${C.accent}14`, padding:"10px 12px", textAlign:"center",
+                  fontFamily:T.font.mono, fontSize:10, letterSpacing:".08em",
+                  textTransform:"uppercase", color:C.accent, lineHeight:1.4 }}>
+                  {g.label}
+                </th>
+              ))}
+            </tr>
+            <tr>
               {E5_COLS.map((col, i) => (
-                <th key={i} style={{ border:bd, borderTop:"none",
-                  borderRight: i===5?"none":undefined,
-                  background:`${C.accent}0a`, width:72, padding:"12px 4px",
-                  verticalAlign:"bottom" }}>
+                <th key={i} style={{ border:bd,
+                  borderRight: i===E5_TOTAL_COLS-1?"none":undefined,
+                  background:`${C.accent}0a`, width:56, padding:"12px 4px",
+                  verticalAlign:"bottom", height:200 }}>
                   <div style={{ display:"flex", gap:3, justifyContent:"center" }}>
                     {col.map((part, pi) => (
                       <div key={pi} style={{
