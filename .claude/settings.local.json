@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(curl -L -o assets/tableau-synthese-e5-2026.pdf \"https://v-assets.cdnsw.com/fs/Root/gmqny-8-ANNEXE-VI-1-EPREUVE-E5-TABLEAU-DE-SYNTHESE-BTS-SIO-2026.pdf\")"
+    ]
+  }
+}

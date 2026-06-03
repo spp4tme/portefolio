@@ -1353,107 +1353,22 @@ function Skills() {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // TABLEAU E5
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Bloc 2 SISR — Administration des systèmes et des réseaux
-// Référentiel BTS SIO option SISR (session 2026)
-const E5_GROUPS = [
-  {
-    label: "Concevoir une solution d'infrastructure réseau",
-    items: [
-      ["Analyser un besoin", "exprimé et son contexte juridique"],
-      ["Étudier l'impact d'une évolution", "sur le système informatique"],
-      ["Étudier les solutions d'architectures", "pour répondre à un besoin"],
-      ["Maquetter et prototyper", "une solution d'infrastructure"],
-      ["Choisir les éléments", "garantissant qualité et disponibilité"],
-    ],
-  },
-  {
-    label: "Installer, tester, déployer une solution d'infrastructure réseau",
-    items: [
-      ["Installer et configurer", "des éléments d'infrastructure"],
-      ["Rédiger ou mettre à jour", "la documentation technique et utilisateur"],
-      ["Tester l'intégration", "et l'acceptation d'une solution"],
-      ["Déployer une solution", "d'infrastructure"],
-    ],
-  },
-  {
-    label: "Exploiter, dépanner et superviser une solution d'infrastructure réseau",
-    items: [
-      ["Administrer sur site et à distance", "des éléments d'une infrastructure"],
-      ["Automatiser", "des tâches d'administration"],
-      ["Gérer les indicateurs", "et les fichiers d'activité"],
-      ["Identifier, qualifier et réagir", "face à un incident ou à un problème"],
-      ["Évaluer, maintenir et améliorer", "la qualité d'un service"],
-    ],
-  },
-];
-
-const E5_COLS = E5_GROUPS.flatMap(g => g.items);
-const E5_TOTAL_COLS = E5_COLS.length; // 14
-
-// checked: tableau d'indices (0-13) des sous-compétences mobilisées
-const E5_DATA = {
-  formation: [
-    { title:"—", periode:"—", checked:[] },
-    { title:"—", periode:"—", checked:[] },
-    { title:"—", periode:"—", checked:[] },
-    { title:"—", periode:"—", checked:[] },
-  ],
-  pro1: [
-    { title:"—", periode:"—", checked:[] },
-    { title:"—", periode:"—", checked:[] },
-    { title:"—", periode:"—", checked:[] },
-  ],
-  pro2: [
-    { title:"—", periode:"—", checked:[] },
-    { title:"—", periode:"—", checked:[] },
-    { title:"—", periode:"—", checked:[] },
-  ],
-};
+// Tableau de synthèse officiel — Annexe VI-1, Circulaire nationale BTS SIO 2026
+const E5_PDF = "assets/tableau-synthese-e5-2026.pdf";
 
 function TableauE5() {
   const { C } = useTheme();
   const tR = useRef();
   const iT = useInView(tR);
 
-  const bd = `1px solid ${C.border}`;
-  const tdBase = { border:bd, padding:"11px 14px", fontSize:13, color:C.text, verticalAlign:"middle" };
-  const tdChk  = { border:bd, textAlign:"center", width:54, padding:"8px 2px", verticalAlign:"middle" };
-
-  const totalCols = 2 + E5_TOTAL_COLS;
-
-  const renderSection = (label) => (
-    <tr key={label}>
-      <td colSpan={totalCols} style={{ border:bd, borderLeft:"none", borderRight:"none",
-        background:`${C.accent}09`, fontFamily:T.font.mono, fontSize:9.5,
-        letterSpacing:".14em", textTransform:"uppercase", color:C.accent, padding:"8px 16px" }}>
-        ▸ {label}
-      </td>
-    </tr>
-  );
-
-  const renderRow = (r, i) => (
-    <tr key={i} style={{ background: i%2===0?"transparent":`${C.bg}50`, transition:"background .15s" }}
-      onMouseEnter={e => e.currentTarget.style.background = `${C.accent}07`}
-      onMouseLeave={e => e.currentTarget.style.background = i%2===0?"transparent":`${C.bg}50`}>
-      <td style={{ ...tdBase, borderLeft:"none", minWidth:300,
-        color: r.title==="—" ? C.textDim : C.text, lineHeight:1.5 }}>{r.title}</td>
-      <td style={{ ...tdBase, fontFamily:T.font.mono, fontSize:11, color:C.textMuted,
-        textAlign:"center", minWidth:72, whiteSpace:"nowrap" }}>{r.periode}</td>
-      {E5_COLS.map((_, ci) => {
-        const ok = r.checked.includes(ci);
-        const isLast = ci === E5_TOTAL_COLS - 1;
-        return (
-          <td key={ci} style={{ ...tdChk, borderRight: isLast?"none":undefined,
-            background: ok ? `${C.accent}0e` : "transparent" }}>
-            {ok
-              ? <span style={{ color:C.accent, fontSize:16, fontWeight:800 }}>✓</span>
-              : <span style={{ color:C.textDim, fontSize:10 }}>—</span>
-            }
-          </td>
-        );
-      })}
-    </tr>
-  );
+  const btnBase = {
+    display:"inline-flex", alignItems:"center", gap:10,
+    padding:"14px 24px", borderRadius:T.radius.md,
+    fontFamily:T.font.mono, fontSize:12, letterSpacing:".08em",
+    textTransform:"uppercase", fontWeight:600,
+    border:`1px solid ${C.accent}`, cursor:"pointer",
+    textDecoration:"none", transition:"all .2s",
+  };
 
   return (
     <section id="e5" style={{ padding:"clamp(80px,12vw,140px) clamp(24px,10vw,180px)",
@@ -1466,66 +1381,42 @@ function TableauE5() {
         </h2>
         <p style={{ fontFamily:T.font.mono, fontSize:12, color:C.textMuted,
           marginBottom:48, letterSpacing:".05em" }}>
-          BTS SIO — Option SISR — Réalisations professionnelles
+          BTS SIO — Option SISR — Annexe VI-1, Circulaire nationale session 2026
         </p>
       </div>
 
-      <div style={{ overflowX:"auto", border:`1px solid ${C.borderHigh}`, borderRadius:T.radius.lg,
-        background:C.surface, boxShadow:"0 8px 32px rgba(0,0,0,.3)" }}>
-        <table style={{ width:"100%", borderCollapse:"collapse", minWidth:1200, fontFamily:T.font.body }}>
-          <thead>
-            <tr>
-              <th rowSpan={2} style={{ border:bd, borderTop:"none", borderLeft:"none", minWidth:280,
-                background:C.surfaceHigh, fontFamily:T.font.mono, fontSize:9.5,
-                letterSpacing:".1em", textTransform:"uppercase", color:C.textMuted,
-                textAlign:"left", padding:"10px 14px", verticalAlign:"bottom" }}>
-                Réalisation professionnelle
-              </th>
-              <th rowSpan={2} style={{ border:bd, borderTop:"none", background:C.surfaceHigh,
-                fontFamily:T.font.mono, fontSize:9.5, letterSpacing:".1em",
-                textTransform:"uppercase", color:C.textMuted, padding:"10px 8px", minWidth:72,
-                verticalAlign:"bottom" }}>
-                Période
-              </th>
-              {E5_GROUPS.map((g, gi) => (
-                <th key={gi} colSpan={g.items.length} style={{
-                  border:bd, borderTop:"none",
-                  borderRight: gi===E5_GROUPS.length-1?"none":undefined,
-                  background:`${C.accent}14`, padding:"10px 12px", textAlign:"center",
-                  fontFamily:T.font.mono, fontSize:10, letterSpacing:".08em",
-                  textTransform:"uppercase", color:C.accent, lineHeight:1.4 }}>
-                  {g.label}
-                </th>
-              ))}
-            </tr>
-            <tr>
-              {E5_COLS.map((col, i) => (
-                <th key={i} style={{ border:bd,
-                  borderRight: i===E5_TOTAL_COLS-1?"none":undefined,
-                  background:`${C.accent}0a`, width:56, padding:"12px 4px",
-                  verticalAlign:"bottom", height:200 }}>
-                  <div style={{ display:"flex", gap:3, justifyContent:"center" }}>
-                    {col.map((part, pi) => (
-                      <div key={pi} style={{
-                        writingMode:"vertical-rl", transform:"rotate(180deg)",
-                        fontFamily:T.font.mono, fontSize:9, letterSpacing:".06em",
-                        textTransform:"uppercase", color:C.accent, whiteSpace:"nowrap",
-                      }}>{part}</div>
-                    ))}
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {renderSection("Réalisations en cours de formation")}
-            {E5_DATA.formation.map((r, i) => renderRow(r, i))}
-            {renderSection("Réalisations en milieu professionnel — 1ère année")}
-            {E5_DATA.pro1.map((r, i) => renderRow(r, i))}
-            {renderSection("Réalisations en milieu professionnel — 2ème année")}
-            {E5_DATA.pro2.map((r, i) => renderRow(r, i))}
-          </tbody>
-        </table>
+      <div style={{ border:`1px solid ${C.borderHigh}`, borderRadius:T.radius.lg,
+        background:C.surface, boxShadow:"0 8px 32px rgba(0,0,0,.3)", overflow:"hidden" }}>
+        <iframe
+          src={E5_PDF}
+          title="Tableau de synthèse E5 — BTS SIO SISR 2026"
+          style={{ width:"100%", height:"clamp(520px,80vh,900px)",
+            border:"none", display:"block", background:"#fff" }}
+        />
+      </div>
+
+      <div style={{ display:"flex", flexWrap:"wrap", gap:14, marginTop:32, justifyContent:"center" }}>
+        <a
+          href={E5_PDF}
+          download="Tableau-synthese-E5-BTS-SIO-SISR-2026.pdf"
+          style={{ ...btnBase, background:C.accent, color:"#fff" }}
+          onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)";
+            e.currentTarget.style.boxShadow = `0 8px 24px ${C.accent}55`; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "none"; }}
+        >
+          <span style={{ fontSize:16 }}>↓</span> Télécharger le PDF
+        </a>
+        <a
+          href={E5_PDF}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ ...btnBase, background:"transparent", color:C.accent }}
+          onMouseEnter={e => e.currentTarget.style.background = `${C.accent}14`}
+          onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+        >
+          <span style={{ fontSize:14 }}>↗</span> Ouvrir dans un nouvel onglet
+        </a>
       </div>
     </section>
   );
